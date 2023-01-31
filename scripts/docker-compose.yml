@@ -1,0 +1,19 @@
+# docker stop chainbot && docker rm chainbot && docker rmi chainbot
+# docker build -t chainbot .
+# docker-compose up
+
+version: '3.7'
+
+services:
+  gt3music-client:
+    container_name: chainbot
+    image: chainbot:latest
+    ports:
+      - "3000:80"
+    networks:
+      - chaincue-tech-net
+
+networks:
+  chaincue-tech-net:
+    name: chaincue-tech-net
+    driver: bridge

@@ -1,12 +1,15 @@
 import React from 'react';
-import {PageSEO} from "@/layouts/SEO";
-import ImageBot from "@/components/imagebot/ImageBot";
+import { PageSEO } from '@/layouts/SEO';
+import ImageBot from '@/components/imagebot/ImageBot';
 
 const Index = () => {
   return (
     <>
-      <PageSEO title={"ChainBot | ImageBot"} description={"ChainBot | ImageBot"}/>
-      <ImageBot/>
+      <PageSEO
+        title={'ChainBot | ImageBot'}
+        description={'ChainBot | ImageBot'}
+      />
+      <ImageBot />
     </>
   );
 };

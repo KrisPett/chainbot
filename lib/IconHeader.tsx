@@ -1,4 +1,4 @@
-import React, {HTMLAttributeAnchorTarget} from 'react';
+import React, { HTMLAttributeAnchorTarget } from 'react';
 import Mail from 'assets/icons/mail.svg';
 import Github from 'assets/icons/github.svg';
 import Facebook from 'assets/icons/facebook.svg';
@@ -12,7 +12,7 @@ interface ISocialIcon {
   kind: string;
   href: string;
   tooltip: string;
-  _blank: HTMLAttributeAnchorTarget
+  _blank: HTMLAttributeAnchorTarget;
 }
 
 const components: any = {
@@ -24,24 +24,32 @@ const components: any = {
   twitter: Twitter,
   gitlab: Gitlab3,
   blank: Blank,
-}
+};
 
-const IconHeader = ({kind, href, tooltip, _blank}: ISocialIcon) => {
+const IconHeader = ({ kind, href, tooltip, _blank }: ISocialIcon) => {
   const SocialSvg = components[kind];
 
   return (
-    <a href={href} target={_blank} className={"group tooltip tooltip-bottom"} data-tip={tooltip}>
+    <a
+      href={href}
+      target={_blank}
+      className={'group tooltip tooltip-bottom'}
+      data-tip={tooltip}
+    >
       <span className="sr-only">{kind}</span>
-      <button className=" hover:fill-current btn btn-circle btn-outline text-orange-700 border border-orange-700
-              hover:border-orange-700 hover:bg-zinc-100 hover:text-white focus:ring-1
-              focus:outline-none focus:ring-orange-500 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center
-              dark:hover:bg-zinc-500 dark:border-orange-500 dark:text-orange-500 dark:hover:text-white dark:focus:ring-orange-400">
+      <button
+        className=" btn-outline btn-circle btn inline-flex items-center rounded-full border
+              border-orange-700 p-2.5 text-center text-sm
+              font-medium text-orange-700 hover:border-orange-700 hover:bg-zinc-100 hover:fill-current hover:text-white focus:outline-none focus:ring-1 focus:ring-orange-500
+              dark:border-orange-500 dark:text-orange-500 dark:hover:bg-zinc-500 dark:hover:text-white dark:focus:ring-orange-400"
+      >
         <SocialSvg
-          className={`group-hover:text-orange-600 dark:group-hover:text-orange-400 hover:fill-current fill-current text-gray-700 
-          hover:text-orange-500 dark:text-gray-200 dark:hover:text-orange-400 h-4 w-4`}/>
+          className={`h-4 w-4 fill-current text-gray-700 hover:fill-current 
+          hover:text-orange-500 group-hover:text-orange-600 dark:text-gray-200 dark:hover:text-orange-400 dark:group-hover:text-orange-400`}
+        />
       </button>
     </a>
-  )
-}
+  );
+};
 
 export default IconHeader;

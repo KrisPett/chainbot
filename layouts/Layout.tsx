@@ -1,19 +1,19 @@
 import React from 'react';
-import Header from "./Header";
-import Drawer from "@/layouts/Drawer";
+import Header from './Header';
+import Drawer from '@/layouts/Drawer';
 
 type Props = {
-  children: JSX.Element
-}
+  children: JSX.Element;
+};
 
-const Layout = ({children}: Props) => {
+const Layout = ({ children }: Props) => {
   return (
-    <div className={"flex flex-col min-h-screen mx-auto max-w-full"}>
-      <Header/>
-      <Drawer/>
-      <main className="flex-1 mb-20">{children}</main>
+    <div className={'min-h-screen mx-auto flex max-w-full flex-col'}>
+      <Header />
+      <Drawer />
+      <main className="mb-20 flex-1">{children}</main>
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

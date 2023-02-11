@@ -1,7 +1,9 @@
 import React from "react";
 
 const ImageBot = () => {
-  return <div>ImageBot</div>;
+  return (
+    <div className={"mt-28"}>ImageBot</div>
+  )
 };
 
 export default ImageBot;

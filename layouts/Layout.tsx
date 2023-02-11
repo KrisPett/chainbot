@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "./Header";
-import SideMenu from "@/layouts/SideMenu";
 
 type Props = {
   children: JSX.Element;

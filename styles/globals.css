@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 *::-webkit-scrollbar-thumb {
-    background-color: gray;
-    border-radius: 20px;
-    border: 6px solid transparent;
-    background-clip: content-box;
+  background-color: gray;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #adadad;
+  background-color: #adadad;
 }
 
 *::-webkit-scrollbar {
-    width: 13px;
+  width: 13px;
 }

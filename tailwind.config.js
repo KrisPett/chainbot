@@ -48,6 +48,10 @@ module.exports = {
       borderRadius: {
         "4xl": "2rem",
       },
+      colors: {
+        "orange-1000": "#78350F",
+        "orange-1100": "#E3560C",
+      },
     },
     minHeight: {
       0: "0",

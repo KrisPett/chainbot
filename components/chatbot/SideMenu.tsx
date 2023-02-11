@@ -9,7 +9,7 @@ const SideMenu = () => {
   let counter = 1;
   let items = [];
   for (let i = 0; i < 30; i++) {
-    items.push({id: counter, title: "Old Chat Bot: " + counter + ""});
+    items.push({ id: counter, title: "Old Chat Bot: " + counter + "" });
     counter++;
   }
 

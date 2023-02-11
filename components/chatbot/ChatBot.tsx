@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  FormEventHandler,
-  ChangeEvent,
-} from "react";
+import React, {useState,} from "react";
 import SideMenu from "@/components/chatbot/SideMenu";
 import catIcon from "@/assets/icons/cat.jpg";
 import chainIcon from "@/assets/icons/chainiconm.png";
@@ -14,9 +8,7 @@ const ChatBot = () => {
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("");
 
-  const handleTextAreaChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
+  const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
   };
 
@@ -38,8 +30,8 @@ const ChatBot = () => {
   return (
     <div className={""}>
       <SideMenu />
-      <main className={"mt-28"}>
-        <section className={"space-y-5 sm:ml-72"}>
+      <main className={"mt-28 flex justify-center"}>
+        <section className={"space-y-5 sm:ml-72 max-w-screen-xl"}>
           <div className="chat chat-start">
             <div className="chat-image avatar">
               <div className="w-10 rounded-full">
@@ -88,9 +80,12 @@ const ChatBot = () => {
             </div>
           </div>
         </section>
-        <footer className="fixed bottom-0 flex w-full justify-center bg-zinc-300 dark:bg-zinc-600">
+        <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
           <textarea
-            className="textarea-bordered textarea w-full resize-none bg-zinc-200 dark:bg-zinc-700 sm:ml-64 sm:w-8/12 md:w-10/12"
+            className="mb-5 xxs:w-11/12 sm:w-7/12 md:w-7/12 lg:w-8/12 xl:w-9/12 dark:placeholder-neutral-100 placeholder-opacity-50 rounded-2xl
+            textarea-bordered textarea w-full resize-none bg-zinc-200 dark:bg-zinc-600 sm:ml-64 sm:w-8/12 md:w-10/12 lg:w-11/12
+            focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 dark:focus-visible:ring-offset-orange-600
+            "
             placeholder="Text"
             onChange={handleTextAreaChange}
             rows={textLines}

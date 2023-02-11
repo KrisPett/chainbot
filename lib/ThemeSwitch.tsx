@@ -1,11 +1,11 @@
-import React from 'react';
-import { useTheme } from 'next-themes';
+import React from "react";
+import { useTheme } from "next-themes";
 
 const ThemeSwitch = () => {
   const { theme, setTheme, resolvedTheme } = useTheme();
 
   const onClickBtnTheme = () =>
-    setTheme(theme === 'dark' || resolvedTheme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === "dark" || resolvedTheme === "dark" ? "light" : "dark");
 
   return (
     <label className="swap swap-rotate">
@@ -13,7 +13,7 @@ const ThemeSwitch = () => {
         defaultChecked={true}
         onClick={() => onClickBtnTheme()}
         type="checkbox"
-        className={'hidden'}
+        className={"hidden"}
       />
       <svg
         className="swap-on h-6 w-6 fill-current"

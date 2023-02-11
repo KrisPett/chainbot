@@ -3,16 +3,16 @@ module.exports = {
   trailingSlash: true,
   images: { unoptimized: true },
   reactStrictMode: true,
-  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   eslint: {
-    dirs: ['pages', 'components', 'lib', 'layouts', 'scripts'],
+    dirs: ["pages", "components", "lib", "layouts", "scripts"],
   },
   webpack(config, { dev, isServer }) {
     config.resolve.fallback = { fs: false };
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
-      use: ['@svgr/webpack'],
+      use: ["@svgr/webpack"],
     });
     return config;
   },

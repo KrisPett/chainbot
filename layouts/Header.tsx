@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import chainbotWhite from '../assets/images/chainbot-logo-white.png';
-import chainbotBlack from '../assets/images/chainbot-logo-black.png';
-import { useTheme } from 'next-themes';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { links } from '@/components/utils/Links';
-import ThemeSwitch from '@/lib/ThemeSwitch';
-import IconHeader from '@/lib/IconHeader';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import chainbotWhite from "../assets/images/chainbot-logo-white.png";
+import chainbotBlack from "../assets/images/chainbot-logo-black.png";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { links } from "@/components/utils/Links";
+import ThemeSwitch from "@/lib/ThemeSwitch";
+import IconHeader from "@/lib/IconHeader";
 
 const Header = () => {
   const router = useRouter();
@@ -21,15 +21,15 @@ const Header = () => {
   return (
     <header
       className={
-        'fixed top-0 left-0 right-0 z-10 w-full bg-zinc-300 from-zinc-600 to-gray-500 dark:bg-zinc-600 dark:bg-gradient-to-r '
+        "fixed top-0 left-0 right-0 z-10 w-full bg-zinc-300 from-zinc-600 to-gray-500 dark:bg-zinc-600 dark:bg-gradient-to-r "
       }
     >
-      <div className={'flex items-center justify-between py-3'}>
-        <div className={'flex'}>
+      <div className={"flex items-center justify-between py-3"}>
+        <div className={"flex"}>
           <div>
-            <Link href={'/'} className="btn-ghost btn hover:bg-transparent">
+            <Link href={"/"} className="btn-ghost btn hover:bg-transparent">
               <Image
-                src={isTheme === 'light' ? chainbotBlack : chainbotWhite}
+                src={isTheme === "light" ? chainbotBlack : chainbotWhite}
                 alt=""
                 width={200}
                 height={200}
@@ -39,7 +39,7 @@ const Header = () => {
             </Link>
           </div>
           <div>
-            <ul className={'flex space-x-1'}>
+            <ul className={"flex space-x-1"}>
               <div className="navbar-center hidden lg:flex">
                 <ul className=" flex px-1">
                   <li>
@@ -63,11 +63,11 @@ const Header = () => {
                         tabIndex={0}
                         className="dropdown-content menu space-y-4 rounded-lg bg-zinc-300 from-zinc-600 to-gray-500 p-4 dark:bg-zinc-600 dark:bg-gradient-to-b"
                       >
-                        <li className={'mt-0'}>
+                        <li className={"mt-0"}>
                           <Link
-                            href={'chatbot'}
+                            href={"chatbot"}
                             className={
-                              'btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80'
+                              "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                             }
                           >
                             ChatBot
@@ -75,9 +75,9 @@ const Header = () => {
                         </li>
                         <li>
                           <Link
-                            href={'imagebot'}
+                            href={"imagebot"}
                             className={
-                              'btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80'
+                              "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                             }
                           >
                             ImageBot
@@ -89,24 +89,24 @@ const Header = () => {
                   <li>
                     <Link
                       href={links.chaincuet}
-                      target={'_self'}
+                      target={"_self"}
                       className={
-                        'btn-ghost btn text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500'
+                        "btn-ghost btn text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500"
                       }
                     >
-                      <div className={'flex items-center space-x-2'}>
+                      <div className={"flex items-center space-x-2"}>
                         <div>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
-                            stroke-width="1.5"
+                            strokeWidth="1.5"
                             stroke="currentColor"
                             className="h-6 w-6"
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
                             />
                           </svg>
@@ -121,8 +121,8 @@ const Header = () => {
           </div>
         </div>
         <div className="mr-4 flex flex-wrap justify-center gap-1">
-          <div className={'flex flex-nowrap sm:flex-row-reverse'}>
-            <div className={'mr-2 flex'}>
+          <div className={"flex flex-nowrap sm:flex-row-reverse"}>
+            <div className={"mr-2 flex"}>
               <ThemeSwitch />
             </div>
             <div className="dropdown-hover dropdown dropdown-end lg:hidden">
@@ -144,11 +144,11 @@ const Header = () => {
                 tabIndex={0}
                 className="dropdown-content menu space-y-4 rounded-lg bg-zinc-100 from-zinc-600 to-gray-500 p-4 dark:bg-zinc-600 dark:bg-gradient-to-b"
               >
-                <li className={'mt-0'}>
+                <li className={"mt-0"}>
                   <Link
-                    href={'chatbot'}
+                    href={"chatbot"}
                     className={
-                      'btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80'
+                      "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                     }
                   >
                     ChatBot
@@ -156,9 +156,9 @@ const Header = () => {
                 </li>
                 <li>
                   <Link
-                    href={'imagebot'}
+                    href={"imagebot"}
                     className={
-                      'btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80'
+                      "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                     }
                   >
                     ImageBot
@@ -167,30 +167,30 @@ const Header = () => {
               </ul>
             </div>
           </div>
-          <div className={'hidden space-x-2 sm:flex'}>
+          <div className={"hidden space-x-2 sm:flex"}>
             <IconHeader
-              kind={'github'}
+              kind={"github"}
               href={links.github}
-              tooltip={'Github'}
-              _blank={'_blank'}
+              tooltip={"Github"}
+              _blank={"_blank"}
             />
             <IconHeader
-              kind={'gitlab'}
+              kind={"gitlab"}
               href={links.gitlab}
-              tooltip={'Gitlab'}
-              _blank={'_blank'}
+              tooltip={"Gitlab"}
+              _blank={"_blank"}
             />
             <IconHeader
-              kind={'twitter'}
+              kind={"twitter"}
               href={links.twitter}
-              tooltip={'Twitter'}
-              _blank={'_blank'}
+              tooltip={"Twitter"}
+              _blank={"_blank"}
             />
             <IconHeader
-              kind={'linkedin'}
+              kind={"linkedin"}
               href={links.linkedin}
-              tooltip={'LinkedIn'}
-              _blank={'_blank'}
+              tooltip={"LinkedIn"}
+              _blank={"_blank"}
             />
           </div>
         </div>

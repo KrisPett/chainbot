@@ -33,7 +33,7 @@ const IconHeader = ({ kind, href, tooltip, _blank }: ISocialIcon) => {
     <a
       href={href}
       target={_blank}
-      className={"group tooltip tooltip-bottom"}
+      className={"group tooltip-bottom tooltip"}
       data-tip={tooltip}
     >
       <span className="sr-only">{kind}</span>

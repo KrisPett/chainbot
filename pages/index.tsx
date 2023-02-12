@@ -1,5 +1,5 @@
 import ChatBot from "@/components/chatbot/ChatBot";
-import {PageSEO} from "@/layouts/SEO";
+import { PageSEO } from "@/layouts/SEO";
 import React from "react";
 
 export default function Home() {

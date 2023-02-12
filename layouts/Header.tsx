@@ -26,7 +26,7 @@ const Header = () => {
     >
       <div className={"flex items-center justify-between py-3"}>
         <div className={"flex"}>
-          <div>
+          <div className={"flex items-center"}>
             <Link href={"/"} className="btn-ghost btn hover:bg-transparent">
               <Image
                 src={isTheme === "light" ? chainbotBlack : chainbotWhite}
@@ -38,12 +38,12 @@ const Header = () => {
               />
             </Link>
           </div>
-          <div>
+          <div className={"flex items-center"}>
             <ul className={"flex space-x-1"}>
               <div className="navbar-center hidden lg:flex">
-                <ul className=" flex px-1">
+                <ul className="flex">
                   <li>
-                    <div className="dropdown dropdown-bottom dropdown-hover">
+                    <div className=" dropdown dropdown-bottom dropdown-hover">
                       <label
                         tabIndex={0}
                         className="btn-ghost btn text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500"

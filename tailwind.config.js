@@ -11,6 +11,7 @@ module.exports = {
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms"),
     require("daisyui"),
+    require('tw-elements/dist/plugin')
   ],
   daisyui: {
     styled: true,

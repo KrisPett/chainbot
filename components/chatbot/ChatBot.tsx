@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import SideMenu from "@/components/chatbot/SideMenu";
 import catIcon from "@/assets/icons/cat.jpg";
 import chainIcon from "@/assets/icons/chainiconm.png";
@@ -65,15 +65,21 @@ type TChatPrompt = {
 
 const initData: TChatPrompt[] = [
   {text: "Explain crypto as a yoda"},
-  {
-    text: "Crypto, hmmm. Currency of the digital realm it is. Hidden and difficult to mine, like valuable Jedi crystals. And like the Force, powerful it can be, if you know how to harness it. A careful balance it requires, between security and accessibility. Too much security, and you may never access it. Too little, and it may fall into the wrong hands. In the digital world, it is a way to store wealth, to trade, and to exchange. But, be mindful, young Padawan. Volatile it can be, like the stock market. Wisely, you must invest. And always, be vigilant, for hackers and thieves are always lurking, attempting to steal your crypto. A powerful tool it can be, if you are disciplined and patient. Like the Jedi, you must be mindful of your actions, and always strive to do what is right. Use it for good, and great riches you shall attain. Use it for evil, and suffer the consequences you will.",
-  },
+  {text: "Crypto, hmmm. Currency of the digital realm it is. Hidden and difficult to mine, like valuable Jedi crystals. And like the Force, powerful it can be, if you know how to harness it. A careful balance it requires, between security and accessibility. Too much security, and you may never access it. Too little, and it may fall into the wrong hands. In the digital world, it is a way to store wealth, to trade, and to exchange. But, be mindful, young Padawan. Volatile it can be, like the stock market. Wisely, you must invest. And always, be vigilant, for hackers and thieves are always lurking, attempting to steal your crypto. A powerful tool it can be, if you are disciplined and patient. Like the Jedi, you must be mindful of your actions, and always strive to do what is right. Use it for good, and great riches you shall attain. Use it for evil, and suffer the consequences you will.",},
 ];
 
 const ChatBot = () => {
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("");
-  const [prompt] = useState<TChatPrompt[]>(initData);
+  const [prompt, setPrompt] = useState<TChatPrompt[]>(initData);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollIntoView({behavior: "smooth"});
+    }
+  }, [prompt]);
 
   const chatAiMutate = useMutation(["CHAT_AI"], (text: string) => {
     return fetch("http://localhost:3000/api/chatbot/", {
@@ -82,7 +88,15 @@ const ChatBot = () => {
       body: JSON.stringify({text: text}),
     })
       .then((value) => value.json())
-      .then((res) => prompt.push({text: res.choices[0].text}));
+      .then((res) => setPrompt(prevState => [...prevState, {text: res.choices[0].text}]))
+      .finally(() => {
+        const autoSelectTextArea = setInterval(() => {
+          if (textareaRef.current) {
+            textareaRef.current.select();
+            clearInterval(autoSelectTextArea);
+          }
+        }, 100);
+      });
   });
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -106,8 +120,9 @@ const ChatBot = () => {
     }
 
     if (isEnterPressed && !isTextAreaEmpty) {
-      prompt.push({text: text});
-      chatAiMutate.mutate(text);
+      setPrompt(prevState => [...prevState, {text: text}]);
+      const textarea = event.target as HTMLTextAreaElement;
+      chatAiMutate.mutate(text)
       setText("");
       setTextLines(1)
     }
@@ -137,6 +152,7 @@ const ChatBot = () => {
           >
             <div className="relative w-full">
               <textarea
+                ref={textareaRef}
                 disabled={chatAiMutate.isLoading}
                 className="textarea-bordered textarea w-full resize-none rounded-2xl bg-zinc-200
                   placeholder-opacity-50 focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 dark:bg-zinc-600
@@ -163,6 +179,7 @@ const ChatBot = () => {
           </form>
         </footer>
       </main>
+      <div ref={messagesContainerRef}/>
     </div>
   );
 };

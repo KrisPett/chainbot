@@ -67,7 +67,7 @@ const Header = () => {
                           <Link
                             href={"chatbot"}
                             className={
-                              "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
+                              "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 capitalize text-base dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                             }
                           >
                             ChatBot
@@ -77,7 +77,7 @@ const Header = () => {
                           <Link
                             href={"imagebot"}
                             className={
-                              "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
+                              "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 capitalize text-base dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                             }
                           >
                             ImageBot
@@ -148,7 +148,7 @@ const Header = () => {
                   <Link
                     href={"chatbot"}
                     className={
-                      "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
+                      "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 capitalize capitalize text-base dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                     }
                   >
                     ChatBot
@@ -158,7 +158,7 @@ const Header = () => {
                   <Link
                     href={"imagebot"}
                     className={
-                      "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
+                      "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 capitalize text-base dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                     }
                   >
                     ImageBot

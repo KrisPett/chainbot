@@ -99,7 +99,7 @@ const ChatBot = () => {
       });
   });
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleTextareaSubmit = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isShiftEnterPressed = event.shiftKey && event.key === "Enter";
     const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
     const isEnterPressed = event.key === "Enter";
@@ -121,7 +121,6 @@ const ChatBot = () => {
 
     if (isEnterPressed && !isTextAreaEmpty) {
       setPrompt(prevState => [...prevState, {text: text}]);
-      const textarea = event.target as HTMLTextAreaElement;
       chatAiMutate.mutate(text)
       setText("");
       setTextLines(1)
@@ -160,7 +159,7 @@ const ChatBot = () => {
                 placeholder="Type here..."
                 onChange={(e) => setText(e.target.value)}
                 rows={textLines}
-                onKeyDown={handleKeyDown}
+                onKeyDown={handleTextareaSubmit}
                 value={text}
               />
               <div

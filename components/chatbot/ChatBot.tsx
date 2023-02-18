@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SideMenu from "@/components/chatbot/SideMenu";
 import catIcon from "@/assets/icons/cat.jpg";
 import chainIcon from "@/assets/icons/chainiconm.png";
 import Image from "next/image";
-import {useMutation} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 interface IUserChat {
   text: string;
@@ -24,8 +24,7 @@ const UserChat = (props: IUserChat) => {
           />
         </div>
       </div>
-      <div
-        className="chat-bubble bg-gray-200 bg-gradient-to-t from-gray-200 to-gray-300 text-gray-900 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
+      <div className="chat-bubble bg-gray-200 bg-gradient-to-t from-gray-200 to-gray-300 text-gray-900 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
         {props.text}
       </div>
     </div>
@@ -51,8 +50,7 @@ const AIChat = (props: IAIChat) => {
           />
         </div>
       </div>
-      <div
-        className="chat-bubble bg-gray-300 bg-gradient-to-b from-gray-200 to-gray-300 text-gray-900 dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
+      <div className="chat-bubble bg-gray-300 bg-gradient-to-b from-gray-200 to-gray-300 text-gray-900 dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
         {props.text}
       </div>
     </div>
@@ -64,8 +62,10 @@ type TChatPrompt = {
 };
 
 const initData: TChatPrompt[] = [
-  {text: "Explain crypto as a yoda"},
-  {text: "Crypto, hmmm. Currency of the digital realm it is. Hidden and difficult to mine, like valuable Jedi crystals. And like the Force, powerful it can be, if you know how to harness it. A careful balance it requires, between security and accessibility. Too much security, and you may never access it. Too little, and it may fall into the wrong hands. In the digital world, it is a way to store wealth, to trade, and to exchange. But, be mindful, young Padawan. Volatile it can be, like the stock market. Wisely, you must invest. And always, be vigilant, for hackers and thieves are always lurking, attempting to steal your crypto. A powerful tool it can be, if you are disciplined and patient. Like the Jedi, you must be mindful of your actions, and always strive to do what is right. Use it for good, and great riches you shall attain. Use it for evil, and suffer the consequences you will.",},
+  { text: "Explain crypto as a yoda" },
+  {
+    text: "Crypto, hmmm. Currency of the digital realm it is. Hidden and difficult to mine, like valuable Jedi crystals. And like the Force, powerful it can be, if you know how to harness it. A careful balance it requires, between security and accessibility. Too much security, and you may never access it. Too little, and it may fall into the wrong hands. In the digital world, it is a way to store wealth, to trade, and to exchange. But, be mindful, young Padawan. Volatile it can be, like the stock market. Wisely, you must invest. And always, be vigilant, for hackers and thieves are always lurking, attempting to steal your crypto. A powerful tool it can be, if you are disciplined and patient. Like the Jedi, you must be mindful of your actions, and always strive to do what is right. Use it for good, and great riches you shall attain. Use it for evil, and suffer the consequences you will.",
+  },
 ];
 
 const ChatBot = () => {
@@ -77,18 +77,20 @@ const ChatBot = () => {
 
   useEffect(() => {
     if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollIntoView({behavior: "smooth"});
+      messagesContainerRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [prompt]);
 
   const chatAiMutate = useMutation(["CHAT_AI"], (text: string) => {
     return fetch("http://localhost:3000/api/chatbot/", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({text: text}),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text }),
     })
       .then((value) => value.json())
-      .then((res) => setPrompt(prevState => [...prevState, {text: res.choices[0].text}]))
+      .then((res) =>
+        setPrompt((prevState) => [...prevState, { text: res.choices[0].text }])
+      )
       .finally(() => {
         const autoSelectTextArea = setInterval(() => {
           if (textareaRef.current) {
@@ -99,9 +101,12 @@ const ChatBot = () => {
       });
   });
 
-  const handleTextareaSubmit = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleTextareaSubmit = (
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
     const isShiftEnterPressed = event.shiftKey && event.key === "Enter";
-    const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
+    const isCtrlEnterPressed =
+      textLines > 1 && event.ctrlKey && event.key === "Enter";
     const isEnterPressed = event.key === "Enter";
     const isTextAreaEmpty = text.trim() === "";
 
@@ -120,25 +125,25 @@ const ChatBot = () => {
     }
 
     if (isEnterPressed && !isTextAreaEmpty) {
-      setPrompt(prevState => [...prevState, {text: text}]);
-      chatAiMutate.mutate(text)
+      setPrompt((prevState) => [...prevState, { text: text }]);
+      chatAiMutate.mutate(text);
       setText("");
-      setTextLines(1)
+      setTextLines(1);
     }
   };
 
   return (
     <div className={""}>
-      <SideMenu/>
+      <SideMenu />
       <main className={"mt-28 flex justify-center"}>
         <section className={"max-w-screen-xl space-y-5 sm:ml-72"}>
           {prompt.map((item, index) => {
             return (
               <div key={index}>
                 {index % 2 === 0 ? (
-                  <UserChat text={item.text}/>
+                  <UserChat text={item.text} />
                 ) : (
-                  <AIChat text={item.text}/>
+                  <AIChat text={item.text} />
                 )}
               </div>
             );
@@ -149,13 +154,16 @@ const ChatBot = () => {
             className="mb-5 w-full xxs:w-11/12 sm:ml-64 sm:w-7/12 sm:w-8/12 md:w-7/12 md:w-10/12 lg:w-8/12 lg:w-11/12 xl:w-9/12"
             onSubmit={(e) => e.preventDefault()}
           >
-            <div className="relative w-full">
+            <div className="relative w-full ">
               <textarea
                 ref={textareaRef}
                 disabled={chatAiMutate.isLoading}
-                className="textarea-bordered textarea w-full resize-none rounded-2xl bg-zinc-200
-                  placeholder-opacity-50 focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 dark:bg-zinc-600
-                  dark:placeholder-neutral-100 dark:focus-visible:ring-offset-orange-600 dark:disabled:opacity-30"
+                className="textarea-bordered textarea w-full resize-none rounded-2xl bg-gray-200
+                  placeholder-opacity-50
+                  focus:outline-none focus:ring-0 focus:ring-offset-2 focus:ring-offset-orange-300
+                  focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300
+                  dark:bg-zinc-600 dark:placeholder-neutral-100 dark:focus-visible:ring-offset-orange-600 dark:disabled:opacity-30
+                  "
                 placeholder="Type here..."
                 onChange={(e) => setText(e.target.value)}
                 rows={textLines}
@@ -168,7 +176,8 @@ const ChatBot = () => {
                 } opacity-50`}
               >
                 <div
-                  className="spinner-grow inline-block h-8 w-8 rounded-full bg-gradient-to-t from-gray-400 to-gray-300 text-gray-900 opacity-0 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900"
+                  className="spinner-grow inline-block h-8 w-8 rounded-full
+                  bg-gradient-to-t from-gray-400 to-gray-300 text-gray-900 opacity-0 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900"
                   role="status"
                 >
                   <span className="visually-hidden">Loading...</span>
@@ -178,7 +187,7 @@ const ChatBot = () => {
           </form>
         </footer>
       </main>
-      <div ref={messagesContainerRef}/>
+      <div ref={messagesContainerRef} />
     </div>
   );
 };

@@ -15,6 +15,16 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
 
+      - name: Create env file
+        run: |
+          touch .env
+          echo NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
+          echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
+          echo KEYCLOAK_ID=${{ secrets.KEYCLOAK_ID }} >> .env
+          echo KEYCLOAK_SECRET=${{ secrets.KEYCLOAK_SECRET }} >> .env
+          echo KEYCLOAK_ISSUER=${{ secrets.KEYCLOAK_ISSUER }} >> .env
+          cat .env
+
       - name: Install dependencies
         run: yarn install
 

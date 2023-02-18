@@ -7,4 +7,5 @@ export const links = {
   chain_music: "https://chainmusic.chaincuet.com/",
   wiki: "https://wiki.chaincuet.com/",
   chaincuet: "https://chaincuet.com/",
+  chain_bot: "https://chainbot.chaincuet.com/",
 };

@@ -1,22 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import chainbotWhite from "../assets/images/chainbot-logo-white.png";
 import chainbotBlack from "../assets/images/chainbot-logo-black.png";
-import { useTheme } from "next-themes";
+import {useTheme} from "next-themes";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { links } from "@/components/utils/Links";
+import {useRouter} from "next/navigation";
+import {links} from "@/components/utils/Links";
 import ThemeSwitch from "@/lib/ThemeSwitch";
-import IconHeader from "@/lib/IconHeader";
+import Button from "@/lib/Button";
+import {signOut, useSession} from "next-auth/react";
 
 const Header = () => {
   const router = useRouter();
-  const { theme } = useTheme();
+  const {theme} = useTheme();
   const [isTheme, setIsTheme] = useState<string>();
+  const {data} = useSession();
 
   useEffect(() => {
     setIsTheme(theme);
   }, [theme]);
+
+  const handleSignOut = async () => {
+    if (data) {
+      const post_logout_redirect_uri = process.env.NEXTAUTH_URL;
+      const logoutUrl = `https://auth.chaincuet.com/auth/realms/chainbot/protocol/openid-connect/logout?id_token_hint=${data.idToken}&post_logout_redirect_uri=${post_logout_redirect_uri}`;
+      signOut().then(() => router.replace(logoutUrl));
+    }
+  };
 
   return (
     <header
@@ -56,7 +66,7 @@ const Header = () => {
                           height="20"
                           viewBox="0 0 24 24"
                         >
-                          <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+                          <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/>
                         </svg>
                       </label>
                       <ul
@@ -67,7 +77,7 @@ const Header = () => {
                           <Link
                             href={"chatbot"}
                             className={
-                              "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 capitalize text-base dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
+                              "btn-ghost btn h-20 text-base capitalize text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                             }
                           >
                             ChatBot
@@ -77,7 +87,7 @@ const Header = () => {
                           <Link
                             href={"imagebot"}
                             className={
-                              "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 capitalize text-base dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
+                              "btn-ghost btn h-20 text-base capitalize text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                             }
                           >
                             ImageBot
@@ -123,7 +133,7 @@ const Header = () => {
         <div className="mr-4 flex flex-wrap justify-center gap-1">
           <div className={"flex flex-nowrap sm:flex-row-reverse"}>
             <div className={"mr-2 flex"}>
-              <ThemeSwitch />
+              <ThemeSwitch/>
             </div>
             <div className="dropdown-hover dropdown dropdown-end lg:hidden">
               <label
@@ -137,7 +147,7 @@ const Header = () => {
                   height="20"
                   viewBox="0 0 24 24"
                 >
-                  <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+                  <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/>
                 </svg>
               </label>
               <ul
@@ -148,7 +158,7 @@ const Header = () => {
                   <Link
                     href={"chatbot"}
                     className={
-                      "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 capitalize capitalize text-base dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
+                      "btn-ghost btn h-20 text-base capitalize capitalize text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                     }
                   >
                     ChatBot
@@ -158,7 +168,7 @@ const Header = () => {
                   <Link
                     href={"imagebot"}
                     className={
-                      "btn-ghost btn h-20 text-gray-600 hover:text-orange-800 capitalize text-base dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
+                      "btn-ghost btn h-20 text-base capitalize text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                     }
                   >
                     ImageBot
@@ -167,36 +177,12 @@ const Header = () => {
               </ul>
             </div>
           </div>
-          <div className={"hidden space-x-2 sm:flex"}>
-            <IconHeader
-              kind={"github"}
-              href={links.github}
-              tooltip={"Github"}
-              _blank={"_blank"}
-            />
-            <IconHeader
-              kind={"gitlab"}
-              href={links.gitlab}
-              tooltip={"Gitlab"}
-              _blank={"_blank"}
-            />
-            <IconHeader
-              kind={"twitter"}
-              href={links.twitter}
-              tooltip={"Twitter"}
-              _blank={"_blank"}
-            />
-            <IconHeader
-              kind={"linkedin"}
-              href={links.linkedin}
-              tooltip={"LinkedIn"}
-              _blank={"_blank"}
-            />
-          </div>
+          <Button onClick={() => handleSignOut()} title={"Sign out"}/>
         </div>
       </div>
     </header>
   );
 };
+
 
 export default Header;

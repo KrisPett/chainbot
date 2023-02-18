@@ -1,9 +1,10 @@
-import {Configuration, CreateCompletionResponse, OpenAIApi} from "openai";
-import {NextApiRequest, NextApiResponse} from "next";
+import { Configuration, CreateCompletionResponse, OpenAIApi } from "openai";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPEN_AI,
 });
+
 const openai = new OpenAIApi(configuration);
 
 const handler = async (
@@ -12,7 +13,7 @@ const handler = async (
 ) => {
   if (!configuration.apiKey) throw new Error("No API key found");
 
-  const {text} = req.body;
+  const { text } = req.body;
   // const prompt = `Explain as Yoda: ${text}`;
   const prompt = `
   Explain as Yoda,
@@ -25,7 +26,7 @@ const handler = async (
     model: "text-davinci-003",
     prompt: prompt,
     temperature: 0,
-    max_tokens: 100
+    max_tokens: 100,
   });
 
   return res.status(200).json(response.data);

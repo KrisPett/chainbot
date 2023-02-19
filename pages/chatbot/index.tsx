@@ -1,6 +1,6 @@
 import React from "react";
 import ChatBot from "@/components/chatbot/ChatBot";
-import { PageSEO } from "@/layouts/SEO";
+import {PageSEO} from "@/layouts/SEO";
 
 const Index = () => {
   return (
@@ -15,3 +15,4 @@ const Index = () => {
 };
 
 export default Index;
+

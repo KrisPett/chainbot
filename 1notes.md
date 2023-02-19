@@ -45,5 +45,9 @@ OPEN_AI=
 ```
 
 ```
+https://auth.chaincuet.com/auth/realms/qt3music/protocol/openid-connect/auth?client_id=chatbot-client
+```
+
+```
 chatbot@gmail.com
 ```

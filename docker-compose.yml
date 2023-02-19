@@ -1,7 +1,7 @@
 # docker stop chainbot && docker rm chainbot && docker rmi chainbot
 # docker build -t chainbot .
 # docker-compose up
-
+# docker exec -it chainbot sh
 version: "3.7"
 
 services:
@@ -9,7 +9,7 @@ services:
     container_name: chainbot
     image: chainbot:latest
     ports:
-      - "3000:80"
+      - "3000:3000"
     networks:
       - chaincue-tech-net
 

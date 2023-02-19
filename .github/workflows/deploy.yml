@@ -18,13 +18,12 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
+          echo NEXT_PUBLIC_NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
           echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
           echo KEYCLOAK_ID=${{ secrets.KEYCLOAK_ID }} >> .env
           echo KEYCLOAK_SECRET=${{ secrets.KEYCLOAK_SECRET }} >> .env
           echo KEYCLOAK_ISSUER=${{ secrets.KEYCLOAK_ISSUER }} >> .env
           cat .env
-          ls -la
 
       - name: Install dependencies
         run: yarn install
@@ -39,8 +38,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Deploy static site to S3 bucket
-        run: aws s3 sync ./out s3://${{ secrets.AWS_S3_BUCKET }} --delete
+#      - name: Deploy static site to S3 bucket
+#        run: aws s3 sync ./out s3://${{ secrets.AWS_S3_BUCKET }} --delete
 
 #      - name: Invalidating cloudfront distribution
 #        run: aws cloudfront create-invalidation --distribution-id=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths '/*'

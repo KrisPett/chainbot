@@ -1,18 +1,19 @@
 import KeycloakProvider from "next-auth/providers/keycloak";
 import NextAuth, {Session} from "next-auth";
 import {JWT} from "next-auth/jwt";
+import * as process from "process";
 
 const keycloak = KeycloakProvider({
   clientId: process.env.KEYCLOAK_ID,
   clientSecret: process.env.KEYCLOAK_SECRET,
-  issuer:  process.env.KEYCLOAK_ISSUER,
+  issuer: process.env.KEYCLOAK_ISSUER,
 });
 
 export default NextAuth({
   providers: [keycloak],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({token, account}) {
+    jwt: async ({token, account}) => {
       if (account) {
         token.accessToken = account.access_token
         token.refreshToken = account.refresh_token
@@ -26,7 +27,7 @@ export default NextAuth({
       }
       return token;
     },
-    async session({session, token}: { session: Session; token: JWT }) {
+    session: async ({session, token}: { session: Session; token: JWT }) => {
       session.accessToken = token.accessToken
       session.refreshToken = token.refreshToken
       session.idToken = token.idToken
@@ -40,3 +41,4 @@ export default NextAuth({
     },
   },
 });
+

@@ -9,7 +9,7 @@ export default function Home() {
         title={"ChainBot | ChatBot"}
         description={"ChainBot | ChatBot"}
       />
-      <ChatBot />
+      <ChatBot/>
     </>
   );
 }

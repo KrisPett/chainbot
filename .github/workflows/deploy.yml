@@ -49,7 +49,10 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
           
-          PREVIOUS_IMAGE=$(aws ecr describe-images --repository-name $REPOSITORY --image-ids imageTag=latest --query 'imageDetails[0].imageDigest' --output text)
-          if [ -n "$PREVIOUS_IMAGE" ]; then
-              aws ecr batch-delete-image --repository-name $REPOSITORY --image-ids imageDigest=$PREVIOUS_IMAGE
-          fi
+          aws ecr batch-delete-image \
+               --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} \
+               --image-ids imageTag=<untagged>
+#          PREVIOUS_IMAGE=$(aws ecr describe-images --repository-name $REPOSITORY --image-ids imageTag=latest --query 'imageDetails[0].imageDigest' --output text)
+#          if [ -n "$PREVIOUS_IMAGE" ]; then
+#              aws ecr batch-delete-image --repository-name $REPOSITORY --image-ids imageDigest=$PREVIOUS_IMAGE
+#          fi

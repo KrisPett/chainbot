@@ -1,4 +1,4 @@
-name: Upload Website
+name: Push Docker image to ECR
 
 on:
   push:
@@ -6,8 +6,9 @@ on:
       - main
 
 jobs:
-  Deploy:
+  build-and-push-image-to-ecr:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -25,21 +26,26 @@ jobs:
           echo KEYCLOAK_ISSUER=${{ secrets.KEYCLOAK_ISSUER }} >> .env
           cat .env
 
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Build static file
-        run: yarn run build
+#      - name: Install dependencies
+#        run: yarn install
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ECR_ROLE }}
           aws-region: us-east-1
 
-#      - name: Deploy static site to S3 bucket
-#        run: aws s3 sync ./out s3://${{ secrets.AWS_S3_BUCKET }} --delete
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-#      - name: Invalidating cloudfront distribution
-#        run: aws cloudfront create-invalidation --distribution-id=${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths '/*'
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: chainbot-chaincuet.com
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG

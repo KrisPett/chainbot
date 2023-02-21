@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main
-
+permissions:
+  id-token: write
+  contents: read
 jobs:
   build-and-push-image-to-ecr:
     runs-on: ubuntu-latest
@@ -26,14 +28,9 @@ jobs:
           echo KEYCLOAK_ISSUER=${{ secrets.KEYCLOAK_ISSUER }} >> .env
           cat .env
 
-#      - name: Install dependencies
-#        run: yarn install
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}ddwddwdweddwdwd
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           role-to-assume: ${{ secrets.AWS_ECR_ROLE }}
           aws-region: us-east-1
 

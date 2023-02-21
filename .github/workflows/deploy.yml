@@ -49,6 +49,8 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
           
+      - name: Delete untagged images from Amazon ECR
+        run: |
           aws ecr batch-delete-image \
                --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} \
-               --image-ids imageTag=<untagged>
+               --image-ids imageTag=<untagged

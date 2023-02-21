@@ -49,5 +49,5 @@ https://auth.chaincuet.com/auth/realms/qt3music/protocol/openid-connect/auth?cli
 ```
 
 ```
-chatbot@gmail.com
+chatbot@gmail.com 
 ```

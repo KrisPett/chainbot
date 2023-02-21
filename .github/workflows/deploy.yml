@@ -51,4 +51,5 @@ jobs:
           
       - name: Delete untagged images from Amazon ECR
         run: |
-          aws ecr batch-delete-image --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --image-ids imageTag='<untagged>'
+#          aws ecr batch-delete-image --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --image-ids imageTag='<untagged>'
+          aws ecr describe-images --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --filter tagStatus=UNTAGGED --query 'imageDetails[*].[imageDigest]' --output text | while read line; do aws ecr batch-delete-image --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} --image-ids imageDigest=$line; done

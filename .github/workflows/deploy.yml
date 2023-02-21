@@ -52,7 +52,3 @@ jobs:
           aws ecr batch-delete-image \
                --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} \
                --image-ids imageTag=<untagged>
-#          PREVIOUS_IMAGE=$(aws ecr describe-images --repository-name $REPOSITORY --image-ids imageTag=latest --query 'imageDetails[0].imageDigest' --output text)
-#          if [ -n "$PREVIOUS_IMAGE" ]; then
-#              aws ecr batch-delete-image --repository-name $REPOSITORY --image-ids imageDigest=$PREVIOUS_IMAGE
-#          fi

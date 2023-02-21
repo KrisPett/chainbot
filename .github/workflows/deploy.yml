@@ -53,4 +53,4 @@ jobs:
         run: |
           aws ecr batch-delete-image \
                --repository-name ${{ secrets.AWS_ECR_REPOSITORY }} \
-               --image-ids imageTag=<untagged
+               --image-ids imageTag=<untagged>

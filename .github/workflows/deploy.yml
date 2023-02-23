@@ -48,10 +48,17 @@ jobs:
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-          
+
       - name: Delete untagged images from Amazon ECR
         run: |
           aws ecr describe-repositories --output text | awk '{print $5}' | egrep -v '^$' | while read line; do  repo=$(echo $line | sed -e  "s/arn:aws:ecr.*\///g") ; \
           aws ecr list-images --repository-name $repo --filter tagStatus=UNTAGGED --query 'imageIds[*]' --output text | while read imageId; \
           do aws ecr batch-delete-image --repository-name $repo --image-ids imageDigest=$imageId; done; done
 
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ secrets.TASK_DEFINITION_JSON }}
+          service: chainbot-chaincuet-com-service
+          cluster: chainbot-chaincuet-com
+          wait-for-service-stability: true

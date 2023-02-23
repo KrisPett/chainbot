@@ -1,4 +1,4 @@
-{
+'{
     "taskDefinitionArn": "arn:aws:ecs:us-east-1:473260546767:task-definition/chainbot-chaincuet-com-task-new:1",
     "containerDefinitions": [
         {
@@ -81,4 +81,4 @@
     "registeredBy": "arn:aws:iam::473260546767:root",
     "tags": []
 }
-
+'

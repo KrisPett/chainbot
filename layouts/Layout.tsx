@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Layout = ({children}: Props) => {
-  const {status} = useSession({required: true, onUnauthenticated: () => signIn('keycloak')});
+  const {status} = useSession({required: false, onUnauthenticated: () => signIn('keycloak')});
   const loading = status === 'loading';
   if (loading) return <></>
 

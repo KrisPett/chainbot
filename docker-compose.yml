@@ -5,7 +5,7 @@
 version: "3.7"
 
 services:
-  gt3music-client:
+  chainbot:
     container_name: chainbot
     image: chainbot:latest
     ports:

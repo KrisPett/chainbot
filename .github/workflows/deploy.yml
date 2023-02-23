@@ -55,10 +55,14 @@ jobs:
           aws ecr list-images --repository-name $repo --filter tagStatus=UNTAGGED --query 'imageIds[*]' --output text | while read imageId; \
           do aws ecr batch-delete-image --repository-name $repo --image-ids imageDigest=$imageId; done; done
 
+      - name: Create task definition file
+        run: |
+          echo -n ${{ secrets.AWS_ECS_TASK_DEFINITION }} | base64 -d > task-definition.json
+
       - name: Deploy to Amazon ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ secrets.AWS_ECS_TASK_DEFINITION }}
+          task-definition: task-definition.json
           service: ${{ secrets.AWS_ECS_SERVICE }}
           cluster: ${{ secrets.AWS_ECS_CLUSTER }}
           wait-for-service-stability: true

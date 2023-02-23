@@ -62,4 +62,4 @@ jobs:
           service: chainbot-chaincuet-com-service
           cluster: chainbot-chaincuet-com
           wait-for-service-stability: true
-          #sdks: "nodejs"
+          #sdks: "nodejs"e

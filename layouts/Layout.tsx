@@ -7,10 +7,10 @@ type Props = {
 };
 
 const Layout = ({children}: Props) => {
-  const {status} = useSession({required: false, onUnauthenticated: () => signIn('keycloak')});
+  const {data: session, status} = useSession({required: true, onUnauthenticated: () => signIn('keycloak')});
   const loading = status === 'loading';
   if (loading) return <></>
-
+  console.log(session?.accessToken)
   return (
     <div className={"min-h-screen mx-auto flex max-w-full flex-col"}>
       <Header/>
@@ -20,4 +20,3 @@ const Layout = ({children}: Props) => {
 };
 
 export default Layout;
-

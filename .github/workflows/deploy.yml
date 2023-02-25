@@ -23,7 +23,8 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo NEXT_PUBLIC_NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
+          echo NEXT_PUBLIC_CLIENT_URL=${{ secrets.NEXT_PUBLIC_CLIENT_URL }} >> .env
+          echo NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
           echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
           echo KEYCLOAK_ID=${{ secrets.KEYCLOAK_ID }} >> .env
           echo KEYCLOAK_SECRET=${{ secrets.KEYCLOAK_SECRET }} >> .env

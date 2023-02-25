@@ -1,4 +1,4 @@
-# docker stop chainbot && docker rm chainbot && docker rmi chainbot
+# docker stop chainbot && docker rm chainbot && docker rmi chainbot && docker build -t chainbot . && docker-compose up
 # docker build -t chainbot .
 # docker-compose up
 # docker exec -it chainbot sh

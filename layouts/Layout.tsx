@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Header from "./Header";
 import {signIn, useSession} from "next-auth/react";
 
@@ -9,9 +9,16 @@ type Props = {
 const Layout = ({children}: Props) => {
   const {data: session, status} = useSession({required: true, onUnauthenticated: () => signIn('keycloak')});
   const loading = status === 'loading';
-  if (loading) return <></>
-  if(session?.error === "RefreshAccessTokenError") return signIn('keycloak')
 
+  useEffect(() => {
+    if (session?.error === "unauthorized_client" || session?.error === "RefreshAccessTokenError") {
+      signIn('keycloak').then()
+    }
+  }, [session]);
+
+  if (loading) return <></>
+
+  console.log(session?.error)
   if(session?.expires_at) {
     const expiresAt = new Date(session.expires_at * 1000);
     const currentTime = new Date(Date.now());
@@ -29,6 +36,7 @@ const Layout = ({children}: Props) => {
     }
     console.log(session)
   }
+
   return (
     <div className={"min-h-screen mx-auto flex max-w-full flex-col"}>
       <Header/>

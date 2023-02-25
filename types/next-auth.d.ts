@@ -11,6 +11,8 @@ declare module "next-auth/jwt" {
     token_type?: string
     type?: string
     userId?: string
+    expires_at?: number
+    error?: string
   }
 }
 
@@ -28,5 +30,7 @@ declare module "next-auth" {
     token_type?: string
     type?: string
     userId?: string
+    expires_at?: number
+    error?: string
   }
 }

@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import SideMenu from "@/components/chatbot/SideMenu";
 import catIcon from "@/assets/icons/cat.jpg";
 import chainIcon from "@/assets/icons/chainiconm.png";
 import Image from "next/image";
-import { useMutation } from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
+import {getSession, useSession} from "next-auth/react";
 
 interface IUserChat {
   text: string;
@@ -24,7 +25,8 @@ const UserChat = (props: IUserChat) => {
           />
         </div>
       </div>
-      <div className="chat-bubble bg-gray-200 bg-gradient-to-t from-gray-200 to-gray-300 text-gray-900 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
+      <div
+        className="chat-bubble bg-gray-200 bg-gradient-to-t from-gray-200 to-gray-300 text-gray-900 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
         {props.text}
       </div>
     </div>
@@ -50,7 +52,8 @@ const AIChat = (props: IAIChat) => {
           />
         </div>
       </div>
-      <div className="chat-bubble bg-gray-300 bg-gradient-to-b from-gray-200 to-gray-300 text-gray-900 dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
+      <div
+        className="chat-bubble bg-gray-300 bg-gradient-to-b from-gray-200 to-gray-300 text-gray-900 dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
         {props.text}
       </div>
     </div>
@@ -62,11 +65,16 @@ type TChatPrompt = {
 };
 
 const initData: TChatPrompt[] = [
-  { text: "Explain crypto as a yoda" },
+  {text: "Explain crypto as a yoda"},
   {
     text: "Crypto, hmmm. Currency of the digital realm it is. Hidden and difficult to mine, like valuable Jedi crystals. And like the Force, powerful it can be, if you know how to harness it. A careful balance it requires, between security and accessibility. Too much security, and you may never access it. Too little, and it may fall into the wrong hands. In the digital world, it is a way to store wealth, to trade, and to exchange. But, be mindful, young Padawan. Volatile it can be, like the stock market. Wisely, you must invest. And always, be vigilant, for hackers and thieves are always lurking, attempting to steal your crypto. A powerful tool it can be, if you are disciplined and patient. Like the Jedi, you must be mindful of your actions, and always strive to do what is right. Use it for good, and great riches you shall attain. Use it for evil, and suffer the consequences you will.",
   },
 ];
+
+type ChatAiMutateMutationFn = {
+  accessToken: string | undefined;
+  text: string
+}
 
 const ChatBot = () => {
   const [textLines, setTextLines] = useState(1);
@@ -77,19 +85,21 @@ const ChatBot = () => {
 
   useEffect(() => {
     if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesContainerRef.current.scrollIntoView({behavior: "smooth"});
     }
   }, [prompt]);
 
-  const chatAiMutate = useMutation(["CHAT_AI"], (text: string) => {
-    return fetch("http://localhost:3000/api/chatbot/", {
+  const chatAiMutate = useMutation(["CHAT_AI"], ({accessToken, text}: ChatAiMutateMutationFn) => {
+    return fetch("https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/default/chatbot", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: text }),
+      headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
+      body: JSON.stringify({text: text}),
     })
       .then((value) => value.json())
-      .then((res) =>
-        setPrompt((prevState) => [...prevState, { text: res.choices[0].text }])
+      .then((res) => {
+          if (res && res.choices && res.choices.length > 0)
+            setPrompt((prevState) => [...prevState, {text: res.choices[0].text}])
+        }
       )
       .finally(() => {
         const autoSelectTextArea = setInterval(() => {
@@ -98,17 +108,16 @@ const ChatBot = () => {
             clearInterval(autoSelectTextArea);
           }
         }, 100);
-      });
+      })
+      .catch((err) => console.log(err));
   });
 
-  const handleTextareaSubmit = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>
-  ) => {
+  const handleTextareaSubmit = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isShiftEnterPressed = event.shiftKey && event.key === "Enter";
-    const isCtrlEnterPressed =
-      textLines > 1 && event.ctrlKey && event.key === "Enter";
+    const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
     const isEnterPressed = event.key === "Enter";
     const isTextAreaEmpty = text.trim() === "";
+    const session = await getSession()
 
     if (isShiftEnterPressed) {
       setTextLines(textLines + 1);
@@ -124,26 +133,30 @@ const ChatBot = () => {
       event.preventDefault();
     }
 
-    if (isEnterPressed && !isTextAreaEmpty) {
-      setPrompt((prevState) => [...prevState, { text: text }]);
-      chatAiMutate.mutate(text);
-      setText("");
-      setTextLines(1);
+    if (session) {
+      if (isEnterPressed && !isTextAreaEmpty) {
+        setPrompt((prevState) => [...prevState, {text: text}]);
+        chatAiMutate.mutate({accessToken: session.accessToken, text: text});
+        setText("");
+        setTextLines(1);
+        console.log(session)
+      }
     }
+
   };
 
   return (
     <div className={""}>
-      <SideMenu />
+      <SideMenu/>
       <main className={"mt-28 flex justify-center"}>
         <section className={"max-w-screen-xl space-y-5 sm:ml-72"}>
           {prompt.map((item, index) => {
             return (
               <div key={index}>
                 {index % 2 === 0 ? (
-                  <UserChat text={item.text} />
+                  <UserChat text={item.text}/>
                 ) : (
-                  <AIChat text={item.text} />
+                  <AIChat text={item.text}/>
                 )}
               </div>
             );
@@ -187,7 +200,7 @@ const ChatBot = () => {
           </form>
         </footer>
       </main>
-      <div ref={messagesContainerRef} />
+      <div ref={messagesContainerRef}/>
     </div>
   );
 };

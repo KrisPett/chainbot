@@ -7,10 +7,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<CreateCompletionResponse>
-) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<CreateCompletionResponse>) => {
   if (!configuration.apiKey) throw new Error("No API key found");
 
   const { text } = req.body;

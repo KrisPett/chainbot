@@ -82,7 +82,7 @@ const ChatBot = () => {
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("");
   const [prompt, setPrompt] = useState<TChatPrompt[]>(initData);
-  const [previousTextSent, setPreviousTextSent] = useState("");
+  const [previousTextSent, setPreviousTextSent] = useState("what is aws");
   const {data: session} = useSession()
 
   useEffect(() => {
@@ -90,12 +90,13 @@ const ChatBot = () => {
       messagesContainerRef.current.scrollIntoView({behavior: "smooth"});
     }
   }, [prompt]);
-
   const chatAiMutate = useMutation(["CHAT_AI"], ({accessToken, text}: ChatAiMutateMutationFn) => {
-    return fetch("https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/default/chatbot", {
+    const url = "https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/chatbot";
+    const requestBody = {text: text}
+    return fetch(url, {
       method: "POST",
       headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
-      body: JSON.stringify({text: text}),
+      body: JSON.stringify(requestBody),
     })
       .then((value) => {
         if (!value.ok) return Promise.reject(value);
@@ -152,7 +153,6 @@ const ChatBot = () => {
         setTextLines(1);
         setText("");
         setPreviousTextSent(text);
-        console.log(session)
       }
     }
 

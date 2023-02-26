@@ -4,7 +4,7 @@ import catIcon from "@/assets/icons/cat.jpg";
 import chainIcon from "@/assets/icons/chainiconm.png";
 import Image from "next/image";
 import {useMutation} from "@tanstack/react-query";
-import {getSession} from "next-auth/react";
+import {getSession, useSession} from "next-auth/react";
 
 interface IUserChat {
   text: string;
@@ -83,6 +83,7 @@ const ChatBot = () => {
   const [text, setText] = useState("");
   const [prompt, setPrompt] = useState<TChatPrompt[]>(initData);
   const [previousTextSent, setPreviousTextSent] = useState("");
+  const {data: session} = useSession()
 
   useEffect(() => {
     if (messagesContainerRef.current) {
@@ -126,7 +127,6 @@ const ChatBot = () => {
     const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
     const isEnterPressed = event.key === "Enter";
     const isTextAreaEmpty = text.trim() === "";
-    const session = await getSession()
 
     if (isArrowUpPressed) setText(previousTextSent);
     if (isArrowDownPressed) setText("");
@@ -149,8 +149,8 @@ const ChatBot = () => {
       if (isEnterPressed && !isTextAreaEmpty) {
         setPrompt((prevState) => [...prevState, {text: text}]);
         chatAiMutate.mutate({accessToken: session.access_token, text: text});
-        setText("");
         setTextLines(1);
+        setText("");
         setPreviousTextSent(text);
         console.log(session)
       }
@@ -191,7 +191,8 @@ const ChatBot = () => {
                   dark:bg-zinc-600 dark:placeholder-neutral-100 dark:focus-visible:ring-offset-orange-600 dark:disabled:opacity-30
                   "
                 placeholder="Type here..."
-                onChange={(e) => setText(e.target.value)}
+                onChange={(e) => setText(e.target.value)
+                }
                 rows={textLines}
                 onKeyDown={handleTextareaKeydown}
                 value={text}

@@ -2,9 +2,9 @@ import NextAuth, {DefaultSession} from "next-auth"
 
 declare module "next-auth/jwt" {
   interface JWT {
-    accessToken?: string
-    refreshToken?: string
-    idToken?: string
+    access_token?: string
+    refresh_token?: string
+    id_token?: string
     providerAccountId?: string
     scope?: string
     session_state?: string
@@ -21,9 +21,9 @@ declare module "next-auth" {
     user: {
       address: string
     }
-    accessToken?: string
-    refreshToken?: string
-    idToken?: string
+    access_token?: string
+    refresh_token?: string
+    id_token?: string
     providerAccountId?: string
     scope?: string
     session_state?: string

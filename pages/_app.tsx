@@ -17,7 +17,7 @@ const queryClient = new QueryClient();
 
 const App = ({Component, pageProps}: AppProps) => {
   return (
-    <SessionProvider session={pageProps.session}>
+    <SessionProvider session={pageProps.session} refetchInterval={300}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider
           attribute={"class"}

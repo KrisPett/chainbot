@@ -12,30 +12,11 @@ const Layout = ({children}: Props) => {
 
   useEffect(() => {
     if (session?.error === "unauthorized_client" || session?.error === "RefreshAccessTokenError") {
-      signIn('keycloak').then()
+      signIn('keycloak')
     }
   }, [session]);
 
   if (loading) return <></>
-
-  console.log(session?.error)
-  if(session?.expires_at) {
-    const expiresAt = new Date(session.expires_at * 1000);
-    const currentTime = new Date(Date.now());
-    if(currentTime.getTime() >= expiresAt.getTime()) {
-      console.log("Token is expired")
-      console.log("expiresAt: " + expiresAt)
-      console.log("currentTime: " + currentTime)
-      console.log(session.accessToken)
-    }
-    else {
-      console.log("Token is still valid")
-      console.log("expiresAt: " + expiresAt)
-      console.log("currentTime: " + currentTime)
-      console.log(session.accessToken)
-    }
-    console.log(session)
-  }
 
   return (
     <div className={"min-h-screen mx-auto flex max-w-full flex-col"}>

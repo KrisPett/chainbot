@@ -8,7 +8,7 @@ import {useRouter} from "next/navigation";
 import {links} from "@/components/utils/Links";
 import ThemeSwitch from "@/lib/ThemeSwitch";
 import Button from "@/lib/Button";
-import {signIn, signOut, useSession} from "next-auth/react";
+import {signOut, useSession} from "next-auth/react";
 
 const Header = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const Header = () => {
   const handleSignOut = async () => {
     if (session) {
       const post_logout_redirect_uri = process.env.NEXT_PUBLIC_CLIENT_URL;
-      const logoutUrl = `https://auth.chaincuet.com/auth/realms/chainbot/protocol/openid-connect/logout?id_token_hint=${session.idToken}&post_logout_redirect_uri=${post_logout_redirect_uri}`;
+      const logoutUrl = `https://auth.chaincuet.com/auth/realms/chainbot/protocol/openid-connect/logout?id_token_hint=${session.id_token}&post_logout_redirect_uri=${post_logout_redirect_uri}`;
       signOut().then(() => router.replace(logoutUrl));
     }
   };

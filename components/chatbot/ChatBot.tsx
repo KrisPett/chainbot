@@ -4,7 +4,7 @@ import catIcon from "@/assets/icons/cat.jpg";
 import chainIcon from "@/assets/icons/chainiconm.png";
 import Image from "next/image";
 import {useMutation} from "@tanstack/react-query";
-import {getSession, useSession} from "next-auth/react";
+import {getSession} from "next-auth/react";
 
 interface IUserChat {
   text: string;
@@ -77,11 +77,12 @@ type ChatAiMutateMutationFn = {
 }
 
 const ChatBot = () => {
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("");
   const [prompt, setPrompt] = useState<TChatPrompt[]>(initData);
-  const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [previousTextSent, setPreviousTextSent] = useState("");
 
   useEffect(() => {
     if (messagesContainerRef.current) {
@@ -95,7 +96,10 @@ const ChatBot = () => {
       headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
       body: JSON.stringify({text: text}),
     })
-      .then((value) => value.json())
+      .then((value) => {
+        if (!value.ok) return Promise.reject(value);
+        return value.json()
+      })
       .then((res) => {
           if (res && res.choices && res.choices.length > 0)
             setPrompt((prevState) => [...prevState, {text: res.choices[0].text}])
@@ -109,15 +113,23 @@ const ChatBot = () => {
           }
         }, 100);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err)
+        setPrompt((prevState) => [...prevState, {text: `Error ${err.statusText}: ${err.status}`}]);
+      });
   });
 
-  const handleTextareaSubmit = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleTextareaKeydown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const isArrowUpPressed = event.key === "ArrowUp";
+    const isArrowDownPressed = event.key === "ArrowDown";
     const isShiftEnterPressed = event.shiftKey && event.key === "Enter";
     const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
     const isEnterPressed = event.key === "Enter";
     const isTextAreaEmpty = text.trim() === "";
     const session = await getSession()
+
+    if (isArrowUpPressed) setText(previousTextSent);
+    if (isArrowDownPressed) setText("");
 
     if (isShiftEnterPressed) {
       setTextLines(textLines + 1);
@@ -136,9 +148,10 @@ const ChatBot = () => {
     if (session) {
       if (isEnterPressed && !isTextAreaEmpty) {
         setPrompt((prevState) => [...prevState, {text: text}]);
-        chatAiMutate.mutate({accessToken: session.accessToken, text: text});
+        chatAiMutate.mutate({accessToken: session.access_token, text: text});
         setText("");
         setTextLines(1);
+        setPreviousTextSent(text);
         console.log(session)
       }
     }
@@ -180,7 +193,7 @@ const ChatBot = () => {
                 placeholder="Type here..."
                 onChange={(e) => setText(e.target.value)}
                 rows={textLines}
-                onKeyDown={handleTextareaSubmit}
+                onKeyDown={handleTextareaKeydown}
                 value={text}
               />
               <div

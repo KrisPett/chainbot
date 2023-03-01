@@ -8,15 +8,15 @@ type Props = {
 
 const Layout = ({children}: Props) => {
   const {data: session, status} = useSession({required: true, onUnauthenticated: () => signIn('keycloak')});
-  const loading = status === 'loading';
 
   useEffect(() => {
     if (session?.error === "unauthorized_client" || session?.error === "RefreshAccessTokenError") {
-      signIn('keycloak')
+      signIn('keycloak').then()
     }
   }, [session]);
 
-  if (loading) return <></>
+  if (status === "loading") return <></>
+  if (session?.error === "unauthorized_client") return <></>
 
   return (
     <div className={"min-h-screen mx-auto flex max-w-full flex-col"}>

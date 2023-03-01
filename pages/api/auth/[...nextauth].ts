@@ -53,6 +53,7 @@ const refreshAccessToken = async (token: JWT): Promise<JWT> => {
 export default NextAuth({
   providers: [keycloak],
   secret: process.env.NEXTAUTH_SECRET,
+  session: {maxAge: 36000},
   callbacks: {
     jwt: async ({token, account}) => {
       if (token.expires_at) {

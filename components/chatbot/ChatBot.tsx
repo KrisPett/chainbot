@@ -92,7 +92,9 @@ const ChatBot = () => {
   }, [prompt]);
   const chatAiMutate = useMutation(["CHAT_AI"], ({accessToken, text}: ChatAiMutateMutationFn) => {
     const url = "https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/chatbot";
+    // const url = "http://localhost:3000/api/chatbot";
     const requestBody = {text: text}
+    console.log(requestBody)
     return fetch(url, {
       method: "POST",
       headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
@@ -103,6 +105,7 @@ const ChatBot = () => {
         return value.json()
       })
       .then((res) => {
+        console.log(res)
           if (res && res.choices && res.choices.length > 0)
             setPrompt((prevState) => [...prevState, {text: res.choices[0].text}])
         }

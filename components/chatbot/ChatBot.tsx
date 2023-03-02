@@ -82,6 +82,7 @@ type ChatAiMutateMutationFn = {
 type AIPromptRequestBody = {
   text: string
   model: string
+  isCheckedYodaMode: boolean
 }
 
 const ChatBot = () => {
@@ -93,6 +94,7 @@ const ChatBot = () => {
   const [previousTextSent, setPreviousTextSent] = useState("what is aws");
   const {data: session} = useSession()
   const [modelSelected, setModelSelected] = useState(models[0].value);
+  const [isCheckedYodaMode, setIsCheckedYodaMode] = useState(false);
 
   useEffect(() => {
     if (messagesContainerRef.current) {
@@ -101,11 +103,8 @@ const ChatBot = () => {
   }, [prompt]);
 
   const chatAiMutate = useMutation(["CHAT_AI"], ({accessToken, text, model}: ChatAiMutateMutationFn) => {
-    // const url = "https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/chatbot";
-    // const url = "http://localhost:3000/api/chatbot";
-    const url = process.env.NEXT_PUBLIC_AWS_GATEWAY_URL;
-    const aiPromptRequestBody: AIPromptRequestBody = {text: text, model: model}
-    return fetch(url, {
+    const aiPromptRequestBody: AIPromptRequestBody = {text: text, model: model, isCheckedYodaMode: isCheckedYodaMode}
+    return fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL, {
       method: "POST",
       headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
       body: JSON.stringify(aiPromptRequestBody),
@@ -175,7 +174,7 @@ const ChatBot = () => {
 
   return (
     <div className={""}>
-      <SideMenu setModelSelected={model => setModelSelected(model)}/>
+      <SideMenu setModelSelected={model => setModelSelected(model)} isCheckedYodaMode={isCheckedYodaMode} setIsCheckedYodaMode={setIsCheckedYodaMode}/>
       <main className={"mt-28 flex justify-center"}>
         <section className={"max-w-screen-xl space-y-5 sm:ml-72"}>
           {prompt.map((item, index) => {

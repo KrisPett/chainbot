@@ -30,7 +30,7 @@ const SideMenu = ({setModelSelected, setIsCheckedYodaMode, isCheckedYodaMode}: P
       </section>
       <section className={"mt-10 flex justify-center"}>
         <select
-          className="select select-lg w-full max-w-xs focus:border-orange-1200 bg-gray-200 w-11/12 font-medium text-gray-800 dark:text-gray-200
+          className="select select-lg max-w-xs focus:border-orange-1200 bg-gray-200 w-11/12 font-medium text-gray-800 dark:text-gray-200
               placeholder-opacity-50
                   focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-orange-300
                   focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:ring-offset-orange-300

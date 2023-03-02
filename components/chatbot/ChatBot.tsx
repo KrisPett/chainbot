@@ -189,7 +189,7 @@ const ChatBot = () => {
         </section>
         <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
           <form
-            className="mb-2 w-full xxs:w-11/12 sm:ml-64 sm:w-6/12 sm:w-8/12 md:w-7/12 md:w-10/12 lg:w-8/12 lg:w-11/12 xl:w-9/12"
+            className="mb-2 w-full xxs:w-11/12 sm:ml-64 sm:w-6/12 sm:w-7/12 md:w-7/12 md:w-10/12 lg:w-8/12 lg:w-11/12 xl:w-9/12"
             onSubmit={(e) => e.preventDefault()}
           >
             <div className="relative w-full">

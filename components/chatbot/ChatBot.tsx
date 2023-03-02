@@ -28,7 +28,8 @@ const UserChat = (props: IUserChat) => {
         </div>
       </div>
       <div
-        className="chat-bubble bg-gray-200 bg-gradient-to-t from-gray-200 to-gray-300 text-gray-900 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
+        className="chat-bubble bg-gray-200 bg-gradient-to-t from-gray-200 to-gray-300 text-gray-900
+        dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
         {props.text}
       </div>
     </div>
@@ -55,7 +56,8 @@ const AIChat = (props: IAIChat) => {
         </div>
       </div>
       <div
-        className="chat-bubble bg-gray-300 bg-gradient-to-b from-gray-200 to-gray-300 text-gray-900 dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
+        className="chat-bubble bg-gray-300 bg-gradient-to-b from-gray-200 to-gray-300 text-gray-900
+        dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
         {props.text}
       </div>
     </div>
@@ -187,10 +189,10 @@ const ChatBot = () => {
         </section>
         <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
           <form
-            className="mb-5 w-full xxs:w-11/12 sm:ml-64 sm:w-7/12 sm:w-8/12 md:w-7/12 md:w-10/12 lg:w-8/12 lg:w-11/12 xl:w-9/12"
+            className="mb-2 w-full xxs:w-11/12 sm:ml-64 sm:w-6/12 sm:w-8/12 md:w-7/12 md:w-10/12 lg:w-8/12 lg:w-11/12 xl:w-9/12"
             onSubmit={(e) => e.preventDefault()}
           >
-            <div className="relative w-full ">
+            <div className="relative w-full">
               <textarea
                 ref={textareaRef}
                 disabled={chatAiMutate.isLoading}

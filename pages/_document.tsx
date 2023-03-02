@@ -34,7 +34,7 @@ export default function Document() {
           content="#000"
         />
       </Head>
-      <body className="bg-zinc-200 text-black dark:bg-zinc-700 dark:text-white ">
+      <body className="bg-zinc-200 text-black dark:text-white dark:bg-gradient-to-r from-zinc-700 to-zinc-600">
       <Main/>
       <NextScript/>
       </body>

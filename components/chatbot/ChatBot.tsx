@@ -196,12 +196,12 @@ const ChatBot = () => {
               <textarea
                 ref={textareaRef}
                 disabled={chatAiMutate.isLoading}
-                className="textarea-bordered textarea w-full resize-none rounded-2xl bg-gray-200
+                className="textarea-bordered textarea w-full resize-none rounded-2xl bg-zinc-300
                   placeholder-opacity-50
-                  focus:outline-none focus:ring-0 focus:ring-offset-2 focus:ring-offset-orange-300
+                  focus:outline-none focus:ring-0 focus:ring-offset-2 focus:ring-offset-orange-300 bg-opacity-60
                   focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300
                   dark:placeholder-neutral-100 dark:focus-visible:ring-offset-orange-600 dark:disabled:opacity-30
-                  dark:bg-gradient-to-br from-zinc-500 to-zinc-700
+                  dark:bg-zinc-600 dark:bg-opacity-70
                   "
                 placeholder="Type here..."
                 onChange={(e) => setText(e.target.value)
@@ -211,7 +211,7 @@ const ChatBot = () => {
                 value={text}
               />
               <div
-                className={`absolute inset-y-0 right-0 bottom-2 flex items-center pr-3 ${chatAiMutate.isLoading ? "block" : "hidden"} opacity-50`}>
+                className={`absolute inset-y-0 right-0 bottom-0.5 flex items-center pr-3 ${chatAiMutate.isLoading ? "block" : "hidden"} opacity-50`}>
                 <div
                   className="inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite]
                 rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]

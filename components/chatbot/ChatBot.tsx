@@ -4,7 +4,9 @@ import catIcon from "@/assets/icons/cat.jpg";
 import chainIcon from "@/assets/icons/chainiconm.png";
 import Image from "next/image";
 import {useMutation} from "@tanstack/react-query";
-import {getSession, useSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
+import {models} from "@/components/utils/AIModels";
+import * as process from "process";
 
 interface IUserChat {
   text: string;
@@ -74,6 +76,12 @@ const initData: TChatPrompt[] = [
 type ChatAiMutateMutationFn = {
   accessToken: string | undefined;
   text: string
+  model: string
+}
+
+type AIPromptRequestBody = {
+  text: string
+  model: string
 }
 
 const ChatBot = () => {
@@ -84,28 +92,29 @@ const ChatBot = () => {
   const [prompt, setPrompt] = useState<TChatPrompt[]>(initData);
   const [previousTextSent, setPreviousTextSent] = useState("what is aws");
   const {data: session} = useSession()
+  const [modelSelected, setModelSelected] = useState(models[0].value);
 
   useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollIntoView({behavior: "smooth"});
     }
   }, [prompt]);
-  const chatAiMutate = useMutation(["CHAT_AI"], ({accessToken, text}: ChatAiMutateMutationFn) => {
-    const url = "https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/chatbot";
+
+  const chatAiMutate = useMutation(["CHAT_AI"], ({accessToken, text, model}: ChatAiMutateMutationFn) => {
+    // const url = "https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/chatbot";
     // const url = "http://localhost:3000/api/chatbot";
-    const requestBody = {text: text}
-    console.log(requestBody)
+    const url = process.env.NEXT_PUBLIC_AWS_GATEWAY_URL;
+    const aiPromptRequestBody: AIPromptRequestBody = {text: text, model: model}
     return fetch(url, {
       method: "POST",
       headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify(aiPromptRequestBody),
     })
       .then((value) => {
         if (!value.ok) return Promise.reject(value);
         return value.json()
       })
       .then((res) => {
-        console.log(res)
           if (res && res.choices && res.choices.length > 0)
             setPrompt((prevState) => [...prevState, {text: res.choices[0].text}])
         }
@@ -131,7 +140,6 @@ const ChatBot = () => {
     const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
     const isEnterPressed = event.key === "Enter";
     const isTextAreaEmpty = text.trim() === "";
-
     if (isArrowUpPressed) setText(previousTextSent);
     if (isArrowDownPressed) setText("");
 
@@ -152,28 +160,28 @@ const ChatBot = () => {
     if (session) {
       if (isEnterPressed && !isTextAreaEmpty) {
         setPrompt((prevState) => [...prevState, {text: text}]);
-        chatAiMutate.mutate({accessToken: session.access_token, text: text});
+        const chatAiMutateMutationFn: ChatAiMutateMutationFn = {
+          accessToken: session.access_token,
+          text: text,
+          model: modelSelected
+        }
+        chatAiMutate.mutate(chatAiMutateMutationFn);
         setTextLines(1);
         setText("");
         setPreviousTextSent(text);
       }
     }
-
   };
 
   return (
     <div className={""}>
-      <SideMenu/>
+      <SideMenu setModelSelected={model => setModelSelected(model)}/>
       <main className={"mt-28 flex justify-center"}>
         <section className={"max-w-screen-xl space-y-5 sm:ml-72"}>
           {prompt.map((item, index) => {
             return (
               <div key={index}>
-                {index % 2 === 0 ? (
-                  <UserChat text={item.text}/>
-                ) : (
-                  <AIChat text={item.text}/>
-                )}
+                {index % 2 === 0 ? (<UserChat text={item.text}/>) : (<AIChat text={item.text}/>)}
               </div>
             );
           })}
@@ -201,16 +209,16 @@ const ChatBot = () => {
                 value={text}
               />
               <div
-                className={`absolute inset-y-0 right-0 bottom-2 flex items-center pr-3 ${
-                  chatAiMutate.isLoading ? "block" : "hidden"
-                } opacity-50`}
-              >
+                className={`absolute inset-y-0 right-0 bottom-2 flex items-center pr-3 ${chatAiMutate.isLoading ? "block" : "hidden"} opacity-50`}>
                 <div
-                  className="spinner-grow inline-block h-8 w-8 rounded-full
-                  bg-gradient-to-t from-gray-400 to-gray-300 text-gray-900 opacity-0 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900"
-                  role="status"
-                >
-                  <span className="visually-hidden">Loading...</span>
+                  className="inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite]
+                rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]
+                bg-gradient-to-t from-gray-400 to-gray-300 text-gray-900 opacity-0 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900"
+                  role="status">
+                <span
+                  className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                  Loading...
+                </span>
                 </div>
               </div>
             </div>

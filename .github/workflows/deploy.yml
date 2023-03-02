@@ -24,6 +24,7 @@ jobs:
         run: |
           touch .env
           echo NEXT_PUBLIC_CLIENT_URL=${{ secrets.NEXT_PUBLIC_CLIENT_URL }} >> .env
+          echo NEXT_PUBLIC_AWS_GATEWAY_URL=${{ secrets.NEXT_PUBLIC_AWS_GATEWAY_URL }} >> .env
           echo NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
           echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
           echo KEYCLOAK_ID=${{ secrets.KEYCLOAK_ID }} >> .env

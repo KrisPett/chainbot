@@ -10,7 +10,7 @@ const openai = new OpenAIApi(configuration);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<CreateCompletionResponse>) => {
   if (!configuration.apiKey) throw new Error("No API key found");
-  const {text} = req.body;
+  const {text, model} = req.body;
   // const prompt = `Explain as Yoda: ${text}`;
   // const prompt = `
   // Explain as Yoda,
@@ -20,7 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<CreateCompletio
   // const prompt = `Min tokens 50: ${text}`;
   const prompt = `${text}`;
   const response = await openai.createCompletion({
-    model: models.textDavinci003,
+    model: model,
     prompt: prompt,
     temperature: 0,
     max_tokens: 100,

@@ -1,12 +1,11 @@
 import React, {useState} from "react";
 import {models} from "@/components/utils/AIModels";
 
-interface IListType {
-  id: string;
-  title: string;
+interface Props {
+  setModelSelected: (model: string) => void;
 }
 
-const SideMenu = () => {
+const SideMenu = ({setModelSelected}: Props) => {
   const [isChecked, setIsChecked] = useState(false);
 
   return (
@@ -30,28 +29,11 @@ const SideMenu = () => {
       </section>
       <section className={"mt-10"}>
         <select className="select select-primary w-full max-w-xs bg-gray-700"
-                onChange={(e) => console.log(e.target.value)}>
+                onChange={(e) => setModelSelected(e.target.value)}>
           {models.map(item => {
             return <option key={item.value} value={item.value}>{item.name}</option>
           })}
         </select>
-      </section>
-      <section>
-        <input type="range" min="0" max="100" value="80" className="range range-primary"/>
-        <div>
-          <label
-            htmlFor="customRange3"
-            className="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
-          >Example range</label
-          >
-          <input
-            type="range"
-            className="transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-neutral-200"
-            min="0"
-            max="5"
-            step="0.5"
-            id="customRange3"/>
-        </div>
       </section>
     </div>
   );

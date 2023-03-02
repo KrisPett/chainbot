@@ -5,6 +5,7 @@ touch .env
 
 # add the required environment variables to the .env file
 echo "NEXT_PUBLIC_CLIENT_URL=" >> .env
+echo "NEXT_PUBLIC_AWS_GATEWAY_URL=" >> .env
 echo "NEXTAUTH_URL=" >> .env
 echo "NEXTAUTH_SECRET=" >> .env
 echo "KEYCLOAK_ID=" >> .env

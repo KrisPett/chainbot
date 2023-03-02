@@ -10,7 +10,7 @@ interface Props {
 const SideMenu = ({setModelSelected, setIsCheckedYodaMode, isCheckedYodaMode}: Props) => {
 
   return (
-    <div className="fixed inset-y-0 left-0 h-full w-64 bg-zinc-300 dark:bg-zinc-600 xxs:hidden sm:block">
+    <div className="fixed inset-y-0 left-0 h-full w-64 bg-zinc-300 dark:bg-gradient-to-b from-zinc-600 to-zinc-500 xxs:hidden sm:block">
       <section className={"mt-24"}>
         <div className={"flex flex-row items-center justify-center"}>
           <span className=" mr-2 text-xl text-zinc-800 dark:text-zinc-200">Powered By Yoda</span>

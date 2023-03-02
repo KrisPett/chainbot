@@ -50,8 +50,8 @@ module.exports = {
         "4xl": "2rem",
       },
       colors: {
-        "orange-1000": "#78350F",
-        "orange-1100": "#E3560C",
+        "orange-1000": "#7c370f",
+        "orange-1100": "#d95515",
       },
     },
     minHeight: {

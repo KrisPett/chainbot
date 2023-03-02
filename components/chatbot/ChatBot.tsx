@@ -200,7 +200,8 @@ const ChatBot = () => {
                   placeholder-opacity-50
                   focus:outline-none focus:ring-0 focus:ring-offset-2 focus:ring-offset-orange-300
                   focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300
-                  dark:bg-zinc-600 dark:placeholder-neutral-100 dark:focus-visible:ring-offset-orange-600 dark:disabled:opacity-30
+                  dark:placeholder-neutral-100 dark:focus-visible:ring-offset-orange-600 dark:disabled:opacity-30
+                  dark:bg-gradient-to-br from-zinc-500 to-zinc-700
                   "
                 placeholder="Type here..."
                 onChange={(e) => setText(e.target.value)

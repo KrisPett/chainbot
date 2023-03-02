@@ -29,7 +29,7 @@ const UserChat = (props: IUserChat) => {
       </div>
       <div
         className="chat-bubble bg-gray-200 bg-gradient-to-t from-gray-200 to-gray-300 text-gray-900
-        dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
+        dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300 break-all">
         {props.text}
       </div>
     </div>
@@ -57,7 +57,7 @@ const AIChat = (props: IAIChat) => {
       </div>
       <div
         className="chat-bubble bg-gray-300 bg-gradient-to-b from-gray-200 to-gray-300 text-gray-900
-        dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300">
+        dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300 break-all">
         {props.text}
       </div>
     </div>
@@ -211,7 +211,7 @@ const ChatBot = () => {
                 value={text}
               />
               <div
-                className={`absolute inset-y-0 right-0 bottom-0.5 flex items-center pr-3 ${chatAiMutate.isLoading ? "block" : "hidden"} opacity-50`}>
+                className={`absolute inset-y-0 right-0 bottom-1 flex items-center pr-3 ${chatAiMutate.isLoading ? "block" : "hidden"} opacity-50`}>
                 <div
                   className="inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite]
                 rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]

@@ -23,7 +23,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<CreateCompletio
     model: model,
     prompt: prompt,
     temperature: 0,
-    max_tokens: 100,
+    max_tokens: 150,
+    stop: [" Human:", " AI:"],
   });
 
   return res.status(200).json(response.data);

@@ -87,13 +87,24 @@ type AIPromptRequestBody = {
   isCheckedYodaMode: boolean
 }
 
+/*
+*   prompt: "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.
+
+  \n\nHuman: Hello, who are you?
+  \nAI: I am an AI created by OpenAI. How can I help you today?
+  \nHuman: \nAI: What would you like me to do for you?
+  \nHuman: what is facebbok
+  \nAI: Facebook is a social networking website that allows people to connect with friends, family, and other people they know online. It also allows users to share photos, videos, and messages.
+  \nHuman: what was my prevoisly question Your previous question was \"Hello, who are you?\".",*/
+
 const ChatBot = () => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("");
   const [prompt, setPrompt] = useState<TChatPrompt[]>(initData);
-  const [previousTextSent, setPreviousTextSent] = useState("what is aws");
+  const [previousTextSent, setPreviousTextSent] = useState<string[]>(["what is aws"]);
+  const [chatHistory, setChatHistory] = useState<string[]>([]);
   const {data: session} = useSession()
   const [modelSelected, setModelSelected] = useState(models[0].value);
   const [isCheckedYodaMode, setIsCheckedYodaMode] = useState(false);
@@ -116,8 +127,11 @@ const ChatBot = () => {
         return value.json()
       })
       .then((res) => {
-          if (res && res.choices && res.choices.length > 0)
+          if (res && res.choices && res.choices.length > 0) {
+            console.log(res)
             setPrompt((prevState) => [...prevState, {text: res.choices[0].text}])
+            setChatHistory((prevState) => [...prevState, `AI: ${res.choices[0].text.trim()}`])
+          }
         }
       )
       .finally(() => {
@@ -141,7 +155,15 @@ const ChatBot = () => {
     const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
     const isEnterPressed = event.key === "Enter";
     const isTextAreaEmpty = text.trim() === "";
-    if (isArrowUpPressed) setText(previousTextSent);
+    console.log(previousTextSent)
+    if (isArrowUpPressed) {
+      event.preventDefault();
+      if (textareaRef.current){
+        setText(previousTextSent[previousTextSent.length - 1]);
+        event.currentTarget.selectionStart = textareaRef.current.value.length;
+        event.currentTarget.selectionEnd = textareaRef.current.value.length;
+      }
+    }
     if (isArrowDownPressed) setText("");
 
     if (isShiftEnterPressed) {
@@ -161,22 +183,26 @@ const ChatBot = () => {
     if (session) {
       if (isEnterPressed && !isTextAreaEmpty) {
         setPrompt((prevState) => [...prevState, {text: text}]);
+        const sendWithChatHistory = chatHistory.join("\n") + `Human: ${text}`
+        console.log(sendWithChatHistory)
         const chatAiMutateMutationFn: ChatAiMutateMutationFn = {
           accessToken: session.access_token,
-          text: text,
+          text: sendWithChatHistory,
           model: modelSelected
         }
         chatAiMutate.mutate(chatAiMutateMutationFn);
         setTextLines(1);
         setText("");
-        setPreviousTextSent(text);
+        setChatHistory((prevState) => [...prevState, `Human: ${text}`])
+        setPreviousTextSent((prevState) => [...prevState, text]);
       }
     }
   };
 
   return (
     <div className={""}>
-      <SideMenu setModelSelected={model => setModelSelected(model)} isCheckedYodaMode={isCheckedYodaMode} setIsCheckedYodaMode={setIsCheckedYodaMode}/>
+      <SideMenu setModelSelected={model => setModelSelected(model)} isCheckedYodaMode={isCheckedYodaMode}
+                setIsCheckedYodaMode={setIsCheckedYodaMode}/>
       <main className={"mt-28 flex justify-center"}>
         <section className={"max-w-screen-xl space-y-5 sm:ml-72"}>
           {prompt.map((item, index) => {

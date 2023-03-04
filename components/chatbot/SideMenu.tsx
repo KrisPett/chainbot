@@ -4,13 +4,21 @@ import {models} from "@/components/utils/AIModels";
 interface Props {
   setModelSelected: (model: string) => void;
   setIsCheckedYodaMode: (isChecked: boolean) => void;
+  setTemperatureRange: (range: number) => void;
+  temperatureRange: number
   isCheckedYodaMode: boolean;
 }
 
-const SideMenu = ({setModelSelected, setIsCheckedYodaMode, isCheckedYodaMode}: Props) => {
-
+const SideMenu = ({
+                    setModelSelected,
+                    setIsCheckedYodaMode,
+                    isCheckedYodaMode,
+                    setTemperatureRange,
+                    temperatureRange
+                  }: Props) => {
   return (
-    <div className="fixed inset-y-0 left-0 h-full w-64 bg-zinc-300 dark:bg-gradient-to-b from-zinc-600 to-zinc-500 xxs:hidden sm:block">
+    <div
+      className="fixed inset-y-0 left-0 h-full w-64 bg-zinc-300 dark:bg-gradient-to-b from-zinc-600 to-zinc-500 xxs:hidden sm:block">
       <section className={"mt-24"}>
         <div className={"flex flex-row items-center justify-center"}>
           <span className=" mr-2 text-xl text-zinc-800 dark:text-zinc-200">Powered By Yoda</span>
@@ -36,11 +44,28 @@ const SideMenu = ({setModelSelected, setIsCheckedYodaMode, isCheckedYodaMode}: P
                   focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:ring-offset-orange-300
                   dark:bg-zinc-700 dark:placeholder-neutral-100 dark:focus-visible:ring-offset-orange-600 dark:disabled:opacity-30
           "
-                onChange={(e) => setModelSelected(e.target.value)}>
+          onChange={(e) => setModelSelected(e.target.value)}>
           {models.map(item => {
             return <option key={item.value} value={item.value}>{item.name}</option>
           })}
         </select>
+      </section>
+      <section className={"mt-5 flex justify-center"}>
+        <div className={"w-11/12 "}>
+          <label htmlFor="customRange3" className="inline-block text-zinc-800 dark:text-zinc-200">
+            Temperature: {temperatureRange / 50}
+          </label>
+          <input
+            type="range"
+            className="transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-zinc-400 dark:bg-zinc-500
+            focus:accent-orange-500 hover:accent-orange-400 accent-orange-400
+            dark:focus:accent-orange-1100 dark:hover:accent-orange-600 dark:accent-orange-1100
+            "
+            id="customRange3" value={temperatureRange} onChange={e => setTemperatureRange(parseInt(e.target.value))}
+            min="0"
+            max="100"
+          />
+        </div>
       </section>
     </div>
   );

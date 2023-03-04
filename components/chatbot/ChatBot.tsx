@@ -85,17 +85,8 @@ type AIPromptRequestBody = {
   text: string
   model: string
   isCheckedYodaMode: boolean
+  temperatureRange: number
 }
-
-/*
-*   prompt: "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.
-
-  \n\nHuman: Hello, who are you?
-  \nAI: I am an AI created by OpenAI. How can I help you today?
-  \nHuman: \nAI: What would you like me to do for you?
-  \nHuman: what is facebbok
-  \nAI: Facebook is a social networking website that allows people to connect with friends, family, and other people they know online. It also allows users to share photos, videos, and messages.
-  \nHuman: what was my prevoisly question Your previous question was \"Hello, who are you?\".",*/
 
 const ChatBot = () => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -109,6 +100,7 @@ const ChatBot = () => {
   const {data: session} = useSession()
   const [modelSelected, setModelSelected] = useState(models[0].value);
   const [isCheckedYodaMode, setIsCheckedYodaMode] = useState(false);
+  const [temperatureRange, setTemperatureRange] = useState<number>(0);
 
   useEffect(() => {
     if (messagesContainerRef.current) {
@@ -117,7 +109,13 @@ const ChatBot = () => {
   }, [prompt]);
 
   const chatAiMutate = useMutation(["CHAT_AI"], ({accessToken, text, model}: ChatAiMutateMutationFn) => {
-    const aiPromptRequestBody: AIPromptRequestBody = {text: text, model: model, isCheckedYodaMode: isCheckedYodaMode}
+    const aiPromptRequestBody: AIPromptRequestBody = {
+      text: text,
+      model: model,
+      isCheckedYodaMode: isCheckedYodaMode,
+      temperatureRange: temperatureRange / 50
+    }
+    console.log(aiPromptRequestBody)
     return fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL, {
       method: "POST",
       headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
@@ -129,7 +127,6 @@ const ChatBot = () => {
       })
       .then((res) => {
           if (res && res.choices && res.choices.length > 0) {
-            console.log(res)
             setPrompt((prevState) => [...prevState, {text: res.choices[0].text}])
             setChatHistory((prevState) => [...prevState, `AI: ${res.choices[0].text.trim()}`])
           }
@@ -193,6 +190,7 @@ const ChatBot = () => {
     if (session) {
       if (isEnterPressed && text !== "") {
         setPrompt((prevState) => [...prevState, {text: text}]);
+        const AIPromptHelperText = "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\n"
         const sendWithChatHistory = chatHistory.join("\n") + `Human: ${text}`
         console.log(sendWithChatHistory)
         const chatAiMutateMutationFn: ChatAiMutateMutationFn = {
@@ -205,6 +203,7 @@ const ChatBot = () => {
         setText("");
         setChatHistory((prevState) => [...prevState, `Human: ${text}`])
         setPreviousTextSent((prevState) => [...prevState, text]);
+        setCurrentIndex(previousTextSent.length);
       }
     }
   };
@@ -212,7 +211,7 @@ const ChatBot = () => {
   return (
     <div className={""}>
       <SideMenu setModelSelected={model => setModelSelected(model)} isCheckedYodaMode={isCheckedYodaMode}
-                setIsCheckedYodaMode={setIsCheckedYodaMode}/>
+                setIsCheckedYodaMode={setIsCheckedYodaMode} setTemperatureRange={setTemperatureRange} temperatureRange={temperatureRange}/>
       <main className={"mt-28 flex justify-center"}>
         <section className={"max-w-screen-xl space-y-5 sm:ml-72"}>
           {prompt.map((item, index) => {

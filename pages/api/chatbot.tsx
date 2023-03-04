@@ -9,7 +9,7 @@ const openai = new OpenAIApi(configuration);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<CreateCompletionResponse>) => {
   if (!configuration.apiKey) throw new Error("No API key found");
-  const {text, model, isCheckedYodaMode: isCheckedYodaMode} = req.body;
+  const {text, model, isCheckedYodaMode: isCheckedYodaMode, temperatureRange } = req.body;
 
   let prompt;
   prompt = `${text}`;
@@ -22,8 +22,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<CreateCompletio
   const response = await openai.createCompletion({
     model: model,
     prompt: prompt,
-    temperature: 0,
+    temperature: temperatureRange,
     max_tokens: 150,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0.6,
     stop: [" Human:", " AI:"],
   });
 

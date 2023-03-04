@@ -115,7 +115,6 @@ const ChatBot = () => {
       isCheckedYodaMode: isCheckedYodaMode,
       temperatureRange: temperatureRange / 50
     }
-    console.log(aiPromptRequestBody)
     return fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL, {
       method: "POST",
       headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
@@ -192,7 +191,6 @@ const ChatBot = () => {
         setPrompt((prevState) => [...prevState, {text: text}]);
         const AIPromptHelperText = "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\n"
         const sendWithChatHistory = chatHistory.join("\n") + `Human: ${text}`
-        console.log(sendWithChatHistory)
         const chatAiMutateMutationFn: ChatAiMutateMutationFn = {
           accessToken: session.access_token,
           text: sendWithChatHistory,

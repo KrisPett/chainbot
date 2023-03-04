@@ -103,7 +103,8 @@ const ChatBot = () => {
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("");
   const [prompt, setPrompt] = useState<TChatPrompt[]>(initData);
-  const [previousTextSent, setPreviousTextSent] = useState<string[]>(["what is aws"]);
+  const [previousTextSent, setPreviousTextSent] = useState<string[]>(["", "what is aws", "what is google"]);
+  let [currentIndex, setCurrentIndex] = useState<number>(previousTextSent.length - 1);
   const [chatHistory, setChatHistory] = useState<string[]>([]);
   const {data: session} = useSession()
   const [modelSelected, setModelSelected] = useState(models[0].value);
@@ -154,20 +155,29 @@ const ChatBot = () => {
     const isShiftEnterPressed = event.shiftKey && event.key === "Enter";
     const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
     const isEnterPressed = event.key === "Enter";
-    const isTextAreaEmpty = text.trim() === "";
-    console.log(previousTextSent)
+
     if (isArrowUpPressed) {
       event.preventDefault();
-      if (textareaRef.current){
-        setText(previousTextSent[previousTextSent.length - 1]);
-        event.currentTarget.selectionStart = textareaRef.current.value.length;
-        event.currentTarget.selectionEnd = textareaRef.current.value.length;
+      if (currentIndex < 0) {
+        currentIndex = previousTextSent.length - 1;
+      }
+      if (currentIndex >= 0 && currentIndex < previousTextSent.length) {
+        setText(previousTextSent[currentIndex]);
+        setCurrentIndex(currentIndex - 1);
+        if (textareaRef.current) {
+          event.currentTarget.selectionStart = textareaRef.current.value.length;
+          event.currentTarget.selectionEnd = textareaRef.current.value.length;
+        }
       }
     }
-    if (isArrowDownPressed) setText("");
+    if (isArrowDownPressed) {
+      event.preventDefault();
+      setText("")
+      setCurrentIndex(previousTextSent.length - 1);
+    }
 
     if (isShiftEnterPressed) {
-      setTextLines(textLines + 1);
+      setTextLines(previousTextSent.length - 1);
       return;
     }
 
@@ -181,7 +191,7 @@ const ChatBot = () => {
     }
 
     if (session) {
-      if (isEnterPressed && !isTextAreaEmpty) {
+      if (isEnterPressed && text !== "") {
         setPrompt((prevState) => [...prevState, {text: text}]);
         const sendWithChatHistory = chatHistory.join("\n") + `Human: ${text}`
         console.log(sendWithChatHistory)

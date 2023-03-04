@@ -57,9 +57,7 @@ const SideMenu = ({
           </label>
           <input
             type="range"
-            className="transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-zinc-400 dark:bg-zinc-500
-            focus:accent-orange-500 hover:accent-orange-400 accent-orange-400
-            dark:focus:accent-orange-1100 dark:hover:accent-orange-600 dark:accent-orange-1100
+            className="transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-zinc-100 dark:bg-zinc-500
             "
             id="customRange3" value={temperatureRange} onChange={e => setTemperatureRange(parseInt(e.target.value))}
             min="0"

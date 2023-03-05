@@ -21,7 +21,7 @@ const App = ({Component, pageProps}: AppProps) => {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider
           attribute={"class"}
-          defaultTheme={"system"}
+          defaultTheme={"dark"}
           themes={["light", "dark"]}
         >
           <Head>

@@ -13,7 +13,7 @@ const ImageBot = () => {
     // openai.listEngines().then((data) => {
     //   console.log(data.data)
     // });
-    openai.listModels().then((data) => {
+    openai.listFiles().then((data) => {
       console.log(data.data)
     });
 

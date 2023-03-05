@@ -9,7 +9,7 @@ interface Props {
   isCheckedYodaMode: boolean;
 }
 
-const SideMenu = ({
+const SideMenuChatBot = ({
                     setModelSelected,
                     setIsCheckedYodaMode,
                     isCheckedYodaMode,
@@ -69,4 +69,4 @@ const SideMenu = ({
   );
 };
 
-export default SideMenu;
+export default SideMenuChatBot;

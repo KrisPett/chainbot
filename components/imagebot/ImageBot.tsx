@@ -4,7 +4,7 @@ import {Configuration, OpenAIApi} from "openai";
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPEN_AI,
 });
-if (!configuration.apiKey) throw new Error("No API key found");
+// if (!configuration.apiKey) throw new Error("No API key found");
 
 const openai = new OpenAIApi(configuration);
 const ImageBot = () => {

@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {models} from "@/components/utils/AIModels";
 import Image from "next/image";
 import catIcon from "@/assets/icons/cat.jpg";
-import {router} from "next/client";
 import {useRouter} from "next/router";
+import ButtonAlt from "@/lib/ButtonAlt";
 
 interface Props {
   setModelSelected: (model: string) => void;
@@ -39,7 +38,7 @@ const ImageGroup = ({isImageSelected, index}: ImageGroupProps) => {
   return (
     <div
       onClick={() => onImageGroupClick(isImageSelected)}
-      className={"flex flex-row space-x-1 justify-center cursor-pointer transition duration-100 ease-in-out transform hover:-translate-y-0 hover:scale-95 hover:opacity-90"}>
+      className={`flex flex-row space-x-1 justify-center cursor-pointer transition duration-100 ease-in-out transform hover:-translate-y-0 hover:scale-95 hover:opacity-90`}>
       <div className={`${id === index.toString() ? "border border-2 border-orange-1100" : ""}`}></div>
       <Image
         src={catIcon}
@@ -83,16 +82,24 @@ const SideMenuImageBot = () => {
   return (
     <div
       className="fixed inset-y-0 left-0 h-full w-64 bg-zinc-300 dark:bg-gradient-to-b from-zinc-600 to-zinc-500 xxs:hidden sm:block">
-      <section className={"mt-24"}>
-        <p className=" p-3 text-2xl font-bold text-zinc-800 dark:text-zinc-200">DALL-E History</p>
-      </section>
-      <section className={"flex flex-col gap-2"}>
-        {Array.from(Array(20).keys()).map((i, index) =>
-          <div key={index}>
-            <ImageGroup isImageSelected={isImageSelected} index={index}/>
-          </div>)}
-      </section>
+      <div className={"overflow-y-auto overflow-hidden"} style={{maxHeight: "90%"}}>
+        <section className={"mt-20"}>
+          <p className="p-3 text-2xl font-bold text-zinc-800 dark:text-zinc-200">DALL-E History</p>
+        </section>
+        <section className={"flex flex-col gap-2 "}>
+          {Array.from(Array(30).keys()).map((i, index) =>
+            <div key={index}>
+              <ImageGroup isImageSelected={isImageSelected} index={index}/>
+            </div>)}
+        </section>
+      </div>
+      <div className={"pl-1 pr-3 pt-5"}>
+        <ButtonAlt title={"Clear"} onClick={() => console.log("awdawdaw")}></ButtonAlt>
+      </div>
+
     </div>
+
+
   );
 };
 

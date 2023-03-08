@@ -29,7 +29,7 @@ const UserChat = (props: IUserChat) => {
       </div>
       <div
         className="chat-bubble bg-gray-200 bg-gradient-to-t from-gray-200 to-gray-300 text-gray-900
-        dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300 break-all">
+        dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300 break-words">
         {props.text}
       </div>
     </div>
@@ -57,7 +57,7 @@ const AIChat = (props: IAIChat) => {
       </div>
       <div
         className="chat-bubble bg-gray-300 bg-gradient-to-b from-gray-200 to-gray-300 text-gray-900
-        dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300 break-all">
+        dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300 break-words">
         {props.text}
       </div>
     </div>

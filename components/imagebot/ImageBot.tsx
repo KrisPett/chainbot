@@ -6,6 +6,7 @@ import catIcon from "@/assets/icons/cat.jpg";
 import SideMenuChatBot from "@/components/chatbot/SideMenuChatBot";
 import SideMenuImageBot from "@/components/imagebot/SideMenuImageBot";
 import {useRouter} from "next/router";
+import LoadingImage from "@/components/imagebot/LoadingImage";
 
 const configuration = new Configuration({
   apiKey: process.env.NEXT_PUBLIC_OPEN_AI,
@@ -18,8 +19,12 @@ const openai = new OpenAIApi(configuration);
 const ImageBot = () => {
   const router = useRouter()
   const {id} = router.query;
+
   const [imageUrl, setImageUrl] = useState<string>(url1);
   const [isLoading, setIsLoading] = useState(false);
+  const [textLines, setTextLines] = useState(1);
+  const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
+
   const btnOnclick = async () => {
     console.log("wadawd");
     // openai.listEngines().then((data) => {
@@ -42,43 +47,75 @@ const ImageBot = () => {
   };
 
   return (
-    <div className={"mt-28"}>
-      <SideMenuImageBot/>
-      <section className={"flex flex-col items-center justify-center"}>
-        <div
-          className="transition duration-500 ease-in-out bg-blue-500 hover:bg-red-500 transform hover:-translate-y-1 hover:scale-110">
-          Hover me
-        </div>
-        <div className={" flex w-96"}>
-          <button className={"btn w-10/12"} onClick={() => btnOnclick()}>{isLoading ? <>
-            <div role="status">
-              <svg aria-hidden="true"
-                   className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                   viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"/>
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"/>
-              </svg>
-              <span className="sr-only">Loading...</span>
+    // <div className={"flex justify-center"} style={{minHeight: "70vh"}}>
+      <div className={"mt-28"}>
+        <SideMenuImageBot/>
+        <section className={"flex flex-col items-center justify-center"} style={{minHeight: "50vh"}}>
+          <div className={"max-w-screen-xl space-y-5 sm:ml-72"}>
+            <div className="w-full rounded-full h-2.5 bg-gray-200 bg-zinc-400 dark:bg-zinc-600">
+              <div
+                className="bg-gradient-to-t from-gray-300 to-gray-400 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 h-2.5 rounded-full"
+                style={{width: "40%"}}></div>
             </div>
-          </> : <>ImageBot</>}
-          </button>
-        </div>
-        <div>
-          <Image src={imageUrl}
-                 alt="user_icon"
-                 width={500}
-                 height={500}
-                 className="min-w-full"
-                 priority={true}
-          />
-        </div>
-        <p>{id}</p>
-      </section>
-    </div>
+            <div className={"flex flex-row gap-5 p-5"}>
+              <LoadingImage/>
+              <LoadingImage/>
+              <LoadingImage/>
+              <LoadingImage/>
+            </div>
+          </div>
+          <div>
+            {/*<Image src={imageUrl}*/}
+            {/*       alt="user_icon"*/}
+            {/*       width={500}*/}
+            {/*       height={500}*/}
+            {/*       className="min-w-full"*/}
+            {/*       priority={true}*/}
+            {/*/>*/}
+          </div>
+          <p>{id}</p>
+        </section>
+
+        <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
+          <form
+            className="mb-2 w-full xxs:w-11/12 sm:ml-64 sm:w-6/12 sm:w-7/12 md:w-7/12 md:w-10/12 lg:w-8/12 lg:w-11/12 xl:w-9/12"
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <div className="relative w-full">
+              <textarea
+                disabled={false}
+                className="textarea-bordered textarea w-full resize-none rounded-2xl bg-zinc-300
+                  placeholder-opacity-50
+                  focus:outline-none focus:ring-0 focus:ring-offset-2 focus:ring-offset-orange-300 bg-opacity-60
+                  focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300
+                  dark:placeholder-neutral-100 dark:focus-visible:ring-offset-orange-600 dark:disabled:opacity-30
+                  dark:bg-zinc-600 dark:bg-opacity-70
+                  "
+                placeholder="Type here..."
+                onChange={(e) => setText(e.target.value)
+                }
+                rows={textLines}
+                onKeyDown={() => console.log("onKeyDown")}
+                value={text}
+              />
+              <div
+                className={`absolute inset-y-0 right-0 bottom-1 flex items-center pr-3 ${false ? "block" : "hidden"} opacity-50`}>
+                <div
+                  className="inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite]
+                rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]
+                bg-gradient-to-t from-gray-400 to-gray-300 text-gray-900 opacity-0 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900"
+                  role="status">
+                <span
+                  className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                  Loading...
+                </span>
+                </div>
+              </div>
+            </div>
+          </form>
+        </footer>
+      </div>
+    // </div>
   )
 };
 

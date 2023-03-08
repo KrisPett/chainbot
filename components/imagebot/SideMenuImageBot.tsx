@@ -96,7 +96,6 @@ const SideMenuImageBot = () => {
       <div className={"pl-1 pr-3 pt-5"}>
         <ButtonAlt title={"Clear"} onClick={() => console.log("awdawdaw")}></ButtonAlt>
       </div>
-
     </div>
 
 

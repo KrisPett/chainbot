@@ -31,7 +31,7 @@ const Header = () => {
   return (
     <header
       className={
-        "fixed top-0 left-0 right-0 z-10 w-full bg-zinc-300 from-zinc-600 to-gray-500 dark:bg-zinc-600 dark:bg-gradient-to-r "
+        "fixed top-0 left-0 right-0 z-10 w-full bg-zinc-300 from-zinc-600 to-gray-500 dark:bg-zinc-600 dark:bg-gradient-to-r"
       }
     >
       <div className={"flex items-center justify-between py-3"}>
@@ -177,7 +177,9 @@ const Header = () => {
               </ul>
             </div>
           </div>
-          <Button onClick={() => handleSignOut()} title={"Sign out"}/>
+          <div className={"xxs:hidden xs:hidden sm:block"}>
+            <Button onClick={() => handleSignOut()} title={"Sign out"}/>
+          </div>
         </div>
       </div>
     </header>

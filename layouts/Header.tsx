@@ -75,7 +75,7 @@ const Header = () => {
                       >
                         <li className={"mt-0"}>
                           <Link
-                            href={"chatbot"}
+                            href={"/chatbot"}
                             className={
                               "btn-ghost btn h-20 text-base capitalize text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                             }
@@ -85,7 +85,7 @@ const Header = () => {
                         </li>
                         <li>
                           <Link
-                            href={"imagebot"}
+                            href={"/imagebot"}
                             className={
                               "btn-ghost btn h-20 text-base capitalize text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                             }
@@ -156,7 +156,8 @@ const Header = () => {
               >
                 <li className={"mt-0"}>
                   <Link
-                    href={"chatbot"}
+                    href={"/chatbot"}
+                    replace
                     className={
                       "btn-ghost btn h-20 text-base capitalize capitalize text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                     }
@@ -166,7 +167,8 @@ const Header = () => {
                 </li>
                 <li>
                   <Link
-                    href={"imagebot"}
+                    href={"/imagebot"}
+                    replace
                     className={
                       "btn-ghost btn h-20 text-base capitalize text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                     }

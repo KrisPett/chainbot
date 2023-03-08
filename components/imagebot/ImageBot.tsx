@@ -47,41 +47,38 @@ const ImageBot = () => {
   };
 
   return (
-    // <div className={"flex justify-center"} style={{minHeight: "70vh"}}>
-      <div className={"mt-28"}>
-        <SideMenuImageBot/>
-        <section className={"flex flex-col items-center justify-center"} style={{minHeight: "50vh"}}>
-          <div className={"max-w-screen-xl space-y-5 sm:ml-72"}>
-            <div className="w-full rounded-full h-2.5 bg-gray-200 bg-zinc-400 dark:bg-zinc-600">
-              <div
-                className="bg-gradient-to-t from-gray-300 to-gray-400 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 h-2.5 rounded-full"
-                style={{width: "40%"}}></div>
-            </div>
-            <div className={"flex flex-row gap-5 p-5"}>
-              <LoadingImage/>
-              <LoadingImage/>
-              <LoadingImage/>
-              <LoadingImage/>
-            </div>
+    <div className={"mt-28 flex justify-center"}>
+      <SideMenuImageBot/>
+      <section className={"flex flex-col items-center justify-center "} style={{minHeight: "50vh"}}>
+        <div className={"max-w-screen-xl space-y-5 sm:ml-64 xxs:w-12/12 xs:w-12/12 sm:w-12/12 md:w-8/12"}>
+          <div className="w-full rounded-full h-2.5 bg-gray-200 bg-zinc-400 dark:bg-zinc-600">
+            <div
+              className="bg-gradient-to-t from-gray-300 to-gray-400 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 h-2.5 rounded-full"
+              style={{width: "40%"}}></div>
           </div>
-          <div>
-            {/*<Image src={imageUrl}*/}
-            {/*       alt="user_icon"*/}
-            {/*       width={500}*/}
-            {/*       height={500}*/}
-            {/*       className="min-w-full"*/}
-            {/*       priority={true}*/}
-            {/*/>*/}
+          <div className={"grid md:grid-cols-2 lg:grid-cols-4 gap-5"}>
+            <LoadingImage/>
+            <LoadingImage/>
+            <LoadingImage/>
+            <LoadingImage/>
           </div>
-          <p>{id}</p>
-        </section>
-
-        <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
-          <form
-            className="mb-2 w-full xxs:w-11/12 sm:ml-64 sm:w-6/12 sm:w-7/12 md:w-7/12 md:w-10/12 lg:w-8/12 lg:w-11/12 xl:w-9/12"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <div className="relative w-full">
+        </div>
+        <div>
+          {/*<Image src={imageUrl}*/}
+          {/*       alt="user_icon"*/}
+          {/*       width={500}*/}
+          {/*       height={500}*/}
+          {/*       className="min-w-full"*/}
+          {/*       priority={true}*/}
+          {/*/>*/}
+        </div>
+      </section>
+      <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
+        <form
+          className="mb-2 w-full xxs:w-11/12 sm:ml-64 sm:w-6/12 sm:w-7/12 md:w-7/12 md:w-10/12 lg:w-8/12 lg:w-11/12 xl:w-9/12"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <div className="relative w-full">
               <textarea
                 disabled={false}
                 className="textarea-bordered textarea w-full resize-none rounded-2xl bg-zinc-300
@@ -98,24 +95,23 @@ const ImageBot = () => {
                 onKeyDown={() => console.log("onKeyDown")}
                 value={text}
               />
+            <div
+              className={`absolute inset-y-0 right-0 bottom-1 flex items-center pr-3 ${false ? "block" : "hidden"} opacity-50`}>
               <div
-                className={`absolute inset-y-0 right-0 bottom-1 flex items-center pr-3 ${false ? "block" : "hidden"} opacity-50`}>
-                <div
-                  className="inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite]
+                className="inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite]
                 rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]
                 bg-gradient-to-t from-gray-400 to-gray-300 text-gray-900 opacity-0 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900"
-                  role="status">
+                role="status">
                 <span
                   className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
                   Loading...
                 </span>
-                </div>
               </div>
             </div>
-          </form>
-        </footer>
-      </div>
-    // </div>
+          </div>
+        </form>
+      </footer>
+    </div>
   )
 };
 

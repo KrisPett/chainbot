@@ -72,6 +72,7 @@ const ImageBot = () => {
           {/*       priority={true}*/}
           {/*/>*/}
         </div>
+        <div>test ecs</div>
       </section>
       <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
         <form

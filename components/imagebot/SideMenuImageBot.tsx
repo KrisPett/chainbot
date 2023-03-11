@@ -33,8 +33,7 @@ const ImageGroup = ({isImageSelected, index}: ImageGroupProps) => {
     // const { id } = router.query;
     // console.log(id)
   };
-  console.log(selectedImage)
-  console.log(id === index.toString())
+
   return (
     <div
       onClick={() => onImageGroupClick(isImageSelected)}
@@ -81,7 +80,7 @@ const SideMenuImageBot = () => {
 
   return (
     <div
-      className="fixed inset-y-0 left-0 h-full w-64 bg-zinc-300 dark:bg-gradient-to-b from-zinc-600 to-zinc-500 xxs:hidden sm:block">
+      className="absolute inset-y-0 left-0 h-full w-64 bg-zinc-300 dark:bg-gradient-to-b from-zinc-600 to-zinc-500 xxs:hidden sm:block">
       <div className={"overflow-y-auto overflow-hidden"} style={{maxHeight: "90%"}}>
         <section className={"mt-20"}>
           <p className="p-3 text-2xl font-bold text-zinc-800 dark:text-zinc-200">DALL-E History</p>
@@ -93,12 +92,10 @@ const SideMenuImageBot = () => {
             </div>)}
         </section>
       </div>
-      <div className={"pl-1 pr-3 pt-5"}>
-        <ButtonAlt title={"Clear"} onClick={() => console.log("awdawdaw")}></ButtonAlt>
+      <div className={" p-1 mt-2 flex justify-center items-center"}>
+        <ButtonAlt title={"Clear"} onClick={() => console.log("ButtonAlt")}></ButtonAlt>
       </div>
     </div>
-
-
   );
 };
 

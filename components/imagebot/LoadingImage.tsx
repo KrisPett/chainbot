@@ -5,7 +5,7 @@ const LoadingImage = () => {
     <div role="status" className="space-y-8 animate-pulse md:space-y-0 md:space-x-8 md:flex md:items-center">
       <div className="flex items-center justify-center rounded
       xxs:h-32 xs:h-32 sm:h-32 md:h-56 lg:h-56 xl:h-56 2xl:h-56
-      xxs:w-44 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-56 2xl:w-64
+      xxs:w-56 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-56 2xl:w-64
       bg-gray-200 bg-gradient-to-t from-gray-300 to-gray-400 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900
       ">
         <svg className="w-12 h-12 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"

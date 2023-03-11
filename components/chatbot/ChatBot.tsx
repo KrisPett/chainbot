@@ -115,14 +115,14 @@ const ChatBot = () => {
       isCheckedYodaMode: isCheckedYodaMode,
       temperatureRange: temperatureRange / 50
     }
-    return fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL, {
+    return fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL_CHATBOT, {
       method: "POST",
       headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
       body: JSON.stringify(aiPromptRequestBody),
     })
-      .then((value) => {
-        if (!value.ok) return Promise.reject(value);
-        return value.json()
+      .then((response) => {
+        if (!response.ok) return Promise.reject(response);
+        return response.json()
       })
       .then((res) => {
           if (res && res.choices && res.choices.length > 0) {

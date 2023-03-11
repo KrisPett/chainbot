@@ -31,24 +31,34 @@ interface ImageAiMutateMutationFn {
   text: string;
 }
 
+type AIPromptRequestBody = {
+  text: string
+}
+
 const ImageBot = () => {
   const router = useRouter()
   const {id} = router.query;
   const {data: session} = useSession()
 
-  const [imageUrl, setImageUrl] = useState<Images[]>([{url: url1}, {url: url2}, {url: url3}, {url: url4}]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<Images[]>([]);
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
 
   const generateImageMutate = useMutation(["CHAT_AI"], ({accessToken, text}: ImageAiMutateMutationFn) => {
-    return openai.createImage({prompt: text, n: 4, size: "256x256"})
-      .then(response => {
-        if (response.data.data[0].url) {
-          const data = response.data.data as Images[];
-          setImageUrl(data);
+    const aiPromptRequestBody: AIPromptRequestBody = {text: text}
+    return fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT, {
+      method: "POST",
+      headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
+      body: JSON.stringify(aiPromptRequestBody),
+    })
+      .then((response) => {
+        if (!response.ok) return Promise.reject(response);
+        return response.json()
+      }).then((value) => {
+        if (value.data) {
+          setImageUrl(value.data);
         }
-      }).then(() => setIsLoading(false));
+      })
   }, {});
 
   const handleTextareaKeydown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -76,21 +86,21 @@ const ImageBot = () => {
       }
     }
   }
-  console.log(imageUrl)
 
   return (
     <div className={"mt-28 flex justify-center"}>
       <SideMenuImageBot/>
       <section className={"flex flex-col items-center justify-center "} style={{minHeight: "50vh"}}>
         <div className={"max-w-screen-xl space-y-5 sm:ml-64 xxs:w-12/12 xs:w-12/12 sm:w-12/12 md:w-8/12"}>
-          <div className={`w-full rounded-full h-2.5 bg-gray-200 bg-zinc-400 dark:bg-zinc-600 ${generateImageMutate.isLoading ? "block" : "hidden"}`}>
+          <div
+            className={`w-full rounded-full h-2.5 bg-gray-200 bg-zinc-400 dark:bg-zinc-600 ${generateImageMutate.isLoading ? "block" : "hidden"}`}>
             <div
               className="bg-gradient-to-t from-gray-300 to-gray-400 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 h-2.5 rounded-full"
               style={{width: "40%"}}></div>
           </div>
           <div
             className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5`}>
-            {generateImageMutate.isLoading ? <>
+            {generateImageMutate.isLoading || imageUrl.length < 1 ? <>
               <LoadingImage/>
               <LoadingImage/>
               <LoadingImage/>
@@ -100,7 +110,7 @@ const ImageBot = () => {
                 return (
                   <div key={index}>
                     <Image
-                      src={url1} alt="user_icon"
+                      src={image.url} alt="user_icon"
                       width={200}
                       height={300}
                       className="xxs:h-32 xs:h-32 sm:h-32 md:h-56 lg:h-56 xl:h-56 2xl:h-56 xxs:w-56 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-56 2xl:w-64"

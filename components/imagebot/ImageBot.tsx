@@ -6,6 +6,7 @@ import LoadingImage from "@/components/imagebot/LoadingImage";
 import {useSession} from "next-auth/react";
 import {useMutation} from "@tanstack/react-query";
 import process from "process";
+import axios from "axios";
 
 const url1 = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-Gj9qRtTFTcQvSvQMlsTGqRzb/user-WIsWrURgDHs7MJkppHrsBBgZ/img-cyNtdD8z57rt4QUwB6ZUr3Iw.png?st=2023-03-11T11%3A26%3A56Z&se=2023-03-11T13%3A26%3A56Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-03-10T23%3A57%3A15Z&ske=2023-03-11T23%3A57%3A15Z&sks=b&skv=2021-08-06&sig=L9DCdRxwCX6isVdX1/lUynQJPexOTS3/kDg37yoo0aQ%3D"
 const url2 = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-Gj9qRtTFTcQvSvQMlsTGqRzb/user-WIsWrURgDHs7MJkppHrsBBgZ/img-hjY3DCqiaLjmDFAAEx5ENDtm.png?st=2023-03-05T12%3A34%3A04Z&se=2023-03-05T14%3A34%3A04Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-03-05T01%3A25%3A46Z&ske=2023-03-06T01%3A25%3A46Z&sks=b&skv=2021-08-06&sig=ynvNdm4F8lhu2x1JTxYU0wOD9971sQ2k3Mm0IbArWpI%3D"
@@ -33,8 +34,24 @@ const ImageBot = () => {
   const [imageUrl, setImageUrl] = useState<Images[]>([]);
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
+  const [progress, setProgress] = useState(0)
 
   const generateImageMutate = useMutation(["CHAT_AI"], ({accessToken, text}: ImageAiMutateMutationFn) => {
+    const progressInterval = setInterval(() => {
+      setProgress((prevProgress) => {
+        if (prevProgress === 100) {
+          setProgress(100);
+          clearInterval(progressInterval);
+          return prevProgress;
+        } else {
+          return prevProgress + 1;
+        }
+      });
+    }, 10);
+    setTimeout(() => {
+      setProgress(100);
+      clearInterval(progressInterval);
+    }, 5000);
     const aiPromptRequestBody: AIPromptRequestBody = {text: text}
     return fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT, {
       method: "POST",
@@ -42,15 +59,16 @@ const ImageBot = () => {
       body: JSON.stringify(aiPromptRequestBody),
     })
       .then((response) => {
-        if (!response.ok) return Promise.reject(response);
+        if (!response.ok) return Promise.reject(response)
         return response.json()
       }).then((value) => {
-        console.log(value)
         if (value.data) {
+          setProgress(100)
           setImageUrl(value.data);
         }
+        return value
       })
-  }, {});
+  });
 
   const handleTextareaKeydown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
@@ -71,7 +89,7 @@ const ImageBot = () => {
           accessToken: session.access_token,
           text: text,
         }
-        generateImageMutate.mutate(chatAiMutateMutationFn);
+        generateImageMutate.mutate(chatAiMutateMutationFn)
         setTextLines(1);
         setText("");
       }
@@ -107,31 +125,40 @@ const ImageBot = () => {
             className={`w-full rounded-full h-2.5 bg-gray-200 bg-zinc-400 dark:bg-zinc-600 ${generateImageMutate.isLoading ? "block" : "hidden"}`}>
             <div
               className="bg-gradient-to-t from-gray-300 to-gray-400 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 h-2.5 rounded-full"
-              style={{width: "40%"}}></div>
+              style={{width: `${progress}%`}}></div>
           </div>
           <div
             className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5`}>
-            {generateImageMutate.isLoading || imageUrl.length < 1 ? <>
-              <LoadingImage/>
-              <LoadingImage/>
-              <LoadingImage/>
-              <LoadingImage/>
-            </> : <>
-              {imageUrl.map((image, index) => {
-                return (
-                  <div key={index} onClick={() => downloadImage(image.url)}>
-                    <Image
-                      src={image.url} alt="user_icon"
-                      width={300}
-                      height={300}
-                      className="xxs:h-32 xs:h-32 sm:h-32 md:h-56 lg:h-56 xl:h-56 2xl:h-56 xxs:w-56 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-64 2xl:w-64
-                      cursor-pointer transition duration-100 ease-in-out transform hover:-translate-y-0 hover:scale-110 rounded"
-                      priority={true}
-                    />
-                  </div>
-                )
-              })}
-            </>}
+            {(generateImageMutate.isLoading || imageUrl.length < 3) && (
+              <>
+                <LoadingImage/>
+                <LoadingImage/>
+                <LoadingImage/>
+                <LoadingImage/>
+              </>
+            )}
+            {(!generateImageMutate.isLoading && imageUrl.length > 3 && progress === 100) && (
+              <>
+                {imageUrl.map((image, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => downloadImage(image.url)}
+                    >
+                      <Image
+                        src={image.url}
+                        alt="user_icon"
+                        width={300}
+                        height={300}
+                        className="xxs:h-32 xs:h-32 sm:h-32 md:h-56 lg:h-56 xl:h-56 2xl:h-56 xxs:w-56 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-64 2xl:w-64
+                        cursor-pointer transition duration-100 ease-in-out transform hover:-translate-y-0 hover:scale-110 rounded"
+                        priority={true}
+                      />
+                    </div>
+                  );
+                })}
+              </>
+            )}
           </div>
         </div>
       </section>

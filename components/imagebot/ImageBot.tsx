@@ -169,7 +169,7 @@ const ImageBot = () => {
         >
           <div className="relative w-full">
               <textarea
-                disabled={false}
+                disabled={generateImageMutate.isLoading}
                 className="textarea-bordered textarea w-full resize-none rounded-2xl bg-zinc-300
                   placeholder-opacity-50
                   focus:outline-none focus:ring-0 focus:ring-offset-2 focus:ring-offset-orange-300 bg-opacity-60

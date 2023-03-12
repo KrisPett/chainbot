@@ -85,14 +85,14 @@ const SideMenuImageBot = () => {
         <section className={"mt-20"}>
           <p className="p-3 text-2xl font-bold text-zinc-800 dark:text-zinc-200">DALL-E History</p>
         </section>
-        <section className={"flex flex-col gap-2 "}>
+        <section className={"flex flex-col gap-2"}>
           {Array.from(Array(30).keys()).map((i, index) =>
             <div key={index}>
               <ImageGroup isImageSelected={isImageSelected} index={index}/>
             </div>)}
         </section>
       </div>
-      <div className={" p-1 mt-2 flex justify-center items-center"}>
+      <div className={"p-1 mt-2 flex justify-center items-center"}>
         <ButtonAlt title={"Clear"} onClick={() => console.log("ButtonAlt")}></ButtonAlt>
       </div>
     </div>

@@ -45,6 +45,7 @@ const ImageBot = () => {
         if (!response.ok) return Promise.reject(response);
         return response.json()
       }).then((value) => {
+        console.log(value)
         if (value.data) {
           setImageUrl(value.data);
         }
@@ -77,6 +78,26 @@ const ImageBot = () => {
     }
   }
 
+  const downloadImage = (url: string) => {
+    return fetch("https://oaidalleapiprodscus.blob.core.windows.net/private/org-Gj9qRtTFTcQvSvQMlsTGqRzb/user-WIsWrURgDHs7MJkppHrsBBgZ/img-UVcaEE4p4iNrX27Kz43tB7SE.png?st=2023-03-12T14%3A07%3A07Z&se=2023-03-12T16%3A07%3A07Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-03-12T06%3A18%3A48Z&ske=2023-03-13T06%3A18%3A48Z&sks=b&skv=2021-08-06&sig=kaau1d9w8eyz/z/eEjAfZ4Jyy%2Bz7JEkSBRYyYgWXeA0%3D",
+      {
+        method: "GET",
+        mode: "no-cors",
+      })
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'image.png');
+        document.body.appendChild(link);
+        link.click();
+        // @ts-ignore
+        link.parentNode.removeChild(link);
+        window.URL.revokeObjectURL(url)
+      });
+  }
+
   return (
     <div className={"mt-28 flex justify-center"}>
       <SideMenuImageBot/>
@@ -98,12 +119,13 @@ const ImageBot = () => {
             </> : <>
               {imageUrl.map((image, index) => {
                 return (
-                  <div key={index}>
+                  <div key={index} onClick={() => downloadImage(image.url)}>
                     <Image
                       src={image.url} alt="user_icon"
-                      width={200}
+                      width={300}
                       height={300}
-                      className="xxs:h-32 xs:h-32 sm:h-32 md:h-56 lg:h-56 xl:h-56 2xl:h-56 xxs:w-56 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-56 2xl:w-64"
+                      className="xxs:h-32 xs:h-32 sm:h-32 md:h-56 lg:h-56 xl:h-56 2xl:h-56 xxs:w-56 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-64 2xl:w-64
+                      cursor-pointer transition duration-100 ease-in-out transform hover:-translate-y-0 hover:scale-110 rounded"
                       priority={true}
                     />
                   </div>

@@ -53,3 +53,4 @@ chatbot@gmail.com
 ```
 
 https://medium.com/codex/from-dall-e-2-to-s3-storing-ai-generated-images-in-the-cloud-e8bbc477ee
+https://stackoverflow.com/questions/74729716/how-to-retrieve-an-openai-image-and-save-it-to-an-s3-bucket

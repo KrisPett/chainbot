@@ -7,6 +7,9 @@ import {useSession} from "next-auth/react";
 import {useMutation} from "@tanstack/react-query";
 import process from "process";
 import axios from "axios";
+import {logicalExpression} from "@babel/types";
+import * as fs from "fs";
+import AWS from "aws-sdk";
 
 const url1 = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-Gj9qRtTFTcQvSvQMlsTGqRzb/user-WIsWrURgDHs7MJkppHrsBBgZ/img-cyNtdD8z57rt4QUwB6ZUr3Iw.png?st=2023-03-11T11%3A26%3A56Z&se=2023-03-11T13%3A26%3A56Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-03-10T23%3A57%3A15Z&ske=2023-03-11T23%3A57%3A15Z&sks=b&skv=2021-08-06&sig=L9DCdRxwCX6isVdX1/lUynQJPexOTS3/kDg37yoo0aQ%3D"
 const url2 = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-Gj9qRtTFTcQvSvQMlsTGqRzb/user-WIsWrURgDHs7MJkppHrsBBgZ/img-hjY3DCqiaLjmDFAAEx5ENDtm.png?st=2023-03-05T12%3A34%3A04Z&se=2023-03-05T14%3A34%3A04Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-03-05T01%3A25%3A46Z&ske=2023-03-06T01%3A25%3A46Z&sks=b&skv=2021-08-06&sig=ynvNdm4F8lhu2x1JTxYU0wOD9971sQ2k3Mm0IbArWpI%3D"
@@ -32,40 +35,73 @@ const fetchDownloadMaterial = (url: string) => {
 // Trigger click event on the download link to download the image
   if (downloadLink)
     downloadLink.click();
-  // const filename = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-Gj9qRtTFTcQvSvQMlsTGqRzb/user-WIsWrURgDHs7MJkppHrsBBgZ/img-JBl5E0HKm2Uv8CHwwnz3rT09.png?st=2023-03-13T16%3A33%3A48Z&se=2023-03-13T18%3A33%3A48Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-03-13T08%3A00%3A59Z&ske=2023-03-14T08%3A00%3A59Z&sks=b&skv=2021-08-06&sig=YsjB8sz7KxvTlhBAWF97U0B7RE1XzqMNgzNpe0lx2X4%3D"
-  // const extractFilename = filename.split('/').pop();
-  // if (!extractFilename) throw new Error("Filename is undefined");
-  // return fetch(`${filename}`, {method: "GET"})
-  //   .then(res => res.blob())
-  //   .then(blob => {
-  //     const url = window.URL.createObjectURL(blob)
-  //     const a = document.createElement("a")
-  //     a.href = url
-  //     a.download = extractFilename
-  //     document.body.appendChild(a)
-  //     a.click()
-  //     a.remove()
-  //   })
-  //   .catch(err => {
-  //     console.error("err: ", err);
-  //   })
+  const filename = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-Gj9qRtTFTcQvSvQMlsTGqRzb/user-WIsWrURgDHs7MJkppHrsBBgZ/img-JBl5E0HKm2Uv8CHwwnz3rT09.png?st=2023-03-13T16%3A33%3A48Z&se=2023-03-13T18%3A33%3A48Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-03-13T08%3A00%3A59Z&ske=2023-03-14T08%3A00%3A59Z&sks=b&skv=2021-08-06&sig=YsjB8sz7KxvTlhBAWF97U0B7RE1XzqMNgzNpe0lx2X4%3D"
+  const extractFilename = filename.split('/').pop();
+  if (!extractFilename) throw new Error("Filename is undefined");
+  return fetch(`${filename}`, {method: "GET"})
+    .then(res => res.blob())
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = extractFilename
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    })
+    .catch(err => {
+      console.error("err: ", err);
+    })
 
 }
 
-const upload = async () => {
-  const form = new FormData();
-  const url = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-Gj9qRtTFTcQvSvQMlsTGqRzb/user-WIsWrURgDHs7MJkppHrsBBgZ/img-7DcFcnfPOYn32ihEeiM46Ura.png?st=2023-03-13T17%3A38%3A59Z&se=2023-03-13T19%3A38%3A59Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-03-13T15%3A26%3A21Z&ske=2023-03-14T15%3A26%3A21Z&sks=b&skv=2021-08-06&sig=WkDqWe8k/U4qN6yyYlXPEodYTBD10d/eYp7rwW5VXbw%3D"
-  return fetch(url, {})
-    .then((res) => res.blob())
-    .then((blob) => {
-      const file = new File([blob], 'image', {
-        type: blob.type,
-      });
+async function toDataURL(url: string) {
+  const blob = await fetch(url).then(res => res.blob());
+  return URL.createObjectURL(blob);
+}
 
-      form.append('image', file);
-      console.log(form)
-      // axios.post('/upload', form);
-    });
+async function download() {
+  const a = document.createElement("a");
+  a.href = await toDataURL("https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/img-6NqPdljBP8Xld09w48lcJELw.png");
+  a.download = "myImage.png";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+const s3 = new AWS.S3({
+  credentials: {
+    accessKeyId: process.env.NEXT_PUBLIC_REACT_APP_AWS_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.NEXT_PUBLIC_REACT_APP_AWS_SECRET_ACCESS_KEY || ""
+  },
+  region: process.env.NEXT_PUBLIC_REACT_APP_AWS_REGION || ""
+});
+
+const downloadBlob = async () => {
+  // const sourceUrl = 'https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/img-6NqPdljBP8Xld09w48lcJELw.png';
+  const sourceUrl = 'https://oaidalleapiprodscus.blob.core.windows.net/private/org-Gj9qRtTFTcQvSvQMlsTGqRzb/user-WIsWrURgDHs7MJkppHrsBBgZ/img-nQWTqZy2TAo0gsZ9zWVl5ahd.png?st=2023-03-15T17%3A02%3A35Z&se=2023-03-15T19%3A02%3A35Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-03-15T17%3A04%3A47Z&ske=2023-03-16T17%3A04%3A47Z&sks=b&skv=2021-08-06&sig=P/Eb6MexgOHEKYQjsD/2AyCO8tZaPB4gA5Pulix8zBE%3D';
+  // const sourceUrl = 'https://images.unsplash.com/photo-1676818248355-5714af2e2979?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY3ODgxODQzMw&ixlib=rb-4.0.3&q=80&w=500';
+
+  fetch(sourceUrl)
+    .then(response => response.blob())
+    .then(blob => {
+      const splitUrl = sourceUrl.split('/').pop();
+      if (!splitUrl) throw new Error("Filename is undefined");
+      const s3Params = {
+        Bucket: "chainbot.chaincuet.com.storage",
+        Key: 'imagebot/' + splitUrl,
+        Body: blob,
+        ContentType: blob.type
+      };
+
+      s3.upload(s3Params, (err: any, data: { Location: any; }) => {
+        if (err) {
+          console.log('Error uploading file: ', err);
+        } else {
+          console.log('File uploaded successfully. Location:', data.Location);
+        }
+      });
+    })
 };
 
 const ImageBot = () => {
@@ -185,7 +221,9 @@ const ImageBot = () => {
             )}
           </div>
         </div>
-        <button className={"btn"} onClick={() => upload()}>Download</button>
+        <button className={"btn"} onClick={() => downloadBlob()}>Download</button>
+        <a href="https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/img-6NqPdljBP8Xld09w48lcJELw.png"
+           download>Download</a>
       </section>
       <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
         <form

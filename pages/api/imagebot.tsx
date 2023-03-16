@@ -1,7 +1,6 @@
-import {Configuration, CreateCompletionResponse, ImagesResponse, OpenAIApi} from "openai";
+import {Configuration, OpenAIApi} from "openai";
 import {NextApiRequest, NextApiResponse} from "next";
 import axios from "axios";
-import {ImagesRequest, ImageUrl} from "@/components/imagebot/ImageModel";
 import {v4 as uuidv4} from 'uuid';
 import AWS from "aws-sdk";
 
@@ -50,39 +49,5 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(500).json({message: 'Error creating images'});
     });
 };
-
-// const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-//   const {text} = req.body;
-//   const response = await openai.createImage({prompt: text, n: 4, size: "256x256"})
-//     .then((data) => {
-//       let request = data.request() as ImagesResponse;
-//       data.data = request.data;
-//     })
-//   // return res.status(200).json(response.data);
-//   const images = response as unknown as ImagesResponse;
-//
-//   const responseImages = [];
-//
-//   try {
-//     for (let i = 0; i < images.data.length; i++) {
-//       const response = await axios.get(images.data[i].url, {responseType: 'arraybuffer'});
-//       const uuid = uuidv4();
-//       const s3Params = {
-//         Bucket: 'chainbot.chaincuet.com.storage',
-//         Key: 'imagebot/' + uuid,
-//         Body: response.data,
-//         ContentType: response.headers['content-type'],
-//       };
-//       const result = await s3.upload(s3Params).promise();
-//       console.log(`File ${i + 1} uploaded successfully. Location:`, result.Location);
-//       responseImages.push(result.Location)
-//     }
-//     res.status(200).json(responseImages);
-//   } catch (error) {
-//     console.error('Error uploading file:', error);
-//     res.status(500).json({message: 'Error uploading file'});
-//   }
-//
-// };
 
 export default handler;

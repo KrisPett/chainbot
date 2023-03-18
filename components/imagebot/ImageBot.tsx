@@ -26,7 +26,7 @@ const ImageBot = () => {
   const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
   const [progress, setProgress] = useState(0)
 
-  const generateImageMutate = useMutation(["CHAT_AI"], ({accessToken, text}: ImageAiMutateMutationFn) => {
+  const generateImageMutate = useMutation(["IMAGE_AI"], ({accessToken, text}: ImageAiMutateMutationFn) => {
     const progressInterval = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress === 100) {
@@ -59,7 +59,7 @@ const ImageBot = () => {
         return value
       })
   });
-
+  console.log(imageUrls)
   const handleTextareaKeydown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
     const isEnterPressed = event.key === "Enter";
@@ -116,7 +116,7 @@ const ImageBot = () => {
                       onClick={() => console.log(imageUrl)}
                     >
                       <Image
-                        src={imageUrl}
+                        src={"https://storage-chainbot.chaincuet.com/" + imageUrl}
                         alt="user_icon"
                         width={300}
                         height={300}

@@ -38,7 +38,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             };
             const result = await s3.upload(s3Params).promise();
             console.log(`File uploaded successfully. Location:`, result.Location);
-            responseImages.push(result.Location);
+            console.log(`File uploaded successfully. Location:`, result.Key);
+            responseImages.push(result.Key);
           }
         }
       }

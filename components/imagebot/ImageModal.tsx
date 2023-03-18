@@ -30,8 +30,8 @@ const ImageModal = ({open, setOpen, selectedImage}: ModalProps) => {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
           </Transition.Child>
 
-          <div className="fixed inset-0 z-10 overflow-y-auto">
-            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <div className="fixed inset-0 z-10  ">
+            <div className="flex min-h-full items-end justify-center p-4 items-center">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -41,10 +41,11 @@ const ImageModal = ({open, setOpen, selectedImage}: ModalProps) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel
-                  className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all  sm:w-full sm:max-w-xl md:max-w-2xl lg:max-w-4xl lg:max-w-5xl">
-                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div className="bg-gray-50 sm:flex sm:flex-row-reverse">
+                <Dialog.Panel style={{height: "80vh"}}
+                              className="relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all
+                  sm:w-full sm:max-w-xl md:max-w-2xl lg:max-w-4xl lg:max-w-5xl">
+                  <div className="bg-transparent">
+                    <div className=" sm:flex sm:flex-row-reverse pt-5 pb-4 sm:mr-3">
                       <button
                         type="button"
                         className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold
@@ -63,14 +64,19 @@ const ImageModal = ({open, setOpen, selectedImage}: ModalProps) => {
                         Cancel
                       </button>
                     </div>
-                    <Image
-                      src={"https://storage-chainbot.chaincuet.com/" + selectedImage}
-                      alt="user_icon"
-                      width={300}
-                      height={300}
-                      className="w-max h-full rounded"
-                      priority={true}
-                    />
+                    <div className={"flex justify-center h-screen"}>
+                      <div className={"h-4/6"}>
+                        <Image
+                          src={"https://storage-chainbot.chaincuet.com/" + selectedImage}
+                          alt="user_icon"
+                          width={0}
+                          height={0}
+                          className="w-max h-full rounded"
+                          priority={true}
+                        />
+                      </div>
+
+                    </div>
                   </div>
 
                 </Dialog.Panel>

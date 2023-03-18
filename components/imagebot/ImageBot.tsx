@@ -22,7 +22,7 @@ const ImageBot = () => {
   const {id} = router.query;
   const {data: session} = useSession()
 
-  const [imageUrls, setImageUrls] = useState<string[]>(["imagebot/daa58fed-8428-407f-abea-89d22689f79d"]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
@@ -62,7 +62,7 @@ const ImageBot = () => {
         return value
       })
   });
-  console.log(imageUrls)
+
   const handleTextareaKeydown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const isCtrlEnterPressed = textLines > 1 && event.ctrlKey && event.key === "Enter";
     const isEnterPressed = event.key === "Enter";

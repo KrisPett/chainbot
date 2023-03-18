@@ -2,6 +2,10 @@ import React from 'react';
 import {Fragment, useRef, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import Image from "next/image";
+import Button from "@/lib/Button";
+import ButtonAlt from "@/lib/ButtonAlt";
+import ButtonAlt2 from "@/lib/ButtonAlt2";
+import ButtonAlt3 from "@/lib/ButtonAlt3";
 
 interface ModalProps {
   open: boolean;
@@ -9,10 +13,30 @@ interface ModalProps {
   selectedImage: string;
 }
 
-const ImageModal = ({open, setOpen, selectedImage}: ModalProps) => {
+const downloadImage = (url: string) => {
+  console.log(url)
+  // https://storage-chainbot.chaincuet.com/imagebot/daa58fed-8428-407f-abea-89d22689f79d
+  // https://storage-chainbot.chaincuet.com/imagebot/035c2701-583b-48ba-9c0f-b1f43db93d4f
+  // https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/1adc22c7-637c-4e51-96e4-1c41063c087f
+  fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      console.log(blob)
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'image.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+}
+
+const ImageModalOld = ({open, setOpen, selectedImage}: ModalProps) => {
   const cancelButtonRef = useRef(null)
 
-  console.log("https://storage-chainbot.chaincuet.com/" + selectedImage)
+  // console.log("https://storage-chainbot.chaincuet.com/" + selectedImage)
 
   return (
     <div>
@@ -30,8 +54,8 @@ const ImageModal = ({open, setOpen, selectedImage}: ModalProps) => {
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
           </Transition.Child>
 
-          <div className="fixed inset-0 z-10  ">
-            <div className="flex min-h-full items-end justify-center p-4 items-center">
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -41,44 +65,27 @@ const ImageModal = ({open, setOpen, selectedImage}: ModalProps) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel style={{height: "80vh"}}
-                              className="relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all
-                  sm:w-full sm:max-w-xl md:max-w-2xl lg:max-w-4xl lg:max-w-5xl">
-                  <div className="bg-transparent">
-                    <div className=" sm:flex sm:flex-row-reverse pt-5 pb-4 sm:mr-3">
-                      <button
-                        type="button"
-                        className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold
-                        text-white shadow-sm hover:bg-orange-500 sm:ml-3 sm:w-auto"
-                        onClick={() => setOpen(false)}
-                      >
-                        Download
-                      </button>
-                      <button
-                        type="button"
-                        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900
-                        shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                        onClick={() => setOpen(false)}
-                        ref={cancelButtonRef}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                    <div className={"flex justify-center h-screen"}>
-                      <div className={"h-4/6"}>
-                        <Image
-                          src={"https://storage-chainbot.chaincuet.com/" + selectedImage}
-                          alt="user_icon"
-                          width={0}
-                          height={0}
-                          className="w-max h-full rounded"
-                          priority={true}
-                        />
-                      </div>
-
+                <Dialog.Panel
+                  className="relative transform overflow-hidden rounded-lg text-left transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                  <div className="bg-transparent px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className={""}>
+                      <Image
+                        src={"https://storage-chainbot.chaincuet.com/" + selectedImage}
+                        alt="user_icon"
+                        width={500}
+                        height={500}
+                        className="rounded min-w-full "
+                        priority={true}
+                      />
                     </div>
                   </div>
-
+                  <div className={"flex justify-center"}>
+                    <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 rounded
+                    bg-gradient-to-br from-gray-200 to-gray-300 dark:from-zinc-600 dark:to-zinc-700 w-11/12 xxs:space-y-1 sm:space-y-0">
+                      <ButtonAlt2 title={"Download"} onClick={() => downloadImage("https://storage-chainbot.chaincuet.com/" + selectedImage)}/>
+                      <ButtonAlt3 title={"Close"} onClick={() => setOpen(false)}/>
+                    </div>
+                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
@@ -89,4 +96,4 @@ const ImageModal = ({open, setOpen, selectedImage}: ModalProps) => {
   );
 };
 
-export default ImageModal;
+export default ImageModalOld;

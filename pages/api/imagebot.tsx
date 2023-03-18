@@ -21,7 +21,7 @@ const openai = new OpenAIApi(configuration);
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {text} = req.body;
 
-  openai.createImage({prompt: text, n: 4, size: "256x256"})
+  openai.createImage({prompt: text, n: 1, size: "256x256"})
     .then(async (data) => {
       const responseImages = [];
       if (data.data.data) {

@@ -6,6 +6,7 @@ import LoadingImage from "@/components/imagebot/LoadingImage";
 import {useSession} from "next-auth/react";
 import {useMutation} from "@tanstack/react-query";
 import process from "process";
+import ImageModal from "@/components/imagebot/ImageModal";
 
 interface ImageAiMutateMutationFn {
   accessToken: string | undefined;
@@ -21,10 +22,12 @@ const ImageBot = () => {
   const {id} = router.query;
   const {data: session} = useSession()
 
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>(["imagebot/daa58fed-8428-407f-abea-89d22689f79d"]);
+  const [selectedImage, setSelectedImage] = useState<string>("");
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
   const [progress, setProgress] = useState(0)
+  const [open, setOpen] = useState(false)
 
   const generateImageMutate = useMutation(["IMAGE_AI"], ({accessToken, text}: ImageAiMutateMutationFn) => {
     const progressInterval = setInterval(() => {
@@ -86,6 +89,11 @@ const ImageBot = () => {
     }
   }
 
+  const onClickImage = (url: string) => {
+    setOpen(true)
+    setSelectedImage(url)
+  }
+
   return (
     <div className={"mt-28 flex justify-center"}>
       <SideMenuImageBot/>
@@ -99,7 +107,7 @@ const ImageBot = () => {
           </div>
           <div
             className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5`}>
-            {(generateImageMutate.isLoading || imageUrls.length < 3) && (
+            {(generateImageMutate.isLoading || imageUrls.length === 0) && (
               <>
                 <LoadingImage/>
                 <LoadingImage/>
@@ -107,13 +115,13 @@ const ImageBot = () => {
                 <LoadingImage/>
               </>
             )}
-            {(!generateImageMutate.isLoading && imageUrls.length > 3 && progress === 100) && (
+            {(!generateImageMutate.isLoading) && (
               <>
                 {imageUrls.map((imageUrl, index) => {
                   return (
                     <div
                       key={index}
-                      onClick={() => console.log(imageUrl)}
+                      onClick={() => onClickImage(imageUrl)}
                     >
                       <Image
                         src={"https://storage-chainbot.chaincuet.com/" + imageUrl}
@@ -130,6 +138,7 @@ const ImageBot = () => {
               </>
             )}
           </div>
+          <ImageModal open={open} setOpen={setOpen} selectedImage={selectedImage}/>
         </div>
       </section>
       <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">

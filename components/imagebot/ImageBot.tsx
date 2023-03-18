@@ -30,6 +30,7 @@ const ImageBot = () => {
   const [open, setOpen] = useState(false)
 
   const generateImageMutate = useMutation(["IMAGE_AI"], ({accessToken, text}: ImageAiMutateMutationFn) => {
+    setProgress(0)
     const progressInterval = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress === 100) {

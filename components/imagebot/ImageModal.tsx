@@ -1,9 +1,6 @@
-import React from 'react';
-import {Fragment, useRef, useState} from 'react'
+import React, {Fragment, useRef} from 'react';
 import {Dialog, Transition} from '@headlessui/react'
 import Image from "next/image";
-import Button from "@/lib/Button";
-import ButtonAlt from "@/lib/ButtonAlt";
 import ButtonAlt2 from "@/lib/ButtonAlt2";
 import ButtonAlt3 from "@/lib/ButtonAlt3";
 
@@ -14,10 +11,6 @@ interface ModalProps {
 }
 
 const downloadImage = (url: string) => {
-  console.log(url)
-  // https://storage-chainbot.chaincuet.com/imagebot/daa58fed-8428-407f-abea-89d22689f79d
-  // https://storage-chainbot.chaincuet.com/imagebot/035c2701-583b-48ba-9c0f-b1f43db93d4f
-  // https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/1adc22c7-637c-4e51-96e4-1c41063c087f
   fetch(url)
     .then(response => response.blob())
     .then(blob => {
@@ -35,9 +28,6 @@ const downloadImage = (url: string) => {
 
 const ImageModalOld = ({open, setOpen, selectedImage}: ModalProps) => {
   const cancelButtonRef = useRef(null)
-
-  // console.log("https://storage-chainbot.chaincuet.com/" + selectedImage)
-
   return (
     <div>
       <Transition.Root show={open} as={Fragment}>

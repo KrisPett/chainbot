@@ -22,7 +22,7 @@ const ImageBot = () => {
   const {id} = router.query;
   const {data: session} = useSession()
 
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>(["imagebot/f0116257-4c8d-4edb-b48e-cbe500a67d6a", "imagebot/f0116257-4c8d-4edb-b48e-cbe500a67d6a", "imagebot/f0116257-4c8d-4edb-b48e-cbe500a67d6a", "imagebot/f0116257-4c8d-4edb-b48e-cbe500a67d6a"]);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
@@ -116,7 +116,7 @@ const ImageBot = () => {
                 <LoadingImage/>
               </>
             )}
-            {(!generateImageMutate.isLoading) && (
+            {(!generateImageMutate.isLoading || imageUrls.length > 0) && (
               <>
                 {imageUrls.map((imageUrl, index) => {
                   return (

@@ -7,6 +7,7 @@ import {useSession} from "next-auth/react";
 import {useMutation} from "@tanstack/react-query";
 import process from "process";
 import ImageModal from "@/components/imagebot/ImageModal";
+import { v4 as uuidv4 } from 'uuid';
 
 interface ImageAiMutateMutationFn {
   accessToken: string | undefined;
@@ -21,8 +22,9 @@ const ImageBot = () => {
   const router = useRouter()
   const {id} = router.query;
   const {data: session} = useSession()
-
-  const [imageUrls, setImageUrls] = useState<string[]>(["imagebot/f0116257-4c8d-4edb-b48e-cbe500a67d6a", "imagebot/f0116257-4c8d-4edb-b48e-cbe500a67d6a", "imagebot/f0116257-4c8d-4edb-b48e-cbe500a67d6a", "imagebot/f0116257-4c8d-4edb-b48e-cbe500a67d6a"]);
+  const uuid = uuidv4();
+  console.log(uuid)
+  const [imageUrls, setImageUrls] = useState<string[]>(["imagebot/0bbb8303-de5f-4bb7-b777-ed69cce1aeb5", "imagebot/0bbb8303-de5f-4bb7-b777-ed69cce1aeb5", "imagebot/0bbb8303-de5f-4bb7-b777-ed69cce1aeb5", "imagebot/0bbb8303-de5f-4bb7-b777-ed69cce1aeb5"]);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");

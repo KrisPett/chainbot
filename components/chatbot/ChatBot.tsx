@@ -58,7 +58,7 @@ const AIChat = (props: IAIChat) => {
       <div
         className="chat-bubble bg-gray-300 bg-gradient-to-b from-gray-200 to-gray-300 text-gray-900
         dark:bg-orange-1000 dark:from-orange-600 dark:to-amber-900 dark:text-gray-300 break-words">
-        {props.text}
+        {props.text.replace("Bot:", "").replace("Computer:", "").replace("Robot:", "")}
       </div>
     </div>
   );
@@ -115,6 +115,7 @@ const ChatBot = () => {
       isCheckedYodaMode: isCheckedYodaMode,
       temperatureRange: temperatureRange / 50
     }
+
     return fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL_CHATBOT, {
       method: "POST",
       headers: {'Authorization': `Bearer ${accessToken}`, "Content-Type": "application/json"},
@@ -125,9 +126,10 @@ const ChatBot = () => {
         return response.json()
       })
       .then((res) => {
+        console.log("res", res)
           if (res && res.choices && res.choices.length > 0) {
             setPrompt((prevState) => [...prevState, {text: res.choices[0].text}])
-            setChatHistory((prevState) => [...prevState, `AI: ${res.choices[0].text.trim()}`])
+            setChatHistory((prevState) => [...prevState, `${res.choices[0].text.trim()}`])
           }
         }
       )
@@ -190,7 +192,8 @@ const ChatBot = () => {
       if (isEnterPressed && text !== "") {
         setPrompt((prevState) => [...prevState, {text: text}]);
         const AIPromptHelperText = "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\n"
-        const sendWithChatHistory = chatHistory.join("\n") + `Human: ${text}`
+        const sendWithChatHistory = chatHistory.join("\n") + `\nHuman: ${text}`
+
         const chatAiMutateMutationFn: ChatAiMutateMutationFn = {
           accessToken: session.access_token,
           text: sendWithChatHistory,

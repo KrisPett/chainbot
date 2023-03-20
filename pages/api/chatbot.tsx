@@ -27,7 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<CreateCompletio
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0.6,
-    stop: [" Human:", " AI:"],
+    stop: [" Human:", " Computer:"],
   });
 
   return res.status(200).json(response.data);

@@ -8,6 +8,7 @@ import {useMutation} from "@tanstack/react-query";
 import process from "process";
 import ImageModal from "@/components/imagebot/ImageModal";
 import { v4 as uuidv4 } from 'uuid';
+import {logicalExpression} from "@babel/types";
 
 interface ImageAiMutateMutationFn {
   accessToken: string | undefined;
@@ -22,9 +23,8 @@ const ImageBot = () => {
   const router = useRouter()
   const {id} = router.query;
   const {data: session} = useSession()
-  const uuid = uuidv4();
-  console.log(uuid)
-  const [imageUrls, setImageUrls] = useState<string[]>(["imagebot/0bbb8303-de5f-4bb7-b777-ed69cce1aeb5", "imagebot/0bbb8303-de5f-4bb7-b777-ed69cce1aeb5", "imagebot/0bbb8303-de5f-4bb7-b777-ed69cce1aeb5", "imagebot/0bbb8303-de5f-4bb7-b777-ed69cce1aeb5"]);
+
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
@@ -97,6 +97,14 @@ const ImageBot = () => {
     setSelectedImage(url)
   }
 
+  function fetchApi() {
+    console.log("awdawd");
+    console.log(session);
+    let s = uuidv4();
+    console.log(s)
+    // fetch("http://localhost:3000/api/dynamoDB").then(value => console.log(value))
+  }
+
   return (
     <div className={"mt-28 flex justify-center"}>
       <SideMenuImageBot/>
@@ -143,6 +151,7 @@ const ImageBot = () => {
           </div>
           <ImageModal open={open} setOpen={setOpen} selectedImage={selectedImage}/>
         </div>
+        {/*<button className={"btn"} onClick={() => fetchApi()}>dwadawd</button>*/}
       </section>
       <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
         <form

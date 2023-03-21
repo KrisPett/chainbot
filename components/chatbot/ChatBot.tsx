@@ -126,7 +126,6 @@ const ChatBot = () => {
         return response.json()
       })
       .then((res) => {
-        console.log("res", res)
           if (res && res.choices && res.choices.length > 0) {
             setPrompt((prevState) => [...prevState, {text: res.choices[0].text}])
             setChatHistory((prevState) => [...prevState, `${res.choices[0].text.trim()}`])
@@ -212,7 +211,8 @@ const ChatBot = () => {
   return (
     <div className={""}>
       <SideMenuChatBot setModelSelected={model => setModelSelected(model)} isCheckedYodaMode={isCheckedYodaMode}
-                       setIsCheckedYodaMode={setIsCheckedYodaMode} setTemperatureRange={setTemperatureRange} temperatureRange={temperatureRange}/>
+                       setIsCheckedYodaMode={setIsCheckedYodaMode} setTemperatureRange={setTemperatureRange}
+                       temperatureRange={temperatureRange}/>
       <main className={"mt-28 flex justify-center"}>
         <section className={"max-w-screen-xl space-y-5 sm:ml-72"}>
           {prompt.map((item, index) => {

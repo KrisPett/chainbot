@@ -53,4 +53,6 @@ chatbot@gmail.com
 ```
 
 https://www.youtube.com/watch?v=2k2GINpO308
-videod
+video
+Load Dynamodb using aws-cli and then update new data to dynamoDB using cli in nextjs
+Then use lambda function for this

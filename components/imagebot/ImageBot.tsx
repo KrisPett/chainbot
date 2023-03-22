@@ -102,7 +102,11 @@ const ImageBot = () => {
     console.log(session);
     let s = uuidv4();
     console.log(s)
-    // fetch("http://localhost:3000/api/dynamoDB").then(value => console.log(value))
+    fetch("http://localhost:3000/api/dynamoDB", {
+      method: "POST",
+      headers: {'Authorization': `Bearer ${session?.access_token}`, "Content-Type": "application/json"},
+    })
+      .then(value => console.log(value))
   }
 
   return (
@@ -151,7 +155,7 @@ const ImageBot = () => {
           </div>
           <ImageModal open={open} setOpen={setOpen} selectedImage={selectedImage}/>
         </div>
-        {/*<button className={"btn"} onClick={() => fetchApi()}>dwadawd</button>*/}
+        <button className={"btn"} onClick={() => fetchApi()}>dwadawd</button>
       </section>
       <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
         <form

@@ -7,7 +7,7 @@ import {useSession} from "next-auth/react";
 import {useMutation} from "@tanstack/react-query";
 import process from "process";
 import ImageModal from "@/components/imagebot/ImageModal";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import {logicalExpression} from "@babel/types";
 
 interface ImageAiMutateMutationFn {
@@ -130,28 +130,31 @@ const ImageBot = () => {
                 <LoadingImage/>
               </>
             )}
-            {(!generateImageMutate.isLoading || imageUrls.length > 0) && (
-              <>
-                {imageUrls.map((imageUrl, index) => {
-                  return (
-                    <div
-                      key={index}
-                      onClick={() => onClickImage(imageUrl)}
-                    >
-                      <Image
-                        src={"https://storage-chainbot.chaincuet.com/" + imageUrl}
-                        alt="user_icon"
-                        width={300}
-                        height={300}
-                        className="xxs:h-32 xs:h-32 sm:h-32 md:h-56 lg:h-56 xl:h-56 2xl:h-56 xxs:w-56 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-64 2xl:w-64
+            {!generateImageMutate.isLoading ? <>
+              {(imageUrls.length > 0) && (
+                <>
+                  {imageUrls.map((imageUrl, index) => {
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => onClickImage(imageUrl)}
+                      >
+                        <Image
+                          src={"https://storage-chainbot.chaincuet.com/" + imageUrl}
+                          alt="user_icon"
+                          width={300}
+                          height={300}
+                          className="xxs:h-32 xs:h-32 sm:h-32 md:h-56 lg:h-56 xl:h-56 2xl:h-56 xxs:w-56 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-64 2xl:w-64
                         cursor-pointer transition duration-100 ease-in-out transform hover:-translate-y-0 hover:scale-110 rounded"
-                        priority={true}
-                      />
-                    </div>
-                  );
-                })}
-              </>
-            )}
+                          priority={true}
+                        />
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+            </> : <></>}
+
           </div>
           <ImageModal open={open} setOpen={setOpen} selectedImage={selectedImage}/>
         </div>

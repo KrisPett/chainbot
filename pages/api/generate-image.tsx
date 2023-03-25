@@ -6,6 +6,7 @@ import AWS from "aws-sdk";
 import {decode} from "jsonwebtoken";
 import {UpdateItemInput} from "aws-sdk/clients/dynamodb";
 import process from "process";
+import {ImagesCollection} from "@/components/imagebot/models/interfaces";
 
 const awsCredentialsOptions = {
   credentials: {
@@ -25,31 +26,6 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-interface ImageObject {
-  S: string;
-}
-
-interface Image {
-  M: {
-    imageId: ImageObject;
-    url: ImageObject;
-  };
-}
-
-interface ImagesCollectionObject {
-  S: string;
-}
-
-interface ImagesCollection {
-  images: { L: Image[] };
-  imagesCollectionId: ImagesCollectionObject;
-  timestamp: ImageObject;
-}
-
-interface Images {
-  L: [{ M: ImagesCollection }];
-}
-
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const {text} = req.body;
@@ -59,7 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401).json({message: 'Unauthorized'})
   }
 
-  const dynamoDBParam: Images = {
+  const dynamoDBParam: ImagesCollection = {
     "L": [{
       "M": {
         "images": {"L": []},
@@ -69,7 +45,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }]
   }
 
-  openai.createImage({prompt: text, n: 4, size: "256x256"})
+  openai.createImage({prompt: text, n: 1, size: "256x256"})
     .then(async (data) => {
       const responseImages = [];
       if (data.data.data) {

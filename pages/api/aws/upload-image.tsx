@@ -2,8 +2,8 @@ import {NextApiRequest, NextApiResponse} from "next";
 import AWS from "aws-sdk";
 import process from "process";
 import axios from "axios";
-import {ImagesRequest} from "@/components/imagebot/ImageModel";
 import { v4 as uuidv4 } from 'uuid';
+import {ImagesRequest} from "@/components/imagebot/models/ImageModel";
 
 const s3 = new AWS.S3({
   credentials: {

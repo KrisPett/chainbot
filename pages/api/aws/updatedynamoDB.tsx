@@ -5,7 +5,7 @@ import {decode} from "jsonwebtoken";
 import {UpdateItemInput} from "aws-sdk/clients/dynamodb";
 import {v4 as uuidv4} from 'uuid';
 
-const dynamodb = new AWS.DynamoDB({
+const updatedynamoDB = new AWS.DynamoDB({
   credentials: {
     accessKeyId: process.env.NEXT_PUBLIC_REACT_APP_AWS_ACCESS_KEY_ID || "",
     secretAccessKey: process.env.NEXT_PUBLIC_REACT_APP_AWS_SECRET_ACCESS_KEY || ""
@@ -43,7 +43,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     console.log(images.L[0].M.imagesCollectionId.S)
     try {
-      const data = await dynamodb.updateItem(params).promise();
+      const data = await updatedynamoDB.updateItem(params).promise();
       console.log(data);
       res.status(200).json({message: 'Table created successfully'});
     } catch (err) {

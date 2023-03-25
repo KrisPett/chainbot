@@ -6,9 +6,10 @@ import LoadingImage from "@/components/imagebot/LoadingImage";
 import {useSession} from "next-auth/react";
 import {useMutation} from "@tanstack/react-query";
 import process from "process";
-import ImageModal from "@/components/imagebot/ImageModal";
+
 import {v4 as uuidv4} from 'uuid';
 import {logicalExpression} from "@babel/types";
+import ImageModal from "@/components/imagebot/ImageModal";
 
 interface ImageAiMutateMutationFn {
   accessToken: string | undefined;
@@ -98,14 +99,11 @@ const ImageBot = () => {
   }
 
   function fetchApi() {
-    console.log("awdawd");
-    console.log(session);
-    let s = uuidv4();
-    console.log(s)
-    fetch("http://localhost:3000/api/dynamoDB", {
+    fetch("http://localhost:3000/api/aws/getItemdynamoDB", {
       method: "POST",
       headers: {'Authorization': `Bearer ${session?.access_token}`, "Content-Type": "application/json"},
     })
+      .then(value => value.json())
       .then(value => console.log(value))
   }
 

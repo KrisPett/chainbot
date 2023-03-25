@@ -19,10 +19,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       "M": {
         "images": {
           "L": [
-            {"M": {"imageId": {"S": uuidv4()}, "url": {"S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/cb9a75a2-2553-4c9f-ab0a-1388c54d6621"}}},
-            {"M": {"imageId": {"S": uuidv4()}, "url": {"S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/09ed4bf2-e43c-4a25-804b-5f55bc94090d"}}},
-            {"M": {"imageId": {"S": uuidv4()}, "url": {"S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/a49da393-db67-4886-951c-a9a63b66348b"}}},
-            {"M": {"imageId": {"S": uuidv4()}, "url": {"S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/f0116257-4c8d-4edb-b48e-cbe500a67d6a"}}}
+            {"M": {"imageId": {"S": uuidv4()}, "url": {"S": "https://s3.amazonaws.com/"}}},
+            {"M": {"imageId": {"S": uuidv4()}, "url": {"S": "https://s3.amazonaws.com/"}}},
+            {"M": {"imageId": {"S": uuidv4()}, "url": {"S": "https://s3.amazonaws.com/"}}},
+            {"M": {"imageId": {"S": uuidv4()}, "url": {"S": "https://s3.amazonaws.com/"}}}
           ]
         },
         "imagesCollectionId": {"S": uuidv4()},

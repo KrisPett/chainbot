@@ -99,8 +99,8 @@ const ImageBotView = () => {
   }
 
   const fetchApi = () => {
-    fetch("http://localhost:3000/api/aws/getItemdynamoDB", {
-      method: "POST",
+    fetch("http://localhost:3000/api/aws/getImagedynamoDB", {
+      method: "GET",
       headers: {'Authorization': `Bearer ${session?.access_token}`, "Content-Type": "application/json"},
     })
       .then(value => value.json())

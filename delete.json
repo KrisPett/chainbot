@@ -1,0 +1,117 @@
+{
+  "userId": {
+    "S": "ec8e3d53-5b88-438e-8187-4d4aacdebb04"
+  },
+  "imagesCollection": {
+    "L": [
+      {
+        "M": {
+          "images": {
+            "L": [
+              {
+                "M": {
+                  "imageId": {
+                    "S": "cb9a75a2-2553-4c9f-ab0a-1388c54d6621"
+                  },
+                  "url": {
+                    "S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/cb9a75a2-2553-4c9f-ab0a-1388c54d6621"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "imageId": {
+                    "S": "09ed4bf2-e43c-4a25-804b-5f55bc94090d"
+                  },
+                  "url": {
+                    "S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/09ed4bf2-e43c-4a25-804b-5f55bc94090d"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "imageId": {
+                    "S": "a49da393-db67-4886-951c-a9a63b66348b"
+                  },
+                  "url": {
+                    "S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/a49da393-db67-4886-951c-a9a63b66348b"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "imageId": {
+                    "S": "f0116257-4c8d-4edb-b48e-cbe500a67d6a"
+                  },
+                  "url": {
+                    "S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/f0116257-4c8d-4edb-b48e-cbe500a67d6a"
+                  }
+                }
+              }
+            ]
+          },
+          "imagesCollectionId": {
+            "S": "5ec5d9a2-3104-4472-89ad-fc45bf4ade51"
+          },
+          "timestamp": {
+            "S": "2022-03-21T10:30:00Z"
+          }
+        }
+      },
+      {
+        "M": {
+          "images": {
+            "L": [
+              {
+                "M": {
+                  "imageId": {
+                    "S": "01ac312e-b768-4d06-b03d-a49c157139d7"
+                  },
+                  "url": {
+                    "S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/01ac312e-b768-4d06-b03d-a49c157139d7"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "imageId": {
+                    "S": "34f6ad96-5082-4a2d-948e-fb9b4429c2e2"
+                  },
+                  "url": {
+                    "S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/34f6ad96-5082-4a2d-948e-fb9b4429c2e2"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "imageId": {
+                    "S": "5c1c1278-5a5a-4241-b8d3-620e822e2c24"
+                  },
+                  "url": {
+                    "S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/5c1c1278-5a5a-4241-b8d3-620e822e2c24"
+                  }
+                }
+              },
+              {
+                "M": {
+                  "imageId": {
+                    "S": "a72b644b-73a9-43bb-8370-8c68720754d4"
+                  },
+                  "url": {
+                    "S": "https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot/a72b644b-73a9-43bb-8370-8c68720754d4"
+                  }
+                }
+              }
+            ]
+          },
+          "imagesCollectionId": {
+            "S": "f0f48770-79e1-4735-a01e-4de5f154926d"
+          },
+          "timestamp": {
+            "S": "2022-03-21T10:30:00Z"
+          }
+        }
+      }
+    ]
+  }
+}

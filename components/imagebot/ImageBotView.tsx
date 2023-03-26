@@ -4,9 +4,10 @@ import SideMenuImageBot from "@/components/imagebot/SideMenuImageBot";
 import {useRouter} from "next/router";
 import LoadingImageBig from "@/components/imagebot/LoadingImageBig";
 import {useSession} from "next-auth/react";
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import process from "process";
 import ImageModal from "@/components/imagebot/ImageModal";
+import {FETCH_IMAGES} from "@/components/imagebot/ImageContextProvider";
 
 interface ImageAiMutateMutationFn {
   accessToken: string | undefined;
@@ -21,6 +22,7 @@ const ImageBotView = () => {
   const router = useRouter()
   const {id} = router.query;
   const {data: session} = useSession()
+  const queryClient = useQueryClient();
 
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
@@ -62,6 +64,7 @@ const ImageBotView = () => {
         setImageUrls(value)
         return value
       })
+      .finally(() => queryClient.refetchQueries([FETCH_IMAGES]))
   });
 
   const handleTextareaKeydown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -103,7 +106,7 @@ const ImageBotView = () => {
       .then(value => value.json())
       .then(value => console.log(value))
   };
-  console.log()
+
   return (
     <div className={"mt-28 flex justify-center"}>
       <SideMenuImageBot/>

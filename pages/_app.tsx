@@ -13,7 +13,7 @@ if (!isServer) {
   if (!localStorage.getItem("theme")) localStorage.setItem("theme", "dark");
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({defaultOptions: {queries: {refetchOnWindowFocus: false}}});
 
 const App = ({Component, pageProps}: AppProps) => {
   return (

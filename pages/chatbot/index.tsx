@@ -6,8 +6,8 @@ const Index = () => {
   return (
     <>
       <PageSEO
-        title={"ChainBot | ChatBot"}
-        description={"ChainBot | ChatBot"}
+        title={"Chatbot | Chainbot"}
+        description={"Chatbot | Chainbot"}
       />
       <ChatBot />
     </>

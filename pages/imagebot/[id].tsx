@@ -1,19 +1,15 @@
-import {useRouter} from "next/router";
 import {PageSEO} from "@/layouts/SEO";
-import ImageBot from "@/components/imagebot/ImageBot";
+import ImageBotView from "@/components/imagebot/ImageBotView";
 import React from "react";
 
 const Id = () => {
-  const router = useRouter();
-  const {id} = router.query;
-
   return (
     <>
       <PageSEO
-        title={`ChainBot | ImageBot ${id}`}
-        description={`ChainBot | ImageBot ${id}`}
+        title={`Imagebot | Chainbot`}
+        description={`Imagebot | Chainbot`}
       />
-      <ImageBot/>
+      <ImageBotView/>
     </>
   );
 };

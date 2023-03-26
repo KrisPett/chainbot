@@ -2,13 +2,10 @@ import React, {useState} from "react";
 import Image from "next/image";
 import SideMenuImageBot from "@/components/imagebot/SideMenuImageBot";
 import {useRouter} from "next/router";
-import LoadingImage from "@/components/imagebot/LoadingImage";
+import LoadingImageBig from "@/components/imagebot/LoadingImageBig";
 import {useSession} from "next-auth/react";
 import {useMutation} from "@tanstack/react-query";
 import process from "process";
-
-import {v4 as uuidv4} from 'uuid';
-import {logicalExpression} from "@babel/types";
 import ImageModal from "@/components/imagebot/ImageModal";
 
 interface ImageAiMutateMutationFn {
@@ -20,7 +17,7 @@ type AIPromptRequestBody = {
   text: string
 }
 
-const ImageBot = () => {
+const ImageBotView = () => {
   const router = useRouter()
   const {id} = router.query;
   const {data: session} = useSession()
@@ -98,15 +95,15 @@ const ImageBot = () => {
     setSelectedImage(url)
   }
 
-  function fetchApi() {
+  const fetchApi = () => {
     fetch("http://localhost:3000/api/aws/getItemdynamoDB", {
       method: "POST",
       headers: {'Authorization': `Bearer ${session?.access_token}`, "Content-Type": "application/json"},
     })
       .then(value => value.json())
       .then(value => console.log(value))
-  }
-
+  };
+  console.log()
   return (
     <div className={"mt-28 flex justify-center"}>
       <SideMenuImageBot/>
@@ -122,10 +119,10 @@ const ImageBot = () => {
             className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5`}>
             {(generateImageMutate.isLoading || imageUrls.length === 0) && (
               <>
-                <LoadingImage/>
-                <LoadingImage/>
-                <LoadingImage/>
-                <LoadingImage/>
+                <LoadingImageBig/>
+                <LoadingImageBig/>
+                <LoadingImageBig/>
+                <LoadingImageBig/>
               </>
             )}
             {!generateImageMutate.isLoading ? <>
@@ -152,7 +149,6 @@ const ImageBot = () => {
                 </>
               )}
             </> : <></>}
-
           </div>
           <ImageModal open={open} setOpen={setOpen} selectedImage={selectedImage}/>
         </div>
@@ -200,4 +196,4 @@ const ImageBot = () => {
   )
 };
 
-export default ImageBot;
+export default ImageBotView;

@@ -16,6 +16,7 @@ const updatedynamoDB = new AWS.DynamoDB({
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const access_token = req.headers.authorization
   const token = access_token?.replace('Bearer ', '')
+  console.log(token)
   if (token) {
     const subId = decode(token)?.sub as string
     const params: GetItemInput = {
@@ -25,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const data = await updatedynamoDB.getItem(params).promise();
       const item = data.Item as unknown as UserImages;
-      const imagesCollection = item.imagesCollection.L;
+      const imagesCollection = item.imagesCollection;
       res.status(200).json(imagesCollection);
     } catch (err) {
       console.log(err);

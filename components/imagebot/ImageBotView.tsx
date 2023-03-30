@@ -105,20 +105,25 @@ const ImageBotView = () => {
   }
 
   const fetchApi = () => {
-    const eventBody: EventBody = {
+    const eventBody = {
       "subId": "1",
-      "imagesCollectionId": "1",
-      "imageIndex": "1"
-    }
-    console.log("fetchApi")
-    console.log(eventBody)
-    fetch("https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/imagebotview", {
+      "imagesCollectionId": "2",
+      "imageIndex": "3"
+    };
+
+    const accessToken = session?.access_token;
+
+    fetch("https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/getItemFilteredDynamoDB", {
       method: "POST",
-      headers: {'Authorization': `Bearer ${session?.access_token}`, "Content-Type": "application/json"},
+      headers: {
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(eventBody)
     })
-      .then(value => value.text())
-      .then(value => console.log(value))
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error(error));
   };
 
   return (

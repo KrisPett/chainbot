@@ -1,9 +1,10 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Image from "next/image";
 import {useRouter} from "next/router";
 import ButtonAlt from "@/lib/ButtonAlt";
 import {ImageContext, ImageContextProvider} from "@/components/imagebot/ImageContextProvider";
 import {Images, ImagesCollection} from "@/components/imagebot/models/interfaces";
+import {useQueryClient} from "@tanstack/react-query";
 
 interface ImageGroupProps {
   index: number;
@@ -16,10 +17,11 @@ const ImageGroup = ({index, imagesGroup}: ImageGroupProps) => {
 
   const onImageGroupClick = () => {
     return router.push(`/imagebot/${imagesGroup.imagesCollectionId.S}`);
-  };
 
+  };
   const updateImageUrl = (url: string) => {
     return url.replace("https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot", "https://storage-chainbot.chaincuet.com/imagebot")
+
   }
 
   return (
@@ -30,8 +32,10 @@ const ImageGroup = ({index, imagesGroup}: ImageGroupProps) => {
       {imagesGroup.images.L.map((image, index) => {
         return (
           <Image key={index}
+                 className={`w-14 h-12`}
                  src={updateImageUrl(image.M.url.S)}
-                 alt="user_icon" width={200} height={200} className="w-14 h-12" priority={true}/>
+                 alt="user_icon" width={200} height={200} priority
+          />
         )
       })
       }
@@ -40,8 +44,8 @@ const ImageGroup = ({index, imagesGroup}: ImageGroupProps) => {
 }
 
 const ImagesList = () => {
-  const [isImageSelected, setIsImageSelected] = useState(1);
   const images = useContext<ImagesCollection>(ImageContext);
+
   return (
     <>
       <div className={"overflow-y-auto overflow-hidden"} style={{maxHeight: "90%"}}>
@@ -62,6 +66,7 @@ const ImagesList = () => {
 }
 
 const SideMenuImageBot = () => {
+
   return (
     <div className="absolute inset-y-0 left-0 h-full w-64 bg-zinc-300 dark:bg-gradient-to-b from-zinc-600 to-zinc-500
                     xxs:hidden sm:block">

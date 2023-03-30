@@ -32,11 +32,11 @@ const ImageContextProvider = ({children}: ImageContextProviderProps) => {
   const router = useRouter()
   const {id} = router.query;
 
-  const {data, isLoading, isRefetching} = useQuery([FETCH_IMAGES], () => {
+  const {data, isLoading, isRefetching, isFetching, isPaused, fetchStatus, status, isStale} = useQuery([FETCH_IMAGES], () => {
     if (session) return fetchMetadata(session.access_token)
-  });
+  }, {});
 
-  if (isLoading || isRefetching && !id) {
+  if (isLoading || isFetching && !id) {
     return (
       <div className={"flex justify-center mt-20"}>
         <div className={` flex  ${!isLoading ? "block" : "hidden"}`}>
@@ -55,8 +55,10 @@ const ImageContextProvider = ({children}: ImageContextProviderProps) => {
     )
   }
 
+  if(!data) return <></>
+
   return (
-    <ImageContext.Provider value={data ? data : mockImagesData.imagesCollection}>
+    <ImageContext.Provider value={data}>
       {children}
     </ImageContext.Provider>
   );

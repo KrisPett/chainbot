@@ -98,12 +98,26 @@ const ImageBotView = () => {
     setSelectedImage(url)
   }
 
+  interface EventBody {
+    subId: string
+    imagesCollectionId: string
+    imageIndex: string
+  }
+
   const fetchApi = () => {
-    fetch("http://localhost:3000/api/aws/getImagedynamoDB", {
-      method: "GET",
+    const eventBody: EventBody = {
+      "subId": "1",
+      "imagesCollectionId": "1",
+      "imageIndex": "1"
+    }
+    console.log("fetchApi")
+    console.log(eventBody)
+    fetch("https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/imagebotview", {
+      method: "POST",
       headers: {'Authorization': `Bearer ${session?.access_token}`, "Content-Type": "application/json"},
+      body: JSON.stringify(eventBody)
     })
-      .then(value => value.json())
+      .then(value => value.text())
       .then(value => console.log(value))
   };
 

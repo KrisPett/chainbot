@@ -106,9 +106,8 @@ const ImageBotView = () => {
 
   const fetchApi = () => {
     const eventBody = {
-      "subId": "1",
-      "imagesCollectionId": "2",
-      "imageIndex": "3"
+      "imagesCollectionId": "53ceeda8-e6fe-4f53-ab65-c8e0b1de5dbf",
+      "imageIndex": "0"
     };
 
     const accessToken = session?.access_token;
@@ -125,7 +124,7 @@ const ImageBotView = () => {
       .then(data => console.log(data))
       .catch(error => console.error(error));
   };
-
+  console.log(session?.access_token)
   return (
     <div className={"mt-28 flex justify-center"}>
       <SideMenuImageBot/>

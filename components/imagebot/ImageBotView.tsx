@@ -8,6 +8,7 @@ import {useMutation, useQueryClient} from "@tanstack/react-query";
 import process from "process";
 import ImageModal from "@/components/imagebot/ImageModal";
 import {FETCH_IMAGES} from "@/components/imagebot/ImageContextProvider";
+import {ImageResponse, ImagesCollectionResponse} from "@/components/imagebot/models/ImageModel";
 
 interface ImageAiMutateMutationFn {
   accessToken: string | undefined;
@@ -24,12 +25,13 @@ const ImageBotView = () => {
   const {data: session} = useSession()
   const queryClient = useQueryClient();
 
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [images, setImages] = useState<ImageResponse[]>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
   const [progress, setProgress] = useState(0)
   const [open, setOpen] = useState(false)
+  const [imageIndex, setImageIndex] = useState<string | undefined>(undefined)
 
   const generateImageMutate = useMutation(["IMAGE_AI"], ({accessToken, text}: ImageAiMutateMutationFn) => {
     setProgress(0)
@@ -61,7 +63,7 @@ const ImageBotView = () => {
         return response.json()
       }).then((value) => {
         setProgress(100)
-        setImageUrls(value)
+        setImages(value)
         return value
       })
       .finally(() => queryClient.refetchQueries([FETCH_IMAGES]))
@@ -93,52 +95,59 @@ const ImageBotView = () => {
     }
   }
 
-  const onClickImage = (url: string) => {
+  const onClickImage = (imageResponse: ImageResponse) => {
     setOpen(true)
-    setSelectedImage(url)
+    setSelectedImage(imageResponse.url)
   }
 
   interface EventBody {
-    subId: string
-    imagesCollectionId: string
+    imagesCollectionId: string | string[]
     imageIndex: string
   }
 
+  console.log(id)
+  console.log(imageIndex)
   const fetchApi = () => {
-    const eventBody = {
-      "imagesCollectionId": "53ceeda8-e6fe-4f53-ab65-c8e0b1de5dbf",
-      "imageIndex": "0"
-    };
-
-    const accessToken = session?.access_token;
-
-    fetch("https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/getItemFilteredDynamoDB", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${accessToken}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(eventBody)
-    })
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
+    if (id && session && imageIndex) {
+      const eventBody: EventBody = {
+        "imagesCollectionId": id,
+        "imageIndex": imageIndex
+      };
+      const accessToken = session.access_token;
+      fetch("https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/getItemFilteredDynamoDB", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(eventBody)
+      })
+        .then(response => response.json())
+        .then(data => {
+          let imagesCollectionResponse = data as ImagesCollectionResponse;
+          console.log(imagesCollectionResponse)
+          setImages(imagesCollectionResponse.images)
+        })
+        .catch(error => console.error(error));
+    }
   };
-  console.log(session?.access_token)
+
+  console.log(images)
+
   return (
     <div className={"mt-28 flex justify-center"}>
-      <SideMenuImageBot/>
+      <SideMenuImageBot setImageIndex={setImageIndex}/>
       <section className={"flex flex-col items-center justify-center "} style={{minHeight: "50vh"}}>
         <div className={"max-w-screen-xl space-y-5 sm:ml-64 xxs:w-12/12 xs:w-12/12 sm:w-12/12 md:w-8/12"}>
           <div
-            className={`w-full rounded-full h-2.5 bg-gray-200 bg-zinc-400 dark:bg-zinc-600 ${generateImageMutate.isLoading ? "block" : "hidden"}`}>
+            className={`w-full rounded-full h-2.5 bg-zinc-400 dark:bg-zinc-600 ${generateImageMutate.isLoading ? "block" : "hidden"}`}>
             <div
               className="bg-gradient-to-t from-gray-300 to-gray-400 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900 h-2.5 rounded-full"
               style={{width: `${progress}%`}}></div>
           </div>
           <div
             className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5`}>
-            {(generateImageMutate.isLoading || imageUrls.length === 0) && (
+            {(generateImageMutate.isLoading || images.length === 0) && (
               <>
                 <LoadingImageBig/>
                 <LoadingImageBig/>
@@ -147,16 +156,16 @@ const ImageBotView = () => {
               </>
             )}
             {!generateImageMutate.isLoading ? <>
-              {(imageUrls.length > 0) && (
+              {(images.length > 0) && (
                 <>
-                  {imageUrls.map((imageUrl, index) => {
+                  {images.map((image, index) => {
                     return (
                       <div
                         key={index}
-                        onClick={() => onClickImage(imageUrl)}
+                        onClick={() => onClickImage(image)}
                       >
                         <Image
-                          src={"https://storage-chainbot.chaincuet.com/" + imageUrl}
+                          src={image.url}
                           alt="user_icon"
                           width={300}
                           height={300}
@@ -202,7 +211,7 @@ const ImageBotView = () => {
               <div
                 className="inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite]
                 rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]
-                bg-gradient-to-t from-gray-400 to-gray-300 text-gray-900 opacity-0 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900"
+                bg-gradient-to-t from-gray-400 to-gray-300 text-gray-900 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900"
                 role="status">
                 <span
                   className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">

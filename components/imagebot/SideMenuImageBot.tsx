@@ -9,26 +9,33 @@ import {useQueryClient} from "@tanstack/react-query";
 interface ImageGroupProps {
   index: number;
   imagesGroup: Images
+  setImageIndex: (index: string) => void;
 }
 
-const ImageGroup = ({index, imagesGroup}: ImageGroupProps) => {
+const ImageGroup = ({index, imagesGroup, setImageIndex}: ImageGroupProps) => {
   const router = useRouter()
   const {id} = router.query;
 
   const onImageGroupClick = () => {
+    setImageIndex(index.toString())
     return router.push(`/imagebot/${imagesGroup.imagesCollectionId.S}`);
-
   };
+
   const updateImageUrl = (url: string) => {
     return url.replace("https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot", "https://storage-chainbot.chaincuet.com/imagebot")
-
   }
+
+  useEffect(() => {
+    if (id === imagesGroup.imagesCollectionId.S) {
+      setImageIndex(index.toString())
+    }
+  }, [id, imagesGroup.imagesCollectionId.S, index, setImageIndex])
 
   return (
     <div
       onClick={() => onImageGroupClick()}
       className={`flex flex-row space-x-1 justify-center cursor-pointer transition duration-100 ease-in-out transform hover:-translate-y-0 hover:scale-95 hover:opacity-90`}>
-      <div className={`${id === imagesGroup.imagesCollectionId.S ? "border border-2 border-orange-1100" : ""}`}></div>
+      <div className={`${id === imagesGroup.imagesCollectionId.S ? "border-2 border-orange-1100" : ""}`}></div>
       {imagesGroup.images.L.map((image, index) => {
         return (
           <Image key={index}
@@ -43,7 +50,11 @@ const ImageGroup = ({index, imagesGroup}: ImageGroupProps) => {
   )
 }
 
-const ImagesList = () => {
+interface ImagesListProps {
+  setImageIndex: (index: string) => void;
+}
+
+const ImagesList = ({setImageIndex}: ImagesListProps) => {
   const images = useContext<ImagesCollection>(ImageContext);
 
   return (
@@ -55,7 +66,7 @@ const ImagesList = () => {
         <section className={"flex flex-col gap-2"}>
           {images.L.map((imagesGroup, index) =>
             <div key={index}>
-              <ImageGroup imagesGroup={imagesGroup.M} index={index}/>
+              <ImageGroup imagesGroup={imagesGroup.M} index={index} setImageIndex={setImageIndex}/>
             </div>)}
         </section>
       </div>
@@ -65,13 +76,17 @@ const ImagesList = () => {
     </>)
 }
 
-const SideMenuImageBot = () => {
+interface SideMenuImageBotProps {
+  setImageIndex: (index: string) => void;
+}
+
+const SideMenuImageBot = ({setImageIndex}: SideMenuImageBotProps) => {
 
   return (
     <div className="absolute inset-y-0 left-0 h-full w-64 bg-zinc-300 dark:bg-gradient-to-b from-zinc-600 to-zinc-500
                     xxs:hidden sm:block">
       <ImageContextProvider>
-        <ImagesList/>
+        <ImagesList setImageIndex={setImageIndex}/>
       </ImageContextProvider>
     </div>
   );

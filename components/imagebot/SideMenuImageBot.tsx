@@ -27,7 +27,7 @@ const ImageGroup = ({index, imagesGroup, setImageIndex}: ImageGroupProps) => {
 
   useEffect(() => {
     if (id === imagesGroup.imagesCollectionId.S) {
-      setImageIndex(index.toString())
+    setImageIndex(index.toString())
     }
   }, [id, imagesGroup.imagesCollectionId.S, index, setImageIndex])
 
@@ -73,7 +73,8 @@ const ImagesList = ({setImageIndex}: ImagesListProps) => {
       <div className={"p-1 mt-2 flex justify-center items-center"}>
         <ButtonAlt title={"Clear"} onClick={() => console.log("ButtonAlt")}></ButtonAlt>
       </div>
-    </>)
+    </>
+  )
 }
 
 interface SideMenuImageBotProps {

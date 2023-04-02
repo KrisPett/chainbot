@@ -10,6 +10,7 @@ const ImageContext = createContext<ImagesCollection>({} as ImagesCollection);
 const apiGateway = "https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/imagebot"
 // const apiGateway = "http://localhost:3000/api/aws/getItemdynamoDB"
 const FETCH_IMAGES = "FETCH_IMAGES";
+const FETCH_IMAGES_FILTER = "FETCH_IMAGES_FILTER";
 
 const fetchMetadata = async (accessToken?: string): Promise<ImagesCollection> => {
   if (!accessToken) return Promise.reject("No access token provided")
@@ -64,4 +65,4 @@ const ImageContextProvider = ({children}: ImageContextProviderProps) => {
   );
 };
 
-export {ImageContext, FETCH_IMAGES, ImageContextProvider};
+export {ImageContext, FETCH_IMAGES, FETCH_IMAGES_FILTER, ImageContextProvider};

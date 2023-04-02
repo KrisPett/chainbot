@@ -1,13 +1,13 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import SideMenuImageBot from "@/components/imagebot/SideMenuImageBot";
 import {useRouter} from "next/router";
 import LoadingImageBig from "@/components/imagebot/LoadingImageBig";
 import {useSession} from "next-auth/react";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import process from "process";
 import ImageModal from "@/components/imagebot/ImageModal";
-import {FETCH_IMAGES} from "@/components/imagebot/ImageContextProvider";
+import {FETCH_IMAGES, FETCH_IMAGES_FILTER} from "@/components/imagebot/ImageContextProvider";
 import {ImageResponse, ImagesCollectionResponse} from "@/components/imagebot/models/ImageModel";
 
 interface ImageAiMutateMutationFn {
@@ -21,7 +21,7 @@ type AIPromptRequestBody = {
 
 const ImageBotView = () => {
   const router = useRouter()
-  const {id} = router.query;
+  const {id} = router.query
   const {data: session} = useSession()
   const queryClient = useQueryClient();
 
@@ -31,7 +31,41 @@ const ImageBotView = () => {
   const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
   const [progress, setProgress] = useState(0)
   const [open, setOpen] = useState(false)
-  const [imageIndex, setImageIndex] = useState<string | undefined>(undefined)
+  const [imageIndex, setImageIndex] = useState<string>()
+  const [imagesCollectionId, setImagesCollectionId] = useState<string | string[] | undefined>(id)
+
+  let keepTrackOfImageIndex = imagesCollectionId;
+
+  const fetchImagesFilter = (imagesCollectionId: string, imageIndex: string, access_token: string) => {
+    const eventBody: EventBody = {
+      "imagesCollectionId": imagesCollectionId,
+      "imageIndex": imageIndex
+    };
+    return fetch("https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/getItemFilteredDynamoDB", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${access_token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(eventBody)
+    })
+      .then(response => response.json())
+      .then(data => {
+        let imagesCollectionResponse = data as ImagesCollectionResponse;
+        setImages(imagesCollectionResponse.images)
+        return imagesCollectionResponse.images
+      })
+      .catch(error => console.error(error));
+  };
+
+  useEffect(() => {
+    let imagesCollectionId = id as string
+    console.log(imagesCollectionId)
+    console.log(imageIndex)
+    if (session?.access_token && imagesCollectionId && imageIndex) {
+      fetchImagesFilter(imagesCollectionId, imageIndex, session.access_token);
+    }
+  }, [id, session])
 
   const generateImageMutate = useMutation(["IMAGE_AI"], ({accessToken, text}: ImageAiMutateMutationFn) => {
     setProgress(0)
@@ -105,35 +139,6 @@ const ImageBotView = () => {
     imageIndex: string
   }
 
-  console.log(id)
-  console.log(imageIndex)
-  const fetchApi = () => {
-    if (id && session && imageIndex) {
-      const eventBody: EventBody = {
-        "imagesCollectionId": id,
-        "imageIndex": imageIndex
-      };
-      const accessToken = session.access_token;
-      fetch("https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/getItemFilteredDynamoDB", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${accessToken}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(eventBody)
-      })
-        .then(response => response.json())
-        .then(data => {
-          let imagesCollectionResponse = data as ImagesCollectionResponse;
-          console.log(imagesCollectionResponse)
-          setImages(imagesCollectionResponse.images)
-        })
-        .catch(error => console.error(error));
-    }
-  };
-
-  console.log(images)
-
   return (
     <div className={"mt-28 flex justify-center"}>
       <SideMenuImageBot setImageIndex={setImageIndex}/>
@@ -147,7 +152,7 @@ const ImageBotView = () => {
           </div>
           <div
             className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5`}>
-            {(generateImageMutate.isLoading || images.length === 0) && (
+            {(generateImageMutate.isLoading) && (
               <>
                 <LoadingImageBig/>
                 <LoadingImageBig/>
@@ -156,7 +161,7 @@ const ImageBotView = () => {
               </>
             )}
             {!generateImageMutate.isLoading ? <>
-              {(images.length > 0) && (
+              {(images) && (
                 <>
                   {images.map((image, index) => {
                     return (
@@ -182,7 +187,6 @@ const ImageBotView = () => {
           </div>
           <ImageModal open={open} setOpen={setOpen} selectedImage={selectedImage}/>
         </div>
-        <button className={"btn"} onClick={() => fetchApi()}>dwadawd</button>
       </section>
       <footer className="fixed bottom-0 flex w-full justify-center bg-transparent">
         <form

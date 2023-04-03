@@ -9,33 +9,25 @@ import {useQueryClient} from "@tanstack/react-query";
 interface ImageGroupProps {
   index: number;
   imagesGroup: Images
-  setImageIndex: (index: string) => void;
 }
 
-const ImageGroup = ({index, imagesGroup, setImageIndex}: ImageGroupProps) => {
+const ImageGroup = ({index, imagesGroup}: ImageGroupProps) => {
   const router = useRouter()
   const {id} = router.query;
 
   const onImageGroupClick = () => {
-    setImageIndex(index.toString())
-    return router.push(`/imagebot/${imagesGroup.imagesCollectionId.S}`);
+    return router.push(`/imagebot/${index}`);
   };
 
   const updateImageUrl = (url: string) => {
     return url.replace("https://s3.amazonaws.com/chainbot.chaincuet.com.storage/imagebot", "https://storage-chainbot.chaincuet.com/imagebot")
   }
 
-  useEffect(() => {
-    if (id === imagesGroup.imagesCollectionId.S) {
-    setImageIndex(index.toString())
-    }
-  }, [id, imagesGroup.imagesCollectionId.S, index, setImageIndex])
-
   return (
     <div
       onClick={() => onImageGroupClick()}
       className={`flex flex-row space-x-1 justify-center cursor-pointer transition duration-100 ease-in-out transform hover:-translate-y-0 hover:scale-95 hover:opacity-90`}>
-      <div className={`${id === imagesGroup.imagesCollectionId.S ? "border-2 border-orange-1100" : ""}`}></div>
+      <div className={`${id === index.toString() ? "border-2 border-orange-1100" : ""}`}></div>
       {imagesGroup.images.L.map((image, index) => {
         return (
           <Image key={index}
@@ -51,11 +43,15 @@ const ImageGroup = ({index, imagesGroup, setImageIndex}: ImageGroupProps) => {
 }
 
 interface ImagesListProps {
-  setImageIndex: (index: string) => void;
+  setTotalImagesCollectionSize: (size: number) => void;
 }
 
-const ImagesList = ({setImageIndex}: ImagesListProps) => {
+const ImagesList = ({setTotalImagesCollectionSize}:ImagesListProps) => {
   const images = useContext<ImagesCollection>(ImageContext);
+
+  useEffect(() => {
+    setTotalImagesCollectionSize(images.L.length)
+  }, [images, setTotalImagesCollectionSize])
 
   return (
     <>
@@ -64,10 +60,11 @@ const ImagesList = ({setImageIndex}: ImagesListProps) => {
           <p className="p-3 text-2xl font-bold text-zinc-800 dark:text-zinc-200">DALL-E History</p>
         </section>
         <section className={"flex flex-col gap-2"}>
-          {images.L.map((imagesGroup, index) =>
+          {Object.values(images.L).reverse().map((imagesGroup, index) =>
             <div key={index}>
-              <ImageGroup imagesGroup={imagesGroup.M} index={index} setImageIndex={setImageIndex}/>
-            </div>)}
+              <ImageGroup imagesGroup={imagesGroup.M} index={images.L.length - index - 1}/>
+            </div>
+          )}
         </section>
       </div>
       <div className={"p-1 mt-2 flex justify-center items-center"}>
@@ -78,16 +75,15 @@ const ImagesList = ({setImageIndex}: ImagesListProps) => {
 }
 
 interface SideMenuImageBotProps {
-  setImageIndex: (index: string) => void;
+  setTotalImagesCollectionSize: (size: number) => void;
 }
 
-const SideMenuImageBot = ({setImageIndex}: SideMenuImageBotProps) => {
-
+const SideMenuImageBot = ({setTotalImagesCollectionSize}: SideMenuImageBotProps) => {
   return (
     <div className="absolute inset-y-0 left-0 h-full w-64 bg-zinc-300 dark:bg-gradient-to-b from-zinc-600 to-zinc-500
                     xxs:hidden sm:block">
       <ImageContextProvider>
-        <ImagesList setImageIndex={setImageIndex}/>
+        <ImagesList setTotalImagesCollectionSize={setTotalImagesCollectionSize}/>
       </ImageContextProvider>
     </div>
   );

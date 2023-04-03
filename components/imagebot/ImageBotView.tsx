@@ -4,11 +4,11 @@ import SideMenuImageBot from "@/components/imagebot/SideMenuImageBot";
 import {useRouter} from "next/router";
 import LoadingImageBig from "@/components/imagebot/LoadingImageBig";
 import {useSession} from "next-auth/react";
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import process from "process";
 import ImageModal from "@/components/imagebot/ImageModal";
-import {FETCH_IMAGES, FETCH_IMAGES_FILTER} from "@/components/imagebot/ImageContextProvider";
 import {ImageResponse, ImagesCollectionResponse} from "@/components/imagebot/models/ImageModel";
+import {FETCH_IMAGES} from "@/components/imagebot/ImageContextProvider";
 
 interface ImageAiMutateMutationFn {
   accessToken: string | undefined;
@@ -17,6 +17,10 @@ interface ImageAiMutateMutationFn {
 
 type AIPromptRequestBody = {
   text: string
+}
+
+interface EventBody {
+  imageIndex: string | string[] | undefined
 }
 
 const ImageBotView = () => {
@@ -28,46 +32,36 @@ const ImageBotView = () => {
   const [images, setImages] = useState<ImageResponse[]>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [textLines, setTextLines] = useState(1);
-  const [text, setText] = useState("Two futuristic towers with a skybridge covered in lush foliage, digital art");
+  const [text, setText] = useState("");
   const [progress, setProgress] = useState(0)
   const [open, setOpen] = useState(false)
-  const [imageIndex, setImageIndex] = useState<string>()
-  const [imagesCollectionId, setImagesCollectionId] = useState<string | string[] | undefined>(id)
-
-  let keepTrackOfImageIndex = imagesCollectionId;
-
-  const fetchImagesFilter = (imagesCollectionId: string, imageIndex: string, access_token: string) => {
-    const eventBody: EventBody = {
-      "imagesCollectionId": imagesCollectionId,
-      "imageIndex": imageIndex
-    };
-    return fetch("https://ehy1v3c0ze.execute-api.us-east-1.amazonaws.com/chatbot-stage/getItemFilteredDynamoDB", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${access_token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(eventBody)
-    })
-      .then(response => response.json())
-      .then(data => {
-        let imagesCollectionResponse = data as ImagesCollectionResponse;
-        setImages(imagesCollectionResponse.images)
-        return imagesCollectionResponse.images
-      })
-      .catch(error => console.error(error));
-  };
+  const [totalImagesCollectionSize, setTotalImagesCollectionSize] = useState<number>()
 
   useEffect(() => {
-    let imagesCollectionId = id as string
-    console.log(imagesCollectionId)
-    console.log(imageIndex)
-    if (session?.access_token && imagesCollectionId && imageIndex) {
-      fetchImagesFilter(imagesCollectionId, imageIndex, session.access_token);
+    if (session?.access_token && id) {
+      const eventBody: EventBody = {
+        "imageIndex": id
+      };
+      fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT_FILTER_IMAGES, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${session.access_token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(eventBody)
+      })
+        .then(response => response.json())
+        .then(data => {
+          let imagesCollectionResponse = data as ImagesCollectionResponse;
+          setImages(imagesCollectionResponse.images)
+          return imagesCollectionResponse.images
+        })
+        .catch(error => console.error(error));
     }
   }, [id, session])
 
   const generateImageMutate = useMutation(["IMAGE_AI"], ({accessToken, text}: ImageAiMutateMutationFn) => {
+    let keepTrackOfImagesCollectionSize = totalImagesCollectionSize
     setProgress(0)
     const progressInterval = setInterval(() => {
       setProgress((prevProgress) => {
@@ -100,7 +94,12 @@ const ImageBotView = () => {
         setImages(value)
         return value
       })
-      .finally(() => queryClient.refetchQueries([FETCH_IMAGES]))
+      .finally(() => {
+        if (keepTrackOfImagesCollectionSize){
+          router.push(`/imagebot/${keepTrackOfImagesCollectionSize}`).then();
+        }
+        queryClient.refetchQueries([FETCH_IMAGES]).then()
+      })
   });
 
   const handleTextareaKeydown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -134,14 +133,9 @@ const ImageBotView = () => {
     setSelectedImage(imageResponse.url)
   }
 
-  interface EventBody {
-    imagesCollectionId: string | string[]
-    imageIndex: string
-  }
-
   return (
     <div className={"mt-28 flex justify-center"}>
-      <SideMenuImageBot setImageIndex={setImageIndex}/>
+      <SideMenuImageBot setTotalImagesCollectionSize={setTotalImagesCollectionSize}/>
       <section className={"flex flex-col items-center justify-center "} style={{minHeight: "50vh"}}>
         <div className={"max-w-screen-xl space-y-5 sm:ml-64 xxs:w-12/12 xs:w-12/12 sm:w-12/12 md:w-8/12"}>
           <div
@@ -152,7 +146,7 @@ const ImageBotView = () => {
           </div>
           <div
             className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5`}>
-            {(generateImageMutate.isLoading) && (
+            {(generateImageMutate.isLoading || images.length === 0) && (
               <>
                 <LoadingImageBig/>
                 <LoadingImageBig/>
@@ -160,25 +154,28 @@ const ImageBotView = () => {
                 <LoadingImageBig/>
               </>
             )}
-            {!generateImageMutate.isLoading ? <>
+            {!generateImageMutate.isLoading && images ? <>
               {(images) && (
                 <>
                   {images.map((image, index) => {
                     return (
-                      <div
-                        key={index}
-                        onClick={() => onClickImage(image)}
-                      >
-                        <Image
-                          src={image.url}
-                          alt="user_icon"
-                          width={300}
-                          height={300}
-                          className="xxs:h-32 xs:h-32 sm:h-32 md:h-56 lg:h-56 xl:h-56 2xl:h-56 xxs:w-56 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-64 2xl:w-64
+                      <div key={index} onClick={() => onClickImage(image)}>
+                        {image.url ? (
+                          <Image
+                            src={image.url}
+                            alt="user_icon"
+                            width={300}
+                            height={300}
+                            className="xxs:h-32 xs:h-32 sm:h-32 md:h-56 lg:h-56 xl:h-56 2xl:h-56 xxs:w-56 xs:w-56 sm:w-56 md:w-64 lg:w-64 xl:w-64 2xl:w-64
                         cursor-pointer transition duration-100 ease-in-out transform hover:-translate-y-0 hover:scale-110 rounded"
-                          priority={true}
-                        />
+                            priority={true}
+                          />) : (
+                          <>
+                            <LoadingImageBig/>
+                          </>
+                        )}
                       </div>
+
                     );
                   })}
                 </>

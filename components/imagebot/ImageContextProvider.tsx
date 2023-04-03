@@ -1,4 +1,4 @@
-import React, {createContext} from "react";
+import React, {createContext, useEffect, useState} from "react";
 import {ImagesCollection, mockImagesData} from "@/components/imagebot/models/interfaces";
 import {useQuery} from "@tanstack/react-query";
 import {useSession} from "next-auth/react";
@@ -32,19 +32,27 @@ const ImageContextProvider = ({children}: ImageContextProviderProps) => {
   const {data: session} = useSession()
   const router = useRouter()
   const {id} = router.query;
+  const [loadingTime, setLoadingTime] = useState(0);
 
   const {data, isLoading, isRefetching, isFetching, isPaused, fetchStatus, status, isStale} = useQuery([FETCH_IMAGES], () => {
     if (session) return fetchMetadata(session.access_token)
   }, {});
 
-  if (isLoading || isFetching && !id) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoadingTime(loadingTime + 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [loadingTime]);
+
+  if (isLoading || isFetching && !id || loadingTime < 1) {
     return (
-      <div className={"flex justify-center mt-20"}>
+      <div className={"flex justify-center mt-28"}>
         <div className={` flex  ${!isLoading ? "block" : "hidden"}`}>
           <div
             className="inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite]
                 rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]
-                bg-gradient-to-t from-gray-400 to-gray-300 text-gray-900 opacity-0 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900"
+                bg-gradient-to-t from-gray-400 to-gray-300 text-gray-900 dark:bg-orange-1100 dark:from-orange-600 dark:to-amber-900"
             role="status">
                 <span
                   className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">

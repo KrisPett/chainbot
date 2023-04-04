@@ -55,7 +55,9 @@ const ImagesList = ({setTotalImagesCollectionSize}:ImagesListProps) => {
 
   return (
     <>
-      <div className={"overflow-y-auto overflow-hidden"} style={{maxHeight: "90%"}}>
+      <div className={"overflow-y-auto overflow-hidden animate-[fade-in-down_1s_ease-in-out]"
+      } style={{maxHeight: "90%"}}
+      >
         <section className={"mt-20"}>
           <p className="p-3 text-2xl font-bold text-zinc-800 dark:text-zinc-200">DALL-E History</p>
         </section>

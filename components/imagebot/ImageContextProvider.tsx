@@ -32,23 +32,15 @@ const ImageContextProvider = ({children}: ImageContextProviderProps) => {
   const {data: session} = useSession()
   const router = useRouter()
   const {id} = router.query;
-  const [loadingTime, setLoadingTime] = useState(0);
 
-  const {data, isLoading, isRefetching, isFetching, isPaused, fetchStatus, status, isStale} = useQuery([FETCH_IMAGES], () => {
+  const {data, isLoading, isFetching,} = useQuery([FETCH_IMAGES], () => {
     if (session) return fetchMetadata(session.access_token)
   }, {});
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoadingTime(loadingTime + 1);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [loadingTime]);
-
-  if (isLoading || isFetching && !id || loadingTime < 1) {
+  if (isLoading || (isFetching && !id)) {
     return (
       <div className={"flex justify-center mt-28"}>
-        <div className={` flex  ${!isLoading ? "block" : "hidden"}`}>
+        <div className={`flex ${!isLoading ? "block" : "hidden"}`}>
           <div
             className="inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite]
                 rounded-full bg-current align-[-0.125em] opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]
@@ -64,7 +56,7 @@ const ImageContextProvider = ({children}: ImageContextProviderProps) => {
     )
   }
 
-  if(!data) return <></>
+  if (!data) return <></>
 
   return (
     <ImageContext.Provider value={data}>

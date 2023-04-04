@@ -4,7 +4,7 @@ import SideMenuImageBot from "@/components/imagebot/SideMenuImageBot";
 import {useRouter} from "next/router";
 import LoadingImageBig from "@/components/imagebot/LoadingImageBig";
 import {useSession} from "next-auth/react";
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import process from "process";
 import ImageModal from "@/components/imagebot/ImageModal";
 import {ImageResponse, ImagesCollectionResponse} from "@/components/imagebot/models/ImageModel";

@@ -3,7 +3,7 @@ import Image from "next/image";
 import SideMenuImageBot from "@/components/imagebot/SideMenuImageBot";
 import {useRouter} from "next/router";
 import LoadingImageBig from "@/components/imagebot/LoadingImageBig";
-import {useSession} from "next-auth/react";
+import {useSession, signIn} from "next-auth/react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import process from "process";
 import ImageModal from "@/components/imagebot/ImageModal";
@@ -53,11 +53,18 @@ const ImageBotView = () => {
       },
       body: JSON.stringify(eventBody)
     })
-      .then(response => response.json())
+      .then(response => {
+        if(!response.ok) return Promise.reject(response)
+        return response.json()
+      })
       .then(data => {
         let imagesCollectionResponse = data as ImagesCollectionResponse;
         setImages(imagesCollectionResponse.images)
         return imagesCollectionResponse.images
+      })
+      .catch(error => {
+        console.log(error)
+        router.push('/imagebot/-1').then( () => signIn('keycloak'))
       })
   }, {});
 

@@ -29,7 +29,7 @@ const ImageBotView = () => {
   const {data: session} = useSession()
   const queryClient = useQueryClient();
 
-  const [images, setImages] = useState<ImageResponse[]>([]);
+  const [images, setImages] = useState<ImageResponse[] | undefined>([]);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [textLines, setTextLines] = useState(1);
   const [text, setText] = useState("");
@@ -37,26 +37,30 @@ const ImageBotView = () => {
   const [open, setOpen] = useState(false)
   const [totalImagesCollectionSize, setTotalImagesCollectionSize] = useState<number>()
 
+  const fetchSelectedImageCollection = (eventBody: EventBody, access_token: string) => {
+    fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT_FILTER_IMAGES, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${access_token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(eventBody)
+    })
+      .then(response => response.json())
+      .then(data => {
+        let imagesCollectionResponse = data as ImagesCollectionResponse;
+        setImages(imagesCollectionResponse.images)
+        return imagesCollectionResponse.images
+      })
+      .catch(error => console.error(error));
+  };
+
   useEffect(() => {
-    if (session?.access_token && id) {
+    if (session?.access_token && id && id !== "-1") {
       const eventBody: EventBody = {
         "imageIndex": id
       };
-      fetch(process.env.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT_FILTER_IMAGES, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${session.access_token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(eventBody)
-      })
-        .then(response => response.json())
-        .then(data => {
-          let imagesCollectionResponse = data as ImagesCollectionResponse;
-          setImages(imagesCollectionResponse.images)
-          return imagesCollectionResponse.images
-        })
-        .catch(error => console.error(error));
+      fetchSelectedImageCollection(eventBody, session.access_token);
     }
   }, [id, session])
 
@@ -146,7 +150,7 @@ const ImageBotView = () => {
           </div>
           <div
             className={`grid md:grid-cols-2 lg:grid-cols-4 gap-5`}>
-            {(generateImageMutate.isLoading || images.length === 0) && (
+            {(generateImageMutate.isLoading || images?.length === 0 || images === undefined) && (
               <>
                 <LoadingImageBig/>
                 <LoadingImageBig/>

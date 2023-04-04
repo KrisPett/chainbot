@@ -9,7 +9,7 @@ const Index = () => {
         title={"Imagebot | Chainbot"}
         description={"Imagebot | Chainbot"}
       />
-      <ImageBotView />
+      {/*<ImageBotView />*/}
     </>
   );
 };

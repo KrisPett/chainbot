@@ -5,6 +5,7 @@ import ButtonAlt from "@/lib/ButtonAlt";
 import {ImageContext, ImageContextProvider} from "@/components/imagebot/ImageContextProvider";
 import {Images, ImagesCollection} from "@/components/imagebot/models/interfaces";
 import {useQueryClient} from "@tanstack/react-query";
+import {router} from "next/client";
 
 interface ImageGroupProps {
   index: number;

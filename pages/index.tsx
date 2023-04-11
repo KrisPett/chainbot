@@ -1,4 +1,3 @@
-import ChatBot from "@/components/chatbot/ChatBot";
 import {PageSEO} from "@/layouts/SEO";
 import React from "react";
 import HomeView from "@/components/home/HomeView";

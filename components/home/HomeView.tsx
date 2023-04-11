@@ -6,7 +6,7 @@ const HomeView = () => {
     <div>
       <main className={"mt-28"}>
         <section className={"flex flex-col gap-4 mt-10 sm:ml-7 md:ml-16"}>
-          <p className={"text-5xl max-w-2xl"}>Experience the Future of Art and Conversation with OpenAI's Technology</p>
+          <p className={"text-5xl max-w-2xl"}>Experience the Future of Art and Conversation with OpenAI&apos;s Technology</p>
           <p className={"text-lg max-w-2xl"}>Discover the power of Chaincue by generating unique images using OpenAI DALL-E image generator and then
             minting them on the Ethereum blockchain.</p>
         </section>

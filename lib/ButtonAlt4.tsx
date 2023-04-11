@@ -12,9 +12,9 @@ const ButtonAlt = ({title, onClick}: IButton) => {
       onClick={onClick}
       onDragEnd={onClick}
       className="group btn relative text-sm
-      text-gray-800 hover:text-gray-700 group-hover:to-orange-400
-      bg-gradient-to-b from-zinc-300 to-green-200 dark:bg-transparen dark:from-transparent dark:to-orange-1100 dark:text-gray-300
-      border-amber-900
+      hover:text-gray-700 group-hover:to-orange-400
+      bg-gradient-to-b from-gray-200 to-gray-300 text-gray-900 dark:bg-violet-00 dark:from-transparent dark:to-violet-900 dark:text-violet-200
+      border-violet-700
       dark:hover:text-white dark:group-hover:to-orange-400
       xxs:w-full xs:w-full normal-case
       inline-flex w-full justify-center px-3 py-2 font-semibold shadow-sm sm:ml-3 sm:w-auto

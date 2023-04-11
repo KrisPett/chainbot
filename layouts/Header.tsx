@@ -159,7 +159,7 @@ const Header = () => {
                     href={"/chatbot"}
                     replace
                     className={
-                      "btn-ghost btn h-20 text-base capitalize capitalize text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
+                      "btn-ghost btn h-20 text-base capitalize text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500 xxs:w-40 xs:w-80"
                     }
                   >
                     ChatBot

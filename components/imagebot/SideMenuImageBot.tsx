@@ -47,7 +47,7 @@ interface ImagesListProps {
   setTotalImagesCollectionSize: (size: number) => void;
 }
 
-const ImagesList = ({setTotalImagesCollectionSize}:ImagesListProps) => {
+const ImagesList = ({setTotalImagesCollectionSize}: ImagesListProps) => {
   const images = useContext<ImagesCollection>(ImageContext);
 
   useEffect(() => {
@@ -55,24 +55,25 @@ const ImagesList = ({setTotalImagesCollectionSize}:ImagesListProps) => {
   }, [images, setTotalImagesCollectionSize])
 
   return (
+    images &&
     <>
-      <div className={"overflow-y-auto overflow-hidden animate-[fade-in-down_1s_ease-in-out]"
-      } style={{maxHeight: "90%"}}
-      >
-        <section className={"mt-20"}>
-          <p className="p-3 text-2xl font-bold text-zinc-800 dark:text-zinc-200">DALL-E History</p>
-        </section>
-        <section className={"flex flex-col gap-2"}>
-          {Object.values(images.L).reverse().map((imagesGroup, index) =>
-            <div key={index}>
-              <ImageGroup imagesGroup={imagesGroup.M} index={images.L.length - index - 1}/>
-            </div>
-          )}
-        </section>
-      </div>
-      <div className={"p-1 mt-2 flex justify-center items-center"}>
-        <ButtonAlt title={"Clear"} onClick={() => console.log("ButtonAlt")}></ButtonAlt>
-      </div>
+        <div className={"overflow-y-auto overflow-hidden animate-[fade-in-down_1s_ease-in-out]"
+        } style={{maxHeight: "90%"}}
+        >
+            <section className={"mt-20"}>
+                <p className="p-3 text-2xl font-bold text-zinc-800 dark:text-zinc-200">DALL-E History</p>
+            </section>
+            <section className={"flex flex-col gap-2"}>
+              {Object.values(images.L).reverse().map((imagesGroup, index) =>
+                <div key={index}>
+                  <ImageGroup imagesGroup={imagesGroup.M} index={images.L.length - index - 1}/>
+                </div>
+              )}
+            </section>
+        </div>
+        <div className={"p-1 mt-2 flex justify-center items-center"}>
+            <ButtonAlt title={"Clear"} onClick={() => console.log("ButtonAlt")}></ButtonAlt>
+        </div>
     </>
   )
 }

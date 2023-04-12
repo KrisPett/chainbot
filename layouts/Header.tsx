@@ -53,10 +53,11 @@ const Header = () => {
               <div className="navbar-center hidden lg:flex">
                 <ul className="flex">
                   <li>
-                    <div className=" dropdown dropdown-bottom dropdown-hover">
+                    <div className="dropdown dropdown-bottom dropdown-hover">
                       <label
                         tabIndex={0}
                         className="btn-ghost btn text-gray-600 hover:text-orange-800 dark:text-gray-200 dark:hover:text-orange-500"
+                        onClick={() => router.replace("/")}
                       >
                         Artificial Intelligence
                         <svg

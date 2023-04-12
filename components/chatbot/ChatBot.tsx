@@ -236,7 +236,7 @@ const ChatBot = () => {
                   placeholder-opacity-50
                   focus:outline-none focus:ring-0 focus:ring-offset-2 focus:ring-offset-orange-300 bg-opacity-60
                   focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300
-                  dark:placeholder-neutral-100 dark:focus-visible:ring-offset-orange-600 dark:disabled:opacity-30
+                  dark:placeholder-neutral-100 dark:focus-visible:ring-offset-orange-600 dark:disabled:opacity-30 disabled:bg-zinc-300
                   dark:bg-zinc-600 dark:bg-opacity-70
                   "
                 placeholder="Type here..."

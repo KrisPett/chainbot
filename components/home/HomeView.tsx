@@ -34,7 +34,7 @@ const HomeView = () => {
               <div data-tip="copy" onClick={() =>  navigator.clipboard.writeText(address)}
                    className="tooltip cursor-pointer grid w-full h-20 place-items-center rounded-2xl group-hover:to-orange-400 bg-gradient-to-b
             from-zinc-300 to-zinc-300 dark:bg-transparen dark:from-orange-900 dark:to-orange-1100 dark:text-gray-300
-            border-amber-900 dark:hover:text-white dark:group-hover:to-orange-400 active:text-sm">
+            border-amber-900 dark:hover:text-white dark:group-hover:to-orange-400 active:brightness-110">
                 {address + "..." + address.slice(-4)}
               </div>
             </div>

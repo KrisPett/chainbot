@@ -20,7 +20,7 @@ const HomeView = () => {
             <button onClick={() => console.log("dwdws")} className="
             group btn relative text-xl text-gray-800 hover:text-gray-700 group-hover:to-orange-400 bg-gradient-to-b
             from-zinc-300 to-zinc-200 dark:bg-transparen dark:from-orange-1000 dark:to-orange-1100 dark:text-gray-300
-            border-zinc-300 border-1 border-orange-1000 hover:dark:border-orange-1100 dark:hover:text-white dark:group-hover:to-orange-400 normal-case inline-flex justify-center
+            border-zinc-300 border-1 border-base-300/10 hover:dark:border-orange-1100 dark:hover:text-white dark:group-hover:to-orange-400 normal-case inline-flex justify-center
             px-3 py-2 font-semibold shadow-sm hover:bg-opacity-0 xxs:w-11/12 sm:w-11/12">
               Connect Wallet
             </button>

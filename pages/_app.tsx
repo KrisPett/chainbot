@@ -19,17 +19,10 @@ const App = ({Component, pageProps}: AppProps) => {
   return (
     <SessionProvider session={pageProps.session} refetchInterval={300}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider
-          attribute={"class"}
-          defaultTheme={"dark"}
-          themes={["light", "dark"]}
-        >
+        <ThemeProvider attribute={"class"} defaultTheme={"dark"} themes={["light", "dark"]}>
           <Head>
             <meta name="description" content="chaincue-technology"/>
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1"
-            />
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
           </Head>
           <Layout>
             <Component {...pageProps} />

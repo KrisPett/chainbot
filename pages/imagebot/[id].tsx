@@ -5,10 +5,7 @@ import React from "react";
 const Id = () => {
   return (
     <>
-      <PageSEO
-        title={`Imagebot | Chainbot`}
-        description={`Imagebot | Chainbot`}
-      />
+      <PageSEO title={`Imagebot | Chainbot`} description={`Imagebot | Chainbot`}/>
       <ImageBotView/>
     </>
   );

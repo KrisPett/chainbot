@@ -30,10 +30,10 @@ const downloadImage = (url: string) => {
 }
 
 const ImageModalOld = ({open, setOpen, selectedImage}: ModalProps) => {
-  const cancelButtonRef = useRef(null)
-
   const [isMetamaskConnected, setIsMetamaskConnected] = useState<boolean>(false);
   const [ethAddress, setEthAddress] = useState<string>("");
+
+  const cancelButtonRef = useRef(null)
 
   useEffect(() => {
     if (isMetamaskInstalled) {
@@ -99,8 +99,10 @@ const ImageModalOld = ({open, setOpen, selectedImage}: ModalProps) => {
                     <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 rounded
                     bg-gradient-to-br from-gray-200 to-gray-300 dark:from-zinc-600 dark:to-zinc-700 w-11/12 xxs:space-y-1 sm:space-y-0">
                       <ButtonAlt2 title={"Download"} onClick={() => downloadImage(selectedImage)}/>
-                      <div className={`${!isMetamaskInstalled || !isMetamaskConnected ? "tooltip" : ""}`} data-tip="Required Metamask">
-                        <ButtonAlt4 disabled={!isMetamaskInstalled || !isMetamaskConnected} title={"Mint"} onClick={() => mintNFT(selectedImage)}/>
+                      <div className={`${!isMetamaskInstalled || !isMetamaskConnected ? "tooltip" : ""}`}
+                           data-tip="Required Metamask">
+                        <ButtonAlt4 disabled={!isMetamaskInstalled || !isMetamaskConnected} title={"Mint"}
+                                    onClick={() => mintNFT(selectedImage)}/>
                       </div>
                       <ButtonAlt3 title={"Close"} onClick={() => setOpen(false)}/>
                     </div>

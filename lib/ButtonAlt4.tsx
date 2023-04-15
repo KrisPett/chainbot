@@ -3,10 +3,10 @@ import React from "react";
 interface IButton {
   title: string;
   onClick: () => void;
-  disabled: boolean
+  disabled?: boolean
 }
 
-const ButtonAlt = ({title, onClick, disabled}: IButton) => {
+const ButtonAlt = ({title, onClick, disabled = false}: IButton) => {
   return (
     <button
       disabled={disabled}

@@ -53,7 +53,7 @@ const ImagesList = ({setTotalImagesCollectionSize}: ImagesListProps) => {
   }, [images, setTotalImagesCollectionSize])
 
   return (
-    (images?.L ?? []) &&
+    (images && images.L) &&
     <>
         <div className={"overflow-y-auto overflow-hidden animate-[fade-in-down_1s_ease-in-out]"
         } style={{maxHeight: "90%"}}
@@ -70,7 +70,7 @@ const ImagesList = ({setTotalImagesCollectionSize}: ImagesListProps) => {
             </section>
         </div>
         <div className={"p-1 mt-2 flex justify-center items-center"}>
-            <ButtonAlt title={"Clear"} onClick={() => console.log("ButtonAlt")}></ButtonAlt>
+            <ButtonAlt disabled={true} title={"Clear"} onClick={() => console.log("ButtonAlt")}></ButtonAlt>
         </div>
     </>
   )

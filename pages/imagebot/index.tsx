@@ -5,10 +5,7 @@ import ImageBotView from "@/components/imagebot/ImageBotView";
 const Index = () => {
   return (
     <>
-      <PageSEO
-        title={"Imagebot | Chainbot"}
-        description={"Imagebot | Chainbot"}
-      />
+      <PageSEO title={"Imagebot | Chainbot"} description={"Imagebot | Chainbot"}/>
       {/*<ImageBotView />*/}
     </>
   );

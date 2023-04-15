@@ -54,7 +54,7 @@ const ImageBotView = () => {
       body: JSON.stringify(eventBody)
     })
       .then(response => {
-        if(!response.ok) return Promise.reject(response)
+        if (!response.ok) return Promise.reject(response)
         return response.json()
       })
       .then(data => {
@@ -64,7 +64,7 @@ const ImageBotView = () => {
       })
       .catch(error => {
         console.log(error)
-        router.push('/imagebot/-1').then( () => signIn('keycloak'))
+        router.push('/imagebot/-1').then(() => signIn('keycloak'))
       })
   }, {});
 
@@ -173,7 +173,7 @@ const ImageBotView = () => {
   return (
     <div className={"mt-28 flex justify-center"}>
       <SideMenuImageBot setTotalImagesCollectionSize={setTotalImagesCollectionSize}/>
-      <section className={"flex flex-col items-center justify-center "} style={{minHeight: "50vh"}}>
+      <section className={"flex flex-col items-center justify-center"} style={{minHeight: "50vh"}}>
         <div className={"max-w-screen-xl space-y-5 sm:ml-64 xxs:w-12/12 xs:w-12/12 sm:w-12/12 md:w-8/12"}>
           <div
             className={`w-full rounded-full h-2.5 bg-zinc-400 dark:bg-zinc-600 ${generateImageMutate.isLoading || mutateFetchSelectedImages.isLoading ? "opacity-100" : "opacity-0"}`}>

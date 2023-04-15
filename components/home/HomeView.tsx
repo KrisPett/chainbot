@@ -6,11 +6,11 @@ const isMetamaskInstalled = typeof window !== 'undefined' && typeof window.ether
 const HomeView = () => {
   const [isLoadingConfirm, setIsLoadingConfirm] = useState<boolean>(false);
   const [isMetamaskConnected, setIsMetamaskConnected] = useState<boolean>(false);
-  const [ethAddress, setEthAddress] = useState<string>("0x000000");
+  const [ethAddress, setEthAddress] = useState<string>("");
 
   useEffect(() => {
     if (isMetamaskInstalled) {
-      if (window.ethereum.selectedAddress) {
+      if (window.ethereum.selectedAddress !== null && window.ethereum.selectedAddress !== undefined && window.ethereum.selectedAddress !== "") {
         setIsMetamaskConnected(true)
         setEthAddress(window.ethereum.selectedAddress)
       }
@@ -29,6 +29,20 @@ const HomeView = () => {
       });
   }
 
+  const getButtonText = () => {
+    if (!isMetamaskInstalled) return "Metamask Required"
+    else if (isMetamaskConnected) return "You Are Connected"
+    else if (isLoadingConfirm) return "Pending Metamask Extension..."
+    else return "Connect Wallet"
+  };
+
+  const isButtonDisabled = () => {
+    if (!isMetamaskInstalled) return true
+    if (isMetamaskConnected) return true
+    if (isLoadingConfirm) return true
+    return !!(window.ethereum && window.ethereum.selectedAddress)
+  };
+
   return (
     <main className={"xxs:mt-10 md:mt-44"}>
       <div className={"flex xxs:flex-col lg:flex-row justify-center xl:gap-x-64"}>
@@ -43,12 +57,12 @@ const HomeView = () => {
               minting them on the Ethereum blockchain.</p>
           </div>
           <div className={"w-full mt-20 flex justify-center"}>
-            <button disabled={isMetamaskConnected || !isMetamaskInstalled} onClick={() => connectWallet()} className="disabled:opacity-70
-            group btn relative text-xl text-gray-800 hover:text-gray-700 group-hover:to-orange-400 bg-gradient-to-b
+            <button disabled={isButtonDisabled()} onClick={() => connectWallet()}
+                    className="dark:disabled:opacity-70 disabled:text-gray-600 group btn relative text-xl text-gray-800 hover:text-gray-700 group-hover:to-orange-400 bg-gradient-to-b
             from-zinc-300 to-zinc-200 dark:bg-transparen dark:from-orange-1000 dark:to-orange-1100 dark:text-gray-300
-            border-zinc-300 border-1 border-base-300/20 hover:dark:border-orange-1100 dark:hover:text-white dark:group-hover:to-orange-400 normal-case inline-flex justify-center
+            border-zinc-300 border-1 border-base-300/50 hover:dark:border-orange-1100 dark:hover:text-white dark:group-hover:to-orange-400 normal-case inline-flex justify-center
             px-3 py-2 font-semibold shadow-sm hover:bg-opacity-0 xxs:w-11/12 sm:w-11/12">
-              {!isMetamaskInstalled ? "Metamask Required" : isMetamaskConnected ? "You Are Connected" : isLoadingConfirm ? "Pending Metamask Extension..." : "Connect Wallet"}
+              {getButtonText()}
             </button>
           </div>
         </section>

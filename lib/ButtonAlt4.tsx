@@ -3,11 +3,13 @@ import React from "react";
 interface IButton {
   title: string;
   onClick: () => void;
+  disabled: boolean
 }
 
-const ButtonAlt = ({title, onClick}: IButton) => {
+const ButtonAlt = ({title, onClick, disabled}: IButton) => {
   return (
     <button
+      disabled={disabled}
       draggable
       onClick={onClick}
       onDragEnd={onClick}
@@ -18,6 +20,8 @@ const ButtonAlt = ({title, onClick}: IButton) => {
       dark:hover:text-white dark:group-hover:to-orange-400
       xxs:w-full xs:w-full normal-case
       inline-flex w-full justify-center px-3 py-2 font-semibold shadow-sm sm:ml-3 sm:w-auto
+      dark:disabled:opacity-40
+      disabled:text-gray-400
       "
     >
       <span className="">

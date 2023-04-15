@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import CreditCard from "@/components/home/CreditCard";
+import localFont from "@next/font/local";
 
 const isMetamaskInstalled = typeof window !== 'undefined' && typeof window.ethereum !== 'undefined';
 
@@ -19,9 +20,8 @@ const HomeView = () => {
 
   const connectWallet = async () => {
     setIsLoadingConfirm(true)
-    const accounts = await window.ethereum.request({method: 'eth_requestAccounts'})
+    await window.ethereum.request({method: 'eth_requestAccounts'})
       .then((accounts) => {
-        console.log(accounts)
         setIsLoadingConfirm(false)
       }).catch((err) => {
         console.log(err)
@@ -34,14 +34,14 @@ const HomeView = () => {
     else if (isMetamaskConnected) return "You Are Connected"
     else if (isLoadingConfirm) return "Pending Metamask Extension..."
     else return "Connect Wallet"
-  };
+  }
 
   const isButtonDisabled = () => {
     if (!isMetamaskInstalled) return true
     if (isMetamaskConnected) return true
     if (isLoadingConfirm) return true
     return !!(window.ethereum && window.ethereum.selectedAddress)
-  };
+  }
 
   return (
     <main className={"xxs:mt-10 md:mt-44"}>

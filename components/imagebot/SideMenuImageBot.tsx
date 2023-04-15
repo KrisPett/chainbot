@@ -1,11 +1,9 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect} from "react";
 import Image from "next/image";
 import {useRouter} from "next/router";
 import ButtonAlt from "@/lib/ButtonAlt";
 import {ImageContext, ImageContextProvider} from "@/components/imagebot/ImageContextProvider";
 import {Images, ImagesCollection} from "@/components/imagebot/models/interfaces";
-import {useQueryClient} from "@tanstack/react-query";
-import {router} from "next/client";
 
 interface ImageGroupProps {
   index: number;
@@ -55,7 +53,7 @@ const ImagesList = ({setTotalImagesCollectionSize}: ImagesListProps) => {
   }, [images, setTotalImagesCollectionSize])
 
   return (
-    images &&
+    (images?.L ?? []) &&
     <>
         <div className={"overflow-y-auto overflow-hidden animate-[fade-in-down_1s_ease-in-out]"
         } style={{maxHeight: "90%"}}

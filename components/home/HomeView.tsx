@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import CreditCard from "@/components/home/CreditCard";
-import localFont from "@next/font/local";
+import {useWeb3Modal} from '@web3modal/react'
 
 const isMetamaskInstalled = typeof window !== 'undefined' && typeof window.ethereum !== 'undefined';
 
 const HomeView = () => {
-  const [isLoadingConfirm, setIsLoadingConfirm] = useState<boolean>(false);
   const [isMetamaskConnected, setIsMetamaskConnected] = useState<boolean>(false);
   const [ethAddress, setEthAddress] = useState<string>("");
+  const {isOpen, open, close, setDefaultChain} = useWeb3Modal();
 
   useEffect(() => {
     if (isMetamaskInstalled) {
@@ -16,30 +16,27 @@ const HomeView = () => {
         setEthAddress(window.ethereum.selectedAddress)
       }
     }
-  }, [isLoadingConfirm]);
+  }, [isOpen]);
 
   const connectWallet = async () => {
-    setIsLoadingConfirm(true)
-    await window.ethereum.request({method: 'eth_requestAccounts'})
-      .then((accounts) => {
-        setIsLoadingConfirm(false)
-      }).catch((err) => {
+    await open()
+      .then((account) => {
+        console.log(account)
+      })
+      .catch((err) => {
         console.log(err)
-        setIsLoadingConfirm(false)
       });
   }
 
   const getButtonText = () => {
-    if (!isMetamaskInstalled) return "Metamask Required"
-    else if (isMetamaskConnected) return "You Are Connected"
-    else if (isLoadingConfirm) return "Pending Metamask Extension..."
+    if (isMetamaskConnected) return "You Are Connected"
+    else if (isOpen) return "Pending Metamask Extension..."
     else return "Connect Wallet"
   }
 
   const isButtonDisabled = () => {
-    if (!isMetamaskInstalled) return true
     if (isMetamaskConnected) return true
-    if (isLoadingConfirm) return true
+    if (isOpen) return true
     return !!(window.ethereum && window.ethereum.selectedAddress)
   }
 

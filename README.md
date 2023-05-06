@@ -1,5 +1,5 @@
 [Chainbot](https://chainbot.chaincuet.com/)
-dwd
+
 ```
 yarn
 yarn dev

@@ -18,7 +18,8 @@ http://localhost:8000
 ```
 
 ```
-docker run -it --rm -p 3000:3000 --name node -v ${PWD}:/app node:19.5.0-alpine sh -c "cd app && yarn dev"
+docker run -it --rm -p 3000:3000 --name node -v ${PWD}:/app node:19.5.0-alpine sh -c "cd app && sh"
+docker run -it --rm -p 3000:3000 --name node -v %cd%:/app node:19.5.0-alpine sh -c "cd app && sh"
 ```
 
 ```
@@ -34,14 +35,8 @@ openssl rand -base64 32
 ### .env.local
 
 ```
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=adwdaw
-
-KEYCLOAK_ID=
-KEYCLOAK_SECRET=
-KEYCLOAK_ISSUER=
-
-OPEN_AI=
+cd scripts/
+sh setup.sh
 ```
 
 ```

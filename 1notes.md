@@ -36,14 +36,8 @@ openssl rand -base64 32
 ### .env.local
 
 ```
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=adwdaw
-
-KEYCLOAK_ID=
-KEYCLOAK_SECRET=
-KEYCLOAK_ISSUER=
-
-OPEN_AI=
+cd scripts/
+sh setup.sh
 ```
 
 ```
@@ -53,6 +47,3 @@ https://auth.chaincuet.com/auth/realms/qt3music/protocol/openid-connect/auth?cli
 ```
 chatbot@gmail.com
 ```
-
-
-

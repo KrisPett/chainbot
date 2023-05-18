@@ -18,7 +18,9 @@ http://localhost:8000
 ```
 
 ```
-docker run -it --rm -p 3000:3000 --name node -v ${PWD}:/app node:19.5.0-alpine sh -c "cd app && yarn dev"
+docker run -it --rm -p 3000:3000 --name node -v ${PWD}:/workdir -w /workdir node:19 bash
+```
+
 ```
 
 ```
@@ -51,3 +53,6 @@ https://auth.chaincuet.com/auth/realms/qt3music/protocol/openid-connect/auth?cli
 ```
 chatbot@gmail.com
 ```
+
+
+

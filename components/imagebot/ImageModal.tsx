@@ -4,6 +4,7 @@ import Image from "next/image";
 import ButtonAlt2 from "@/lib/ButtonAlt2";
 import ButtonAlt3 from "@/lib/ButtonAlt3";
 import ButtonAlt4 from "@/lib/ButtonAlt4";
+import {mintNFTContractWeb3} from "@/contracts/TransactionsHelper";
 
 const isMetamaskInstalled = typeof window !== 'undefined' && typeof window.ethereum !== 'undefined';
 
@@ -45,13 +46,7 @@ const ImageModalOld = ({open, setOpen, selectedImage}: ModalProps) => {
   }, []);
 
   const mintNFT = async (selectedImage: string) => {
-    console.log("Minting NFT")
-    console.log(selectedImage)
-    if(isMetamaskInstalled) {
-      console.log(isMetamaskInstalled)
-      console.log(window.ethereum.selectedAddress)
-    }
-    console.log(isMetamaskConnected)
+    mintNFTContractWeb3(selectedImage)
   }
 
   return (

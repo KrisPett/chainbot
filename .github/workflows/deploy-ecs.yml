@@ -1,0 +1,73 @@
+#name: Push Docker image to ECR
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#
+#permissions:
+#  id-token: write
+#  contents: read
+#
+#jobs:
+#  build-and-push-image-to-ecr:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#
+#      - name: Setup node
+#        uses: actions/setup-node@v2
+#
+#      - name: Create env file
+#        run: |
+#          touch .env
+#          echo NEXT_PUBLIC_CLIENT_URL=${{ secrets.NEXT_PUBLIC_CLIENT_URL }} >> .env
+#          echo NEXT_PUBLIC_AWS_GATEWAY_URL_CHATBOT=${{ secrets.NEXT_PUBLIC_AWS_GATEWAY_URL_CHATBOT }} >> .env
+#          echo NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT=${{ secrets.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT }} >> .env
+#          echo NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT_FILTER_IMAGES=${{ secrets.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT_FILTER_IMAGES }} >> .env
+#          echo NEXT_PUBLIC_WALLET_CONNECT_ID=${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }} >> .env
+#          echo NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
+#          echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
+#          echo KEYCLOAK_ID=${{ secrets.KEYCLOAK_ID }} >> .env
+#          echo KEYCLOAK_SECRET=${{ secrets.KEYCLOAK_SECRET }} >> .env
+#          echo KEYCLOAK_ISSUER=${{ secrets.KEYCLOAK_ISSUER }} >> .env
+#
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          role-to-assume: ${{ secrets.AWS_ECR_ROLE }}
+#          aws-region: us-east-1
+#
+#      - name: Download task definition
+#        run: |
+#          aws ecs describe-task-definition --task-definition ${{ secrets.AWS_ECS_TASK_DEFINITION }} --query taskDefinition > task-definition.json
+#
+#      - name: Login to Amazon ECR
+#        id: login-ecr
+#        uses: aws-actions/amazon-ecr-login@v1
+#
+#      - name: Build, tag, and push docker image to Amazon ECR
+#        env:
+#          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#          REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
+#          IMAGE_TAG: latest
+#        run: |
+#          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+#          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+#
+#      - name: Delete untagged images from Amazon ECR
+#        run: |
+#          aws ecr describe-repositories --output text | awk '{print $5}' | egrep -v '^$' | while read line; do  repo=$(echo $line | sed -e  "s/arn:aws:ecr.*\///g") ; \
+#          aws ecr list-images --repository-name $repo --filter tagStatus=UNTAGGED --query 'imageIds[*]' --output text | while read imageId; \
+#          do aws ecr batch-delete-image --repository-name $repo --image-ids imageDigest=$imageId; done; done
+#
+#      - name: Deploy to Amazon ECS
+#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+#        with:
+#          task-definition: task-definition.json
+#          service: ${{ secrets.AWS_ECS_SERVICE }}
+#          cluster: ${{ secrets.AWS_ECS_CLUSTER }}
+#          wait-for-service-stability: true
+

@@ -1,21 +1,24 @@
-name: Push Docker image to ECR
+name: Push Docker image to Github
 
 on:
   push:
     branches:
       - main
 
-permissions:
-  id-token: write
-  contents: read
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-image-to-ecr:
+  build-and-push-image-to-github:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Setup node
         uses: actions/setup-node@v2
@@ -34,40 +37,43 @@ jobs:
           echo KEYCLOAK_SECRET=${{ secrets.KEYCLOAK_SECRET }} >> .env
           echo KEYCLOAK_ISSUER=${{ secrets.KEYCLOAK_ISSUER }} >> .env
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
-          role-to-assume: ${{ secrets.AWS_ECR_ROLE }}
-          aws-region: us-east-1
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Download task definition
-        run: |
-          aws ecs describe-task-definition --task-definition ${{ secrets.AWS_ECS_TASK_DEFINITION }} --query taskDefinition > task-definition.json
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build, tag, and push docker image to Amazon ECR
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
-          IMAGE_TAG: latest
-        run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-
-      - name: Delete untagged images from Amazon ECR
-        run: |
-          aws ecr describe-repositories --output text | awk '{print $5}' | egrep -v '^$' | while read line; do  repo=$(echo $line | sed -e  "s/arn:aws:ecr.*\///g") ; \
-          aws ecr list-images --repository-name $repo --filter tagStatus=UNTAGGED --query 'imageIds[*]' --output text | while read imageId; \
-          do aws ecr batch-delete-image --repository-name $repo --image-ids imageDigest=$imageId; done; done
-
-      - name: Deploy to Amazon ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          task-definition: task-definition.json
-          service: ${{ secrets.AWS_ECS_SERVICE }}
-          cluster: ${{ secrets.AWS_ECS_CLUSTER }}
-          wait-for-service-stability: true
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+
+#      - name: Build, tag, and push docker image to Amazon ECR
+#        env:
+#          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#          REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY }}
+#          IMAGE_TAG: latest
+#        run: |
+#          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+#          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+
+#      - name: Deploy to Amazon ECS
+#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+#        with:
+#          task-definition: task-definition.json
+#          service: ${{ secrets.AWS_ECS_SERVICE }}
+#          cluster: ${{ secrets.AWS_ECS_CLUSTER }}
+#          wait-for-service-stability: true
 

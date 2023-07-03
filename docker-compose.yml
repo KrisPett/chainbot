@@ -7,7 +7,8 @@ version: "3.7"
 services:
   chainbot:
     container_name: chainbot
-    image: chainbot:latest
+    image: ghcr.io/kqt3/chainbot:main
+#    image: chainbot:latest
     ports:
       - "3000:3000"
     networks:

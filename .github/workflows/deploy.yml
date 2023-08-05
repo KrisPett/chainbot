@@ -70,7 +70,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "hello"
-            echo "${{ secrets.DOCKER_READ_ACCESS }}" | docker login ghcr.io -u KQT3 --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u KQT3 --password-stdin
             ./docker-compose-chainbot.sh
 
  

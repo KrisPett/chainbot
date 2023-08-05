@@ -60,8 +60,6 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    permissions: read-all
-
     needs: build-and-push-image-to-github
     steps:
       - name: executing remote ssh commands using ssh key
@@ -70,9 +68,9 @@ jobs:
           host: ${{ secrets.EC2_SERVER }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          script: |
-#            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-#            ./docker-compose-chainbot.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u github-actions --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             ./docker-compose-chainbot.sh
+

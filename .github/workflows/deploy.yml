@@ -61,9 +61,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-push-image-to-github
-    permissions:
-      contents: read
-      packages: read
     steps:
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
@@ -76,6 +73,6 @@ jobs:
 
           script: |
             echo "hello"
-            echo ${{ env.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ env.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             ./docker-compose-chainbot.sh
 

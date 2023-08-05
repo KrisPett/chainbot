@@ -89,6 +89,6 @@ jobs:
         run: |
           ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_SERVER }} "echo 'hello'"
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_SERVER }} "./docker-compose-chainbot.sh"
+          "./docker-compose-chainbot.sh"
   
   

@@ -74,8 +74,9 @@ jobs:
 #            ./docker-compose-chainbot.sh
   deploy:
     runs-on: ubuntu-latest
+
     needs: build-and-push-image-to-github
-    permissions: read-all
+
     steps:
       - name: Set up SSH and Docker credentials
         uses: webfactory/ssh-agent@v0.5.0
@@ -85,10 +86,14 @@ jobs:
       - name: Add remote server's host key to known_hosts
         run: ssh-keyscan ${{ secrets.EC2_SERVER }} >> $HOME/.ssh/known_hosts
 
-      - name: Execute remote commands on EC2 Server
+      - name: Set up Docker credentials
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        env:
+          DOCKER_CLI_AIO_ENV: 1
+
+      - name: SSH to the server and execute commands
         run: |
           ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_SERVER }} "echo 'hello'"
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_SERVER }} "./docker-compose-chainbot.sh"
  
   

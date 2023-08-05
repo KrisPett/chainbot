@@ -73,6 +73,6 @@ jobs:
 
           script: |
             echo "hello"
-            echo "${{ env.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             ./docker-compose-chainbot.sh
 

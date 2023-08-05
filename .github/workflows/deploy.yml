@@ -11,57 +11,60 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  build-and-push-image-to-github:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v2
-
-      - name: Create env file
-        run: |
-          touch .env
-          echo NEXT_PUBLIC_CLIENT_URL=${{ secrets.NEXT_PUBLIC_CLIENT_URL }} >> .env
-          echo NEXT_PUBLIC_AWS_GATEWAY_URL_CHATBOT=${{ secrets.NEXT_PUBLIC_AWS_GATEWAY_URL_CHATBOT }} >> .env
-          echo NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT=${{ secrets.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT }} >> .env
-          echo NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT_FILTER_IMAGES=${{ secrets.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT_FILTER_IMAGES }} >> .env
-          echo NEXT_PUBLIC_WALLET_CONNECT_ID=${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }} >> .env
-          echo NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
-          echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
-          echo KEYCLOAK_ID=${{ secrets.KEYCLOAK_ID }} >> .env
-          echo KEYCLOAK_SECRET=${{ secrets.KEYCLOAK_SECRET }} >> .env
-          echo KEYCLOAK_ISSUER=${{ secrets.KEYCLOAK_ISSUER }} >> .env
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+#  build-and-push-image-to-github:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      packages: write
+#
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v3
+#
+#      - name: Setup node
+#        uses: actions/setup-node@v2
+#
+#      - name: Create env file
+#        run: |
+#          touch .env
+#          echo NEXT_PUBLIC_CLIENT_URL=${{ secrets.NEXT_PUBLIC_CLIENT_URL }} >> .env
+#          echo NEXT_PUBLIC_AWS_GATEWAY_URL_CHATBOT=${{ secrets.NEXT_PUBLIC_AWS_GATEWAY_URL_CHATBOT }} >> .env
+#          echo NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT=${{ secrets.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT }} >> .env
+#          echo NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT_FILTER_IMAGES=${{ secrets.NEXT_PUBLIC_AWS_GATEWAY_URL_IMAGEBOT_FILTER_IMAGES }} >> .env
+#          echo NEXT_PUBLIC_WALLET_CONNECT_ID=${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }} >> .env
+#          echo NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} >> .env
+#          echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
+#          echo KEYCLOAK_ID=${{ secrets.KEYCLOAK_ID }} >> .env
+#          echo KEYCLOAK_SECRET=${{ secrets.KEYCLOAK_SECRET }} >> .env
+#          echo KEYCLOAK_ISSUER=${{ secrets.KEYCLOAK_ISSUER }} >> .env
+#
+#      - name: Log in to the Container registry
+#        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+#        with:
+#          registry: ${{ env.REGISTRY }}
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Extract metadata (tags, labels) for Docker
+#        id: meta
+#        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+#        with:
+#          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+#
+#      - name: Build and push Docker image
+#        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+#        with:
+#          context: .
+#          push: true
+#          tags: ${{ steps.meta.outputs.tags }}
+#          labels: ${{ steps.meta.outputs.labels }}
 
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-push-image-to-github
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master

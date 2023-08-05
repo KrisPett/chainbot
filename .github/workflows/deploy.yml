@@ -58,42 +58,21 @@ jobs:
 #          tags: ${{ steps.meta.outputs.tags }}
 #          labels: ${{ steps.meta.outputs.labels }}
 
-#  deploy:
-#    runs-on: ubuntu-latest
-#    needs: build-and-push-image-to-github
-#    steps:
-#      - name: executing remote ssh commands using ssh key
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.EC2_SERVER }}
-#          username: ${{ secrets.EC2_USERNAME }}
-#          key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          script: |
-#            echo "hello"
-#            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-#            ./docker-compose-chainbot.sh
   deploy:
     runs-on: ubuntu-latest
-
     needs: build-and-push-image-to-github
-
     steps:
-      - name: Set up SSH and Docker credentials
-        uses: webfactory/ssh-agent@v0.5.0
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.EC2_SERVER }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "hello"
+            echo "${{ secrets.DOCKER_READ_ACCESS }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            ./docker-compose-chainbot.sh
 
-      - name: Add remote server's host key to known_hosts
-        run: ssh-keyscan ${{ secrets.EC2_SERVER }} >> $HOME/.ssh/known_hosts
-
-      - name: Set up Docker credentials
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-        env:
-          DOCKER_CLI_AIO_ENV: 1
-
-      - name: SSH to the server and execute commands
-        run: |
-          ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_SERVER }} "./docker-compose-chainbot.sh"
  
   
   

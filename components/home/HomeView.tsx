@@ -45,7 +45,7 @@ const HomeView = () => {
       <div className={"flex xxs:flex-col lg:flex-row justify-center xl:gap-x-64"}>
         <section className={"mt-20"}>
           <div className={"flex flex-col items-center"}>
-            <p className={"text-5xl max-w-2xl w-11/12"}>1 Experience the Future of Art and Conversation with OpenAI&apos;s
+            <p className={"text-5xl max-w-2xl w-11/12"}>2 Experience the Future of Art and Conversation with OpenAI&apos;s
               Technology</p>
             <p className={"text-lg max-w-2xl mt-10 w-11/12"}>Discover the power of Chaincue by generating unique images
               using

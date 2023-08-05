@@ -75,9 +75,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-push-image-to-github
-    permissions:
-      contents: read
-      packages: read
+    permissions: read-all
     steps:
       - name: Set up SSH and Docker credentials
         uses: webfactory/ssh-agent@v0.5.0

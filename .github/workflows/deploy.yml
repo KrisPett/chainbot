@@ -93,7 +93,6 @@ jobs:
 
       - name: SSH to the server and execute commands
         run: |
-          ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_SERVER }} "echo 'hello'"
           ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_SERVER }} "./docker-compose-chainbot.sh"
  
   
